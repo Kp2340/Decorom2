@@ -1,6 +1,6 @@
 import React from 'react';
 import Layout from '../../components/Layout';
-import { products } from '../../data/products';
+import { nameplate } from '../../data/nameplate.js';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 
@@ -8,7 +8,7 @@ const Nameplate = () => {
   const [material, setMaterial] = React.useState('');
   const [shape, setShape] = React.useState('');
 
-  const filteredProducts = products.filter(
+  const filteredProducts = nameplate.filter(
     (p) => (!material || p.material === material) && (!shape || p.shape === shape)
   );
 

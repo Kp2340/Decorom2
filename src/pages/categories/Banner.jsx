@@ -1,6 +1,6 @@
 import React from 'react';
 import Layout from "../../components/Layout.jsx";
-import {products} from "../../data/products.js";
+import {nameplate} from "../../data/nameplate.js";
 // import Layout from '../components/Layout';
 // import { products } from '../data/products';
 
@@ -8,7 +8,7 @@ const Banner = () => {
     const [material, setMaterial] = React.useState('');
     const [shape, setShape] = React.useState('');
 
-    const filteredProducts = products.filter(
+    const filteredProducts = nameplate.filter(
         (p) => (p.id<3) && (!material || p.material === material) && (!shape || p.shape === shape)
     );
 
