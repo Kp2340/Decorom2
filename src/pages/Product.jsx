@@ -3,7 +3,7 @@ import Layout from "../components/Layout";
 import Carousel from "../components/Carousel";
 import Categories from "../components/Categories";
 
-const Home = () => {
+const Product = () => {
   return (
     <Layout>
       <Categories/>
@@ -11,4 +11,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Product;

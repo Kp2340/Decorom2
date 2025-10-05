@@ -1,6 +1,7 @@
 import React from 'react';
 import Layout from "../../components/Layout.jsx";
 import {nameplate} from "../../data/nameplate.js";
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 const Film = () => {
     const [material, setMaterial] = React.useState('');
@@ -62,7 +63,7 @@ const Film = () => {
                 <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-4">
                     {filteredProducts.map((product) => (
                         <div key={product.id} className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow duration-300 overflow-hidden flex flex-col">
-                            <img src={product.link} alt={product.name} className="w-full h-48 object-cover" />
+                            <LazyLoadImage src={product.link} alt={product.name} className="w-full h-48 object-cover" />
                             <div className="p-4 flex flex-col flex-1">
                                 <h3 className="text-lg font-semibold text-gray-800 mb-2">{product.name}</h3>
                                 <div className="text-gray-600 text-sm mb-4 space-y-1">
