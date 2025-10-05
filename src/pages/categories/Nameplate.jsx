@@ -59,13 +59,6 @@ const Nameplate = () => {
         </div>
       </section>
 
-      git init
-      git add .
-      git commit -m "first commit"
-      git branch -M main
-      git remote add origin https://github.com/Kp2340/Decorom2.git
-      git push -u origin main
-
       {/* Gallery */}
       <section id="gallery" className="py-12 bg-gray-50">
         <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-4">
