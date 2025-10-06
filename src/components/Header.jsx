@@ -44,7 +44,7 @@ const Header = () => {
 
           {/* Logo (Center) */}
           <div className="flex-1 flex justify-center md:justify-start z-50">
-            <img src="logologo.png" alt="logo" className="h-14 w-auto" />
+            <img src="logo/logo.png" alt="logo" className="h-14 w-auto" />
           </div>
 
           {/* Desktop Menu */}
@@ -80,7 +80,7 @@ const Header = () => {
       >
         {/* Mobile Logo + Close */}
         <div className="flex items-center justify-center p-4 border-b relative">
-          <img src="logologo.png" alt="logo" className="h-14 w-auto" />
+          <img src="logo/logo.png" alt="logo" className="h-14 w-auto" />
           <button
             onClick={closeMenu}
             className="absolute right-4 p-2 md:hidden"
