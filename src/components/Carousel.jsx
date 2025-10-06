@@ -2,11 +2,11 @@ import React, { useState, useEffect, useRef } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 
 const images = [
-  "/images/carousel/1.jpg",
-  "/images/carousel/2.jpg",
-  "/images/carousel/3.jpg",
-  "/images/carousel/4.jpg",
-  "/images/carousel/5.jpg",
+  "carousel/1.jpg",
+  "carousel/2.jpg",
+  "carousel/3.jpg",
+  "carousel/4.jpg",
+  "carousel/5.jpg",
 ];
 
 const Carousel = () => {

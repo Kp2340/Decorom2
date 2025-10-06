@@ -3,13 +3,13 @@ import { Link } from "react-router-dom";
 
 // Dummy categories
 const categories = [
-  { id: 1, name: "NamePlate", image: "/images/category/1.png", path: "/nameplate" },
-  { id: 2, name: "Banner", image: "/images/category/2.png", path: "/banner" },
-  { id: 3, name: "Radium", image: "/images/category/3.png", path: "/radium" },
-  { id: 4, name: "Commercial", image: "/images/category/4.png", path: "/commercial" },
-  { id: 5, name: "Interior", image: "/images/category/5.png", path: "/interior" },
-  { id: 6, name: "Film", image: "/images/category/6.png", path: "/film" },
-  { id: 7, name: "Safety", image: "/images/category/7.png", path: "/safety" },
+  { id: 1, name: "NamePlate", image: "category/1.png", path: "/nameplate" },
+  { id: 2, name: "Banner", image: "category/2.png", path: "/banner" },
+  { id: 3, name: "Radium", image: "category/3.png", path: "/radium" },
+  { id: 4, name: "Commercial", image: "category/4.png", path: "/commercial" },
+  { id: 5, name: "Interior", image: "category/5.png", path: "/interior" },
+  { id: 6, name: "Film", image: "category/6.png", path: "/film" },
+  { id: 7, name: "Safety", image: "category/7.png", path: "/safety" },
 ];
 
 const Categories = () => {
