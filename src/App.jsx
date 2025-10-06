@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter , Routes, Route } from "react-router-dom";
 import Product from "./pages/Product";
 import Nameplate from "./pages/categories/Nameplate";
 import Banner from "./pages/categories/Banner";
@@ -14,7 +14,7 @@ import Layout from "./components/Layout";
 // import Categories from "./components/Categories.jsx";
 
 const App = () => (
-  <BrowserRouter>
+  <HashRouter>
       <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/products" element={<Product />} />
@@ -29,6 +29,6 @@ const App = () => (
       <Route path="/about" element={<Layout> <AboutUs /> </Layout>} />
       {/*<Route path="/signage" element={<Signage />} />*/}
      </Routes>
-  </BrowserRouter>
+  </HashRouter>
 );
 export default App;
