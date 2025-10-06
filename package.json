@@ -3,12 +3,16 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://kp2340.github.io/Decorom2",
   "scripts": {
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "dev": "vite --host"
+    "dev": "vite --host",
+    "predeploy": "vite build",
+    "deploy": "gh-pages -d dist"
   },
+
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "react": "^19.1.1",
