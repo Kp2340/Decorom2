@@ -4,11 +4,6 @@ import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 
 export default defineConfig({
   base: '/Decorom2/',
-  // build: {
-  //   rollupOptions: {
-  //     input: 'src/index.html'
-  //   }
-  // },
   plugins: [
     react(),
     ViteImageOptimizer({
