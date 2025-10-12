@@ -1,4 +1,3 @@
-import Layout from "../components/Layout.jsx";
 import { useState, useEffect} from 'react';
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useParams} from "react-router-dom";
@@ -66,7 +65,7 @@ const HandleInquiry = () => {
             </div>
         </header>
     ) : (
-        <Layout>
+        <div>
             {/* Hero Section */}
             <section id="hero" className="text-center py-16 bg-gray-50">
                 <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
@@ -146,7 +145,7 @@ const HandleInquiry = () => {
                 </div>
             </section>)
             }
-        </Layout>
+        </div>
     );
 };
 
