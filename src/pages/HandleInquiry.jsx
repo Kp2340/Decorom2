@@ -1,4 +1,4 @@
-import Layout from "../../components/Layout.jsx";
+import Layout from "../components/Layout.jsx";
 import { useState, useEffect} from 'react';
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useParams} from "react-router-dom";

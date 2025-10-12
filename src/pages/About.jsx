@@ -15,7 +15,7 @@ const AboutUs = () => {
           <div>
             <img
               // src="/about-placeholder.jpg"
-              src="logo/logo.png"
+              src="public/logo/logo.png"
               alt="About Decorom"
               className="w-full rounded-lg shadow-md"
             />
