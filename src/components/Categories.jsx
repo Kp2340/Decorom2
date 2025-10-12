@@ -10,6 +10,7 @@ const categories = [
   { id: 5, name: "Interior", image: "category/5.png", path: "/interior" },
   { id: 6, name: "Film", image: "category/6.png", path: "/film" },
   { id: 7, name: "Safety", image: "category/7.png", path: "/safety" },
+  { id: 7, name: "Festival Offer", image: "category/7.png", path: "/festival-offer" },
 ];
 
 const Categories = () => {
@@ -20,7 +21,7 @@ const Categories = () => {
 
         {/* Top row - 4 images */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 justify-items-center mb-6">
-          {categories.slice(0, 4).map((cat) => (
+          {categories.slice(0, 8).map((cat) => (
             <Link key={cat.id} to={cat.path}>
               <div className="flex flex-col items-center text-center hover:scale-105 transition-transform duration-300 cursor-pointer">
                 <div className="w-64 h-64 sm:w-52 sm:h-52 rounded-lg overflow-hidden mb-2">
@@ -36,23 +37,24 @@ const Categories = () => {
           ))}
         </div>
 
-        {/* Bottom row - 3 images centered */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 justify-items-center mx-auto">
-          {categories.slice(4).map((cat) => (
-            <Link key={cat.id} to={cat.path}>
-              <div className="flex flex-col items-center text-center hover:scale-105 transition-transform duration-300 cursor-pointer">
-                <div className="w-64 h-64 sm:w-52 sm:h-52 rounded-lg overflow-hidden mb-2">
-                  <img
-                    src={cat.image}
-                    alt={cat.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <p className="text-lg font-medium text-gray-700">{cat.name}</p>
-              </div>
-            </Link>
-          ))}
-        </div>
+        {/*/!* Bottom row - 3 images centered *!/*/}
+        {/*<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 justify-items-center mb-6">*/}
+        {/*/!*<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 justify-items-center mx-auto">*!/*/}
+        {/*  {categories.slice(4).map((cat) => (*/}
+        {/*    <Link key={cat.id} to={cat.path}>*/}
+        {/*      <div className="flex flex-col items-center text-center hover:scale-105 transition-transform duration-300 cursor-pointer">*/}
+        {/*        <div className="w-64 h-64 sm:w-52 sm:h-52 rounded-lg overflow-hidden mb-2">*/}
+        {/*          <img*/}
+        {/*            src={cat.image}*/}
+        {/*            alt={cat.name}*/}
+        {/*            className="w-full h-full object-cover"*/}
+        {/*          />*/}
+        {/*        </div>*/}
+        {/*        <p className="text-lg font-medium text-gray-700">{cat.name}</p>*/}
+        {/*      </div>*/}
+        {/*    </Link>*/}
+        {/*  ))}*/}
+        {/*</div>*/}
       </div>
     </section>
   );

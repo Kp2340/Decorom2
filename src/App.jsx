@@ -11,7 +11,7 @@ import ContactUs from "./pages/Contact";
 import AboutUs from "./pages/About";
 import Home from "./pages/Home";
 import Layout from "./components/Layout";
-// import Categories from "./components/Categories.jsx";
+import Offer from "./pages/categories/Offer";
 
 const App = () => (
   <HashRouter>
@@ -25,9 +25,9 @@ const App = () => (
       <Route path="/interior" element={<Interior />} />
       <Route path="/film" element={<Film />} />
       <Route path="/safety" element={<Safety />} />
+      <Route path="/festival-offer" element={<Offer />} />
       <Route path="/contact" element={<Layout><ContactUs /></Layout>} />
       <Route path="/about" element={<Layout> <AboutUs /> </Layout>} />
-      {/*<Route path="/signage" element={<Signage />} />*/}
      </Routes>
   </HashRouter>
 );
