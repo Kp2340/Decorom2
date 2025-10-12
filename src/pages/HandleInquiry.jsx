@@ -17,8 +17,8 @@ const HandleInquiry = () => {
             setProduct([]);
             return;
         }
-        import(`../../data/${type}.js`)
-            .then((module) => setProduct(module?.types))
+        import(`../data/${type}.js`)
+            .then((module) => setProduct(module.types))
             .catch((error) => {
                 console.log(error);
                 setProduct([])
