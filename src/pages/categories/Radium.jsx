@@ -1,13 +1,13 @@
-import React from 'react';
+import { useState} from 'react';
 import Layout from "../../components/Layout.jsx";
-import {nameplate} from "../../data/nameplate.js";
+import {products} from "../../data/products.js";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 const Radium = () => {
-    const [material, setMaterial] = React.useState('');
-    const [shape, setShape] = React.useState('');
+    const [material, setMaterial] = useState('');
+    const [shape, setShape] = useState('');
 
-    const filteredProducts = nameplate.filter(
+    const filteredProducts = products.filter(
         (p) => (p.id<4) && (!material || p.material === material) && (!shape || p.shape === shape)
     );
 

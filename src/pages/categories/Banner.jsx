@@ -1,13 +1,13 @@
-import React from 'react';
+import { useState} from 'react';
 import Layout from "../../components/Layout.jsx";
-import {nameplate} from "../../data/nameplate.js";
+import {products} from "../../data/products.js";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 const Banner = () => {
-    const [material, setMaterial] = React.useState('');
-    const [shape, setShape] = React.useState('');
+    const [material, setMaterial] = useState('');
+    const [shape, setShape] = useState('');
 
-    const filteredProducts = nameplate.filter(
+    const filteredProducts = products.filter(
         (p) => (p.id<3) && (!material || p.material === material) && (!shape || p.shape === shape)
     );
 
@@ -23,7 +23,11 @@ const Banner = () => {
         );
         window.open(`https://wa.me/9016707658?text=${message}`, '_blank');
     };
-
+    // return (
+    //     <Layout>
+    //
+    //     </Layout>
+    // );
     return (
         <Layout>
             {/* Hero Section */}

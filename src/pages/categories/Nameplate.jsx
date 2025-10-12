@@ -1,13 +1,13 @@
-import React from "react";
+import { useState} from "react";
 import Layout from "../../components/Layout";
-import { nameplate } from "../../data/nameplate.js";
+import { products } from "../../data/products.js";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const Nameplate = () => {
-  const [material, setMaterial] = React.useState("");
-  const [shape, setShape] = React.useState("");
+  const [material, setMaterial] = useState("");
+  const [shape, setShape] = useState("");
 
-  const filteredProducts = nameplate.filter(
+  const filteredProducts = products.filter(
     (p) => (!material || p.material === material) && (!shape || p.shape === shape)
   );
 
@@ -94,7 +94,7 @@ const Nameplate = () => {
                 </div>
                 <button
                   onClick={() => handleInquiry(product)}
-                  className="mt-auto bg-black text-white font-medium py-2 rounded-md hover:bg-gray-800 transition-colors"
+                  className="mt-auto bg-green-500 text-white font-medium py-2 rounded-md hover:bg-gray-800 transition-colors"
                 >
                   Inquiry Now
                 </button>
