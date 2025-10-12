@@ -2,8 +2,6 @@ import React from 'react';
 import Layout from "../../components/Layout.jsx";
 import {nameplate} from "../../data/nameplate.js";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-// import Layout from '../components/Layout';
-// import { products } from '../data/products';
 
 const Banner = () => {
     const [material, setMaterial] = React.useState('');

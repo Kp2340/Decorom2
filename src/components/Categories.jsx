@@ -14,7 +14,7 @@ const categories = [
 
 const Categories = () => {
   return (
-    <section id="categories" className="py-12 bg-gray-50">
+    <section id="categories" className="py-12">
       <div className="max-w-7xl mx-auto px-4">
         <h2 className="text-3xl font-semibold text-center mb-8">Products</h2>
 
@@ -23,7 +23,7 @@ const Categories = () => {
           {categories.slice(0, 4).map((cat) => (
             <Link key={cat.id} to={cat.path}>
               <div className="flex flex-col items-center text-center hover:scale-105 transition-transform duration-300 cursor-pointer">
-                <div className="w-40 h-40 rounded-lg overflow-hidden mb-2">
+                <div className="w-64 h-64 sm:w-52 sm:h-52 rounded-lg overflow-hidden mb-2">
                   <img
                     src={cat.image}
                     alt={cat.name}
@@ -41,7 +41,7 @@ const Categories = () => {
           {categories.slice(4).map((cat) => (
             <Link key={cat.id} to={cat.path}>
               <div className="flex flex-col items-center text-center hover:scale-105 transition-transform duration-300 cursor-pointer">
-                <div className="w-40 h-40 rounded-lg overflow-hidden mb-2">
+                <div className="w-64 h-64 sm:w-52 sm:h-52 rounded-lg overflow-hidden mb-2">
                   <img
                     src={cat.image}
                     alt={cat.name}

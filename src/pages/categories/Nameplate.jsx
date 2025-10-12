@@ -1,11 +1,11 @@
-import React from 'react';
-import Layout from '../../components/Layout';
-import { nameplate } from '../../data/nameplate.js';
-import { LazyLoadImage } from 'react-lazy-load-image-component';
+import React from "react";
+import Layout from "../../components/Layout";
+import { nameplate } from "../../data/nameplate.js";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const Nameplate = () => {
-  const [material, setMaterial] = React.useState('');
-  const [shape, setShape] = React.useState('');
+  const [material, setMaterial] = React.useState("");
+  const [shape, setShape] = React.useState("");
 
   const filteredProducts = nameplate.filter(
     (p) => (!material || p.material === material) && (!shape || p.shape === shape)
@@ -21,7 +21,7 @@ const Nameplate = () => {
         `Size: ${product.size}\n\n` +
         `Please provide more information about this product.`
     );
-    window.open(`https://wa.me/9016707658?text=${message}`, '_blank');
+    window.open(`https://wa.me/9016707658?text=${message}`, "_blank");
   };
 
   return (
@@ -71,7 +71,10 @@ const Nameplate = () => {
               className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow duration-300 overflow-hidden flex flex-col"
             >
               {/* 🔥 Fixed Square Image Container */}
-              <div className="relative w-full" style={{ paddingBottom: '100%' }}>
+              <div
+                className="relative w-full"
+                style={{ paddingBottom: "100%" }}
+              >
                 <LazyLoadImage
                   src={product.link}
                   alt={product.name}
@@ -91,7 +94,7 @@ const Nameplate = () => {
                 </div>
                 <button
                   onClick={() => handleInquiry(product)}
-                  className="mt-auto bg-pink-500 text-white font-medium py-2 rounded-md hover:bg-pink-600 transition-colors relative overflow-hidden"
+                  className="mt-auto bg-black text-white font-medium py-2 rounded-md hover:bg-gray-800 transition-colors"
                 >
                   Inquiry Now
                 </button>
