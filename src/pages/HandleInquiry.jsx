@@ -135,7 +135,7 @@ const HandleInquiry = () => {
                                 </div>
                                 <button
                                     onClick={() => handleInquiry(product)}
-                                    className="mt-auto bg-green-500 text-white font-medium py-2 rounded-md hover:bg-gray-800 transition-colors"
+                                    className="mt-auto bg-green-500 hover:bg-green-500 active:bg-green-700 text-white font-medium py-2 rounded-md transition-colors"
                                 >
                                     Inquiry Now
                                 </button>
