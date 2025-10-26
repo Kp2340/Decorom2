@@ -7,6 +7,9 @@ import HandleInquiry from "./pages/HandleInquiry.jsx";
 import ContactUs from "./pages/Contact";
 import AboutUs from "./pages/About";
 
+// Analytic
+import { Analytics } from "@vercel/analytics/next"
+
 //Components
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
@@ -25,6 +28,7 @@ const App = () => (
       <Route path="/about" element={<AboutUs />} />
      </Routes>
     <Footer />
+   <Analytics/>
   </HashRouter>
 );
 export default App;
