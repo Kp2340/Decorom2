@@ -15,6 +15,8 @@ import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
 import Categories from "./components/Categories.jsx";
 import Carousel from "./components/Carousel.jsx";
+//   package.json: dependency: "react-speech-recognition": "^4.0.1"
+// import {DecoromVoiceBot} from "./pages/DecoromVoiceBot.jsx";
 
 const App = () => (
   <HashRouter>
@@ -26,6 +28,7 @@ const App = () => (
       <Route path="/productss/:type" element={<HandleInquiry />} />
       <Route path="/contact" element={<ContactUs />} />
       <Route path="/about" element={<AboutUs />} />
+      {/*<Route path="/agent" element={<DecoromVoiceBot />} />*/}
      </Routes>
     <Footer />
    <Analytics/>
