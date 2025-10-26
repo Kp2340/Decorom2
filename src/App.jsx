@@ -8,7 +8,7 @@ import ContactUs from "./pages/Contact";
 import AboutUs from "./pages/About";
 
 // Analytic
-import { Analytics } from "@vercel/analytics"
+import { Analytics } from "@vercel/analytics/react"
 
 //Components
 import Header from "./components/Header.jsx";
