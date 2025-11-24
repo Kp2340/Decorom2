@@ -1,6 +1,7 @@
-import { useState, useEffect} from 'react';
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import { useParams} from "react-router-dom";
+import { useState, useEffect } from 'react';
+import { useParams } from "react-router-dom";
+import ProductCard from '../components/ProductCard';
+import ProductDetailsModal from '../components/ProductDetailsModal';
 
 const HandleInquiry = () => {
     const { type } = useParams();
@@ -8,11 +9,12 @@ const HandleInquiry = () => {
     const [material, setMaterial] = useState("");
     const [shape, setShape] = useState("");
     const [filteredProducts, setFilteredProducts] = useState([]);
+    const [selectedProduct, setSelectedProduct] = useState(null);
 
-    // import("../../data/"+type+".js");
-    const productTypes = ["banner", "commercial", "film", "interior", "nameplate", "offer", "radium","safety"]
+    const productTypes = ["banner", "commercial", "film", "interior", "nameplate", "offer", "radium", "safety"]
+
     useEffect(() => {
-        if(!type || !productTypes.includes(type)){
+        if (!type || !productTypes.includes(type)) {
             setProduct([]);
             return;
         }
@@ -24,37 +26,12 @@ const HandleInquiry = () => {
             });
     }, [type]);
 
-            // import(`../../data/${type}`)
-            // .then((module) => {
-            //     const loadedProducts = module.type || module.default || module;
-            //     setProduct(loadedProducts);
-            // console.log(product);
-            //     })
-            // .catch((error) => {
-            //     console.error("Failed to load product data:", error);
-            //     setProduct([]);
-            // });
-        // refreshProducts(product);
-
     useEffect(() => {
         const filtered = product.filter(
             (p) => (!material || p.material === material) && (!shape || p.shape === shape)
         );
         setFilteredProducts(filtered);
     }, [product, material, shape]);
-
-    const handleInquiry = (product) => {
-        const message = encodeURIComponent(
-            `Hi, I'm interested in:\n\n` +
-            `Image: decorom.in${product.link}\n` +
-            `Product_Name: ${product.name}\n` +
-            `Material: ${product.material}\n` +
-            `Shape: ${product.shape}\n` +
-            `Size: ${product.size}\n\n` +
-            `Please provide more information about this product.`
-        );
-        window.open(`https://wa.me/9016707658?text=${message}`, "_blank");
-    };
 
     return !product ? (
         <header className="bg-pink-600 text-white py-6 mb-8">
@@ -77,11 +54,11 @@ const HandleInquiry = () => {
             </section>
 
             {/* Filters */}
-            <section id="filters" className="py-8 bg-white">
-                <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-4 justify-center items-center">
+            <section id="filters" className="py-8 bg-white sticky top-0 z-30 shadow-sm">
+                <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-4 justify-center items-center px-4">
                     <select
                         onChange={(e) => setMaterial(e.target.value)}
-                        className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                        className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500 w-full md:w-auto"
                     >
                         <option value="">All Materials</option>
                         <option value="Acrylic">Acrylic</option>
@@ -90,7 +67,7 @@ const HandleInquiry = () => {
                     </select>
                     <select
                         onChange={(e) => setShape(e.target.value)}
-                        className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                        className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500 w-full md:w-auto"
                     >
                         <option value="">All Shapes</option>
                         <option value="Square">Square</option>
@@ -104,47 +81,26 @@ const HandleInquiry = () => {
 
             {/* Gallery */}
             {filteredProducts && (
-            <section id="gallery" className="py-12 bg-gray-50">
-                <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-4">
-                    {filteredProducts.map((product) => (
-                        <div
-                            key={product.id}
-                            className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow duration-300 overflow-hidden flex flex-col"
-                        >
-                            {/* 🔥 Fixed Square Image Container */}
-                            <div
-                                className="relative w-full"
-                                style={{ paddingBottom: "100%" }}
-                            >
-                                <LazyLoadImage
-                                    src={product.link}
-                                    alt={product.name}
-                                    className="absolute inset-0 w-full h-full object-contain bg-gray-100"
-                                />
-                            </div>
+                <section id="gallery" className="py-12 bg-gray-50">
+                    <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-4">
+                        {filteredProducts.map((product) => (
+                            <ProductCard
+                                key={product.id}
+                                product={product}
+                                onClick={setSelectedProduct}
+                            />
+                        ))}
+                    </div>
+                </section>
+            )}
 
-                            {/* Product Info */}
-                            <div className="p-4 flex flex-col flex-1">
-                                <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                                    {product.name}
-                                </h3>
-                                <div className="text-gray-600 text-sm mb-4 space-y-1">
-                                    <p>Material: {product.material}</p>
-                                    <p>Shape: {product.shape}</p>
-                                    <p>Size: {product.size}</p>
-                                </div>
-                                <button
-                                    onClick={() => handleInquiry(product)}
-                                    className="mt-auto bg-green-500 hover:bg-green-500 active:bg-green-700 text-white font-medium py-2 rounded-md transition-colors"
-                                >
-                                    Inquiry Now
-                                </button>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </section>)
-            }
+            {/* Product Details Modal */}
+            {selectedProduct && (
+                <ProductDetailsModal
+                    product={selectedProduct}
+                    onClose={() => setSelectedProduct(null)}
+                />
+            )}
         </div>
     );
 };
