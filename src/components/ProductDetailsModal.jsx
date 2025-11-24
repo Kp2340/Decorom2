@@ -40,30 +40,47 @@ const ProductDetailsModal = ({ product, onClose }) => {
         setAddress(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleCheckout = async () => {
+    const handlePlaceOrder = async () => {
         // Validation
         if (!calculatedConfig || !calculatedConfig.isValid) {
             alert("Please ensure product configuration is valid.");
             return;
         }
-        if (!address.flatNo || !address.society || !address.area || !address.pincode) {
+
+        // Price Validation (Crucial for Backend)
+        if (calculatedConfig.price <= 0) {
+            alert("Price is calculating... please wait a moment.");
+            return;
+        }
+
+        const { flatNo, society, area, city, state, pincode } = address;
+        if (!flatNo || !society || !area || !city || !state || !pincode) {
             alert("Please fill in all address details.");
             return;
         }
 
         setIsSubmitting(true);
 
+        // Construct size string (e.g., "10x12")
+        const sizeString = `${calculatedConfig.height}x${calculatedConfig.width}`;
+
         const payload = {
-            category: product.category || "Unknown", // Assuming category is passed or merged in data
-            imageId: product.id || product.name,
-            material: calculatedConfig.material,
-            size: `${calculatedConfig.height}x${calculatedConfig.width}`,
+            category: product.category || "General",
+            material: calculatedConfig.material, // Use user-selected material
+            size: sizeString,
             totalSqInch: calculatedConfig.totalSqInch,
-            price: calculatedConfig.price,
-            isLightIncluded: calculatedConfig.withLighting,
-            isFittingIncluded: calculatedConfig.withFitting,
-            userIP: userIP,
-            address: address
+            frontendPrice: calculatedConfig.price,
+            lightingIncluded: calculatedConfig.withLighting,
+            fittingIncluded: calculatedConfig.withFitting,
+            customerAddress: {
+                fullName: "Valued Customer",
+                email: "customer@example.com",
+                phone: "9999999999",
+                street: `${flatNo}, ${society}, ${area}`,
+                city: city,
+                state: state,
+                zipCode: pincode
+            }
         };
 
         try {
@@ -76,10 +93,16 @@ const ProductDetailsModal = ({ product, onClose }) => {
             });
 
             if (response.ok) {
-                alert("Order Placed Successfully!");
+                const data = await response.json(); // Expecting Order object or ID
+                console.log("Order Placed! ID:", data.id || data);
+                alert("Order Placed!");
                 onClose();
+            } else if (response.status === 400) {
+                const errorMsg = await response.text();
+                alert(`Security Alert: ${errorMsg}`);
             } else {
-                alert("Failed to place order. Please try again.");
+                const errorMsg = await response.text();
+                alert(`Order Failed: ${errorMsg}`);
             }
         } catch (error) {
             console.error("Checkout error:", error);
@@ -198,7 +221,7 @@ const ProductDetailsModal = ({ product, onClose }) => {
 
                     {/* Checkout Button */}
                     <button
-                        onClick={handleCheckout}
+                        onClick={handlePlaceOrder}
                         disabled={!calculatedConfig?.isValid || isSubmitting}
                         className={`mt-6 w-full font-bold py-3 rounded-lg shadow-md transition-all transform hover:scale-[1.02] 
                             ${(!calculatedConfig?.isValid || isSubmitting)

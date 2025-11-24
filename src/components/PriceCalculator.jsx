@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 const PriceCalculator = ({ initialMaterial = "Acrylic", initialSize = "", productHasLight = false, onPriceChange }) => {
     // Parse initial size if possible (e.g., "12x24 inches")
@@ -19,16 +19,19 @@ const PriceCalculator = ({ initialMaterial = "Acrylic", initialSize = "", produc
     const [finalPrice, setFinalPrice] = useState(0);
     const [error, setError] = useState("");
 
-    // Sync lighting state if prop changes (though usually static per product)
+    // Sync lighting state if prop changes
     useEffect(() => {
         if (productHasLight) {
             setWithLighting(true);
         }
     }, [productHasLight]);
 
-    // Pricing Rules
-    const calculatePrice = () => {
-        const area = height * width;
+    // Pricing Rules wrapped in useCallback to be a stable dependency
+    const calculatePrice = useCallback(() => {
+        const h = parseInt(height) || 0;
+        const w = parseInt(width) || 0;
+        const area = h * w;
+
         let isValid = true;
         let errorMsg = "";
 
@@ -72,14 +75,7 @@ const PriceCalculator = ({ initialMaterial = "Acrylic", initialSize = "", produc
 
         // Lighting Logic
         // If productHasLight is true, lighting is mandatory and included in calculation logic
-        // If productHasLight is false, checkbox is hidden, so withLighting should be false (unless user checked it previously? Prompt says "If false / undefined: Completely Hide the lighting checkbox". So user can't check it. I should force it to false if productHasLight is false?
-        // Wait, the prompt says: "If false / undefined: Completely Hide the lighting checkbox." It doesn't explicitly say "Force to false". But if it's hidden, user can't toggle it.
-        // However, for "Lighting Logic (Crucial)": "If true: ... Apply specific price multiplier".
-        // "If false: ...". It implies if the product DOESN'T support light, we shouldn't charge for it.
-        // So I will assume if productHasLight is false, withLighting is effectively false for calculation.
-        // Actually, let's stick to the state `withLighting`. If the checkbox is hidden, the user can't enable it. So it stays false (default).
-
-        // Logic for multiplier
+        // If withLighting is checked (and allowed), apply multiplier
         if (withLighting) {
             if (isMetal) {
                 materialCost *= 1.6; // +60%
@@ -97,10 +93,11 @@ const PriceCalculator = ({ initialMaterial = "Acrylic", initialSize = "", produc
         const calculatedTotal = Math.round(total);
         setFinalPrice(calculatedTotal);
 
+        // Notify parent
         if (onPriceChange) {
             onPriceChange({
-                height,
-                width,
+                height: h,
+                width: w,
                 material,
                 withLighting,
                 withFitting,
@@ -109,11 +106,12 @@ const PriceCalculator = ({ initialMaterial = "Acrylic", initialSize = "", produc
                 isValid
             });
         }
-    };
+    }, [height, width, material, withLighting, withFitting, onPriceChange]);
 
+    // Run calculation whenever dependencies change
     useEffect(() => {
         calculatePrice();
-    }, [height, width, material, withLighting, withFitting, productHasLight]);
+    }, [calculatePrice]);
 
     return (
         <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 mt-4">
@@ -125,7 +123,7 @@ const PriceCalculator = ({ initialMaterial = "Acrylic", initialSize = "", produc
                     <input
                         type="number"
                         value={height}
-                        onChange={(e) => setHeight(Number(e.target.value))}
+                        onChange={(e) => setHeight(e.target.value)}
                         className={`w-full border rounded px-2 py-1 ${error ? 'border-red-500 focus:ring-red-500' : 'border-gray-300'}`}
                     />
                 </div>
@@ -134,7 +132,7 @@ const PriceCalculator = ({ initialMaterial = "Acrylic", initialSize = "", produc
                     <input
                         type="number"
                         value={width}
-                        onChange={(e) => setWidth(Number(e.target.value))}
+                        onChange={(e) => setWidth(e.target.value)}
                         className={`w-full border rounded px-2 py-1 ${error ? 'border-red-500 focus:ring-red-500' : 'border-gray-300'}`}
                     />
                 </div>
