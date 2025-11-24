@@ -1,4 +1,4 @@
-import { HashRouter , Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 
 //Categories
 import HandleInquiry from "./pages/HandleInquiry.jsx";
@@ -6,6 +6,7 @@ import HandleInquiry from "./pages/HandleInquiry.jsx";
 //Pages
 import ContactUs from "./pages/Contact";
 import AboutUs from "./pages/About";
+import PaymentSuccess from "./pages/PaymentSuccess.jsx";
 
 // Analytic
 import { Analytics } from "@vercel/analytics/react"
@@ -21,17 +22,18 @@ import Carousel from "./components/Carousel.jsx";
 const App = () => (
   <HashRouter>
     <Header />
-      <Routes>
-      <Route path="*" element={<div> <Carousel /> <Categories/> </div>} />
-      <Route path="/" element={<div> <Carousel /> <Categories/> </div>} />
+    <Routes>
+      <Route path="*" element={<div> <Carousel /> <Categories /> </div>} />
+      <Route path="/" element={<div> <Carousel /> <Categories /> </div>} />
       <Route path="/products" element={<Categories />} />
       <Route path="/productss/:type" element={<HandleInquiry />} />
       <Route path="/contact" element={<ContactUs />} />
       <Route path="/about" element={<AboutUs />} />
+      <Route path="/payment-success" element={<PaymentSuccess />} />
       {/*<Route path="/agent" element={<DecoromVoiceBot />} />*/}
-     </Routes>
+    </Routes>
     <Footer />
-   <Analytics/>
+    <Analytics />
   </HashRouter>
 );
 export default App;
