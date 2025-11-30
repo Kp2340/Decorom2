@@ -84,7 +84,7 @@ const ProductDetailsModal = ({ product, onClose }) => {
         };
 
         try {
-            const response = await fetch('http://localhost:8080/checkout', {
+            const response = await fetch('https://api.decorom.in/checkout', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
