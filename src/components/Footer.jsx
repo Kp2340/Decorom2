@@ -122,7 +122,7 @@ const Footer = () => {
               href="https://facebook.com/decoromindia"
               className="flex items-center gap-2 hover:text-blue-700 transition-colors"
             >
-              <FaFacebookF className="text-black" /> /decoromindia
+              <FaFacebookF className="text-black" /> Decorom India
             </a>
           </div>
         </div>
