@@ -3,8 +3,8 @@ import react from '@vitejs/plugin-react';
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 
 export default defineConfig({
-  // base: '/',
-  base: '/Decorom2/',
+  base: '/',
+  // base: '/Decorom2/',
   plugins: [
     react(),
     ViteImageOptimizer({
