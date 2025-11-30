@@ -18,7 +18,7 @@ const PaymentSuccess = () => {
         }
 
         // Fetch order details from backend
-        fetch(`https://api.decorom.in/orders/${orderId}`)
+        fetch(`${import.meta.env.VITE_APP_URL}/orders/${orderId}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Order not found');
