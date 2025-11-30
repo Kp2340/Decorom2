@@ -63,7 +63,7 @@ const ContactUs = () => {
               ✉️
             </div>
             <h3 className="text-lg font-semibold text-gray-800">Email</h3>
-            <p className="mt-2 text-gray-600">info@decorom.in</p>
+            <p className="mt-2 text-gray-600">decorom213@gmail.com</p>
           </div>
         </div>
 
