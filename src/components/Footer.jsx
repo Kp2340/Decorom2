@@ -7,6 +7,7 @@ import {
   FaInstagram,
   FaFacebookF,
 } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -18,10 +19,10 @@ const Footer = () => {
           <p className="flex items-center gap-2 justify-center md:justify-start">
             <FaEnvelope className="text-black" />{" "}
             <a
-              href="mailto:decorom213@gmail.com"
+              href="mailto:kushpatel2354@gmail.com"
               className="hover:text-yellow-600 transition-colors"
             >
-              decorom213@gmail.com
+              kushpatel2354@gmail.com
             </a>
           </p>
           <p className="flex items-center gap-2 justify-center md:justify-start">
@@ -33,9 +34,9 @@ const Footer = () => {
               +91 9016707658
             </a>
           </p>
-          <p className="flex items-center gap-2 justify-start">
+          <p className="flex items-center gap-2 justify-center md:justify-start">
             <FaMapMarkerAlt className="text-black flex-shrink-0" />
-            <span>Shop No. 2, Ruchir Apartment, Ahmedabad</span>
+            <span>Ahmedabad, Gujarat, India</span>
           </p>
         </div>
 
@@ -44,60 +45,99 @@ const Footer = () => {
           <h3 className="text-lg font-semibold">Categories</h3>
           <ul className="space-y-1">
             <li>
-              <a
-                href="/nameplate"
+              <Link
+                to="/products/nameplate"
                 className="hover:text-yellow-600 hover:underline transition-colors"
               >
                 Name Plate
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="/commercial"
+              <Link
+                to="/products/commercial"
                 className="hover:text-yellow-600 hover:underline transition-colors"
               >
                 Commercial
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="/interior"
+              <Link
+                to="/products/interior"
                 className="hover:text-yellow-600 hover:underline transition-colors"
               >
                 Interior
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="/radium"
+              <Link
+                to="/products/radium"
                 className="hover:text-yellow-600 hover:underline transition-colors"
               >
                 Radium
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="/banner"
+              <Link
+                to="/products/banner"
                 className="hover:text-yellow-600 hover:underline transition-colors"
               >
                 Banner
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="/safety"
+              <Link
+                to="/products/safety"
                 className="hover:text-yellow-600 hover:underline transition-colors"
               >
                 Safety
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="/film"
+              <Link
+                to="/products/film"
                 className="hover:text-yellow-600 hover:underline transition-colors"
               >
                 Film
-              </a>
+              </Link>
+            </li>
+          </ul>
+        </div>
+
+        {/* Policies Section */}
+        <div className="flex-1 space-y-3 text-center">
+          <h3 className="text-lg font-semibold">Policies</h3>
+          <ul className="space-y-1">
+            <li>
+              <Link
+                to="/privacy"
+                className="hover:text-yellow-600 hover:underline transition-colors"
+              >
+                Privacy Policy
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/terms"
+                className="hover:text-yellow-600 hover:underline transition-colors"
+              >
+                Terms & Conditions
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/refund-policy"
+                className="hover:text-yellow-600 hover:underline transition-colors"
+              >
+                Refund Policy
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/shipping-policy"
+                className="hover:text-yellow-600 hover:underline transition-colors"
+              >
+                Shipping Policy
+              </Link>
             </li>
           </ul>
         </div>
@@ -130,7 +170,7 @@ const Footer = () => {
 
       {/* Footer Bottom */}
       <div className="bg-yellow-200 text-black text-center py-4 mt-6">
-        <p>&copy; 2025 Decorom Gallery. All rights reserved.</p>
+        <p>&copy; 2025 Decorom. All Rights Reserved.</p>
       </div>
     </footer>
   );

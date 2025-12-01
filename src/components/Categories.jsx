@@ -1,5 +1,5 @@
 import React from "react";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const categories = [
   { id: 1, name: "NamePlate", image: "category/1.png", path: "/products/nameplate" },
@@ -24,9 +24,9 @@ const Categories = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 justify-items-center mb-6">
           {categories.slice(0, 8).map((cat) => (
             <Link key={cat.id}
-                  // to={cat.path}
-                  to={"/productss/"+cat.name.toLowerCase()} >
-                  {/*onClick={() => navigate("/productss"+cat.name.toLowerCase())} >*/}
+              // to={cat.path}
+              to={"/products/" + cat.name.toLowerCase()} >
+              {/*onClick={() => navigate("/productss"+cat.name.toLowerCase())} >*/}
               <div className="flex flex-col items-center text-center hover:scale-105 transition-transform duration-300 cursor-pointer">
                 <div className="w-64 h-64 sm:w-52 sm:h-52 rounded-lg overflow-hidden mb-2">
                   <img
