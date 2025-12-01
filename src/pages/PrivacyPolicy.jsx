@@ -44,7 +44,7 @@ const PrivacyPolicy = () => {
                 <section>
                     <h2 className="text-xl font-semibold mb-3 text-black">5. Contact Us</h2>
                     <p>
-                        For more information about our privacy practices, if you have questions, or if you would like to make a complaint, please contact us by e-mail at <a href="mailto:kushpatel2354@gmail.com" className="text-blue-600 hover:underline">kushpatel2354@gmail.com</a>.
+                        For more information about our privacy practices, if you have questions, or if you would like to make a complaint, please contact us by e-mail at <a href="mailto:decorom213@gmail.com" className="text-blue-600 hover:underline">decorom213@gmail.com</a>.
                     </p>
                 </section>
             </div>

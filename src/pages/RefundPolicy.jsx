@@ -16,7 +16,7 @@ const RefundPolicy = () => {
                 <section>
                     <h2 className="text-xl font-semibold mb-3 text-black">2. Damaged or Defective Items</h2>
                     <p>
-                        Refunds are only processed for damaged/defective items reported within <strong>24 hours of delivery</strong>. If you receive a damaged item, please contact us immediately with photographic evidence at <a href="mailto:kushpatel2354@gmail.com" className="text-blue-600 hover:underline">kushpatel2354@gmail.com</a>.
+                        Refunds are only processed for damaged/defective items reported within <strong>24 hours of delivery</strong>. If you receive a damaged item, please contact us immediately with photographic evidence at <a href="mailto:decorom213@gmail.com" className="text-blue-600 hover:underline">decorom213@gmail.com</a>.
                     </p>
                 </section>
 

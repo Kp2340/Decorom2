@@ -19,10 +19,10 @@ const Footer = () => {
           <p className="flex items-center gap-2 justify-center md:justify-start">
             <FaEnvelope className="text-black" />{" "}
             <a
-              href="mailto:kushpatel2354@gmail.com"
+              href="mailto:decorom213@gmail.com"
               className="hover:text-yellow-600 transition-colors"
             >
-              kushpatel2354@gmail.com
+              decorom213@gmail.com
             </a>
           </p>
           <p className="flex items-center gap-2 justify-center md:justify-start">
