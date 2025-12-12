@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 import ProductCard from '../components/ProductCard';
 import ProductDetailsModal from '../components/ProductDetailsModal';
+import {useParams} from "react-router-dom";
 
 const HandleInquiry = () => {
     const { type } = useParams();
@@ -14,11 +15,12 @@ const HandleInquiry = () => {
     const productTypes = ["banner", "commercial", "film", "interior", "nameplate", "offer", "radium", "safety"]
 
     useEffect(() => {
-        if (!type || !productTypes.includes(type)) {
-            setProduct([]);
-            return;
-        }
-        import(`../data/${type}.js`)
+        // if (!type || !productTypes.includes(type)) {
+        //     setProduct([]);
+        //     return;
+        // }
+        // import(`../data/${type}.js`)
+        import(`../data/nameplate.js`)
             .then((module) => setProduct(module.types))
             .catch((error) => {
                 console.log(error);

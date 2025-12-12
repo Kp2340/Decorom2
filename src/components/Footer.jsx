@@ -41,6 +41,7 @@ const Footer = () => {
         </div>
 
         {/* Categories Section */}
+        {/*
         <div className="flex-1 space-y-3 text-center">
           <h3 className="text-lg font-semibold">Categories</h3>
           <ul className="space-y-1">
@@ -102,6 +103,7 @@ const Footer = () => {
             </li>
           </ul>
         </div>
+        */}
 
         {/* Policies Section */}
         <div className="flex-1 space-y-3 text-center">

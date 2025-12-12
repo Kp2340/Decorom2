@@ -28,10 +28,15 @@ const App = () => (
     <Header />
     <main className="pt-20 min-h-screen">
       <Routes>
+        <Route path="*" element={<HandleInquiry />} />
+        <Route path="/" element={<HandleInquiry/>} />
+        {/*
         <Route path="*" element={<div> <Carousel /> <Categories /> </div>} />
         <Route path="/" element={<div> <Carousel /> <Categories /> </div>} />
         <Route path="/products" element={<Categories />} />
         <Route path="/products/:type" element={<HandleInquiry />} />
+        */}
+        {/*<Route path="/products" element={<HandleInquiry />} />*/}
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/payment-success" element={<PaymentSuccess />} />

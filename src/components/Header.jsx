@@ -9,7 +9,7 @@ const Header = () => {
 
   const menuItems = [
     { name: "Home", path: "/" },
-    { name: "Products", path: "/products" },
+    // { name: "Products", path: "/products" },
     { name: "Contact Us", path: "/contact" },
     { name: "About Us", path: "/about" },
   ];
