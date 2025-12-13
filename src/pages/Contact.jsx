@@ -44,6 +44,7 @@ const ContactUs = () => {
             </div>
             <h3 className="text-lg font-semibold text-gray-800">Phone</h3>
             <p className="mt-2 text-gray-600">+91 9016707658</p>
+            <p className="mt-2 text-gray-600">Shubh Bhavsar</p>
           </div>
 
           {/* Address */}
