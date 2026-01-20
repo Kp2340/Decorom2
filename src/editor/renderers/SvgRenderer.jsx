@@ -21,10 +21,12 @@ const SvgRenderer = memo(
       ? `/designs/blank/${productId}.png`
       : null;
 
-    // Calculate font size with auto-scaling based on text length and scale factor
+    // Calculate font size with auto-scaling based on text length
+    // Note: We do NOT apply 'scale' here because the viewBox is fixed.
+    // The design scales proportionally with the SVG container.
     const calculateFontSize = useMemo(
       () => (zone, text) => {
-        if (!text) return zone.fontSize * scale;
+        if (!text) return zone.fontSize;
 
         const charCount = text.length;
         const maxChars = zone.maxLength || 15;
@@ -37,9 +39,9 @@ const SvgRenderer = memo(
           scaledSize = fontSize * (1 - reduction * 0.4);
         }
 
-        return Math.round(scaledSize * scale);
+        return Math.round(scaledSize);
       },
-      [scale],
+      [],
     );
 
     // Convert percentage position to viewBox coordinates

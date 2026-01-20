@@ -149,16 +149,6 @@ const NameplateEditor = ({
                   </div>
                 </div>
               </div>
-
-              {/* Default size hint */}
-              <p className="text-xs text-gray-400 mt-2">
-                Default: {defaultWidth} × {defaultHeight} inch
-                {scale !== 1 && (
-                  <span className="ml-1 text-pink-500">
-                    (Currently {Math.round(scale * 100)}% of default)
-                  </span>
-                )}
-              </p>
             </div>
 
             {/* Validation message */}
