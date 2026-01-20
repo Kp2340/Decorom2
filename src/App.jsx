@@ -18,8 +18,6 @@ import { Analytics } from "@vercel/analytics/react";
 //Components
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
-import Categories from "./components/Categories.jsx";
-import Carousel from "./components/Carousel.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
 
 const App = () => (

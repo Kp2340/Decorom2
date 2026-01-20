@@ -1,9 +1,9 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
 
 export default defineConfig({
-  base: '/',
+  base: "/",
   // base: '/Decorom2/',
   plugins: [
     react(),
@@ -20,8 +20,8 @@ export default defineConfig({
       // avif: { quality: 70 },
       svg: {
         plugins: [
-          { name: 'removeViewBox', active: false },
-          { name: 'sortAttrs' },
+          { name: "removeViewBox", active: false },
+          { name: "sortAttrs" },
         ],
       },
     }),

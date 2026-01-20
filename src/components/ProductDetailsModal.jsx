@@ -1,106 +1,143 @@
-import React, { useState, useEffect } from "react";
-import { LazyLoadImage } from "react-lazy-load-image-component";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import PriceCalculator from "./PriceCalculator";
 import NameplateEditor from "../editor/NameplateEditor";
+import Gallery from "./model/Gallery";
+import ProductInfo from "./model/ProductInfo";
+import ShippingForm, { validateShipping } from "./model/ShippingForm";
+import CheckoutButton from "./model/CheckoutButton";
 
+/**
+ * ProductDetailsModal - Main product modal.
+ *
+ * UX Features:
+ * - Body scroll locked when open
+ * - Close button always visible (sticky header)
+ * - Internal scrolling only
+ * - Clean separation: Gallery | Details
+ */
 const ProductDetailsModal = ({ product, onClose }) => {
+  // Lock body scroll + handle Escape key + browser back button
+  useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    // Escape key handler
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+
+    // Push history state for mobile back button
+    window.history.pushState({ modal: true }, "");
+    const handlePopState = () => {
+      onClose();
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      document.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [onClose]);
+
   if (!product) return null;
 
   // Gallery Logic: Main image + extra images
-  const allImages = [product.link, ...(product.images || [])];
+  const allImages = useMemo(
+    () => [product.link, ...(product.images || [])],
+    [product.link, product.images],
+  );
   const [selectedImage, setSelectedImage] = useState(allImages[0]);
 
   // Calculator State
   const [calculatedConfig, setCalculatedConfig] = useState(null);
 
   // Nameplate Editor State (for customizable products)
-  const [nameplatePayload, setNameplatePayload] = useState(null);
   const [editorDimensions, setEditorDimensions] = useState(null);
 
-  // Checkout Form State
-  const [userIP, setUserIP] = useState("");
+  // Checkout Form State - includes identity + address fields
   const [address, setAddress] = useState({
+    name: "",
+    mobile: "",
+    email: "",
     flatNo: "",
     society: "",
     area: "",
     city: "Ahmedabad",
     state: "Gujarat",
+    country: "India",
     pincode: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Fetch IP on mount
-  useEffect(() => {
-    fetch("https://api.ipify.org?format=json")
-      .then((res) => res.json())
-      .then((data) => setUserIP(data.ip))
-      .catch((err) => {
-        console.warn(
-          "IP fetch blocked by client (likely ad-blocker). Using fallback.",
-        );
-        setUserIP("0.0.0.0"); // Fallback IP to ensure checkout doesn't fail
-      });
+  // Determine if product has light
+  const productHasLight = product.hasLight || false;
+
+  // Stable callbacks
+  const handleSelectImage = useCallback((img) => {
+    setSelectedImage(img);
   }, []);
 
-  const handleAddressChange = (e) => {
-    const { name, value } = e.target;
+  const handleAddressChange = useCallback((name, value) => {
     setAddress((prev) => ({ ...prev, [name]: value }));
-  };
+  }, []);
 
-  const handlePlaceOrder = async () => {
+  const handlePlaceOrder = useCallback(async () => {
     // Validation
     if (!calculatedConfig || !calculatedConfig.isValid) {
       alert("Please ensure product configuration is valid.");
       return;
     }
 
-    // Price Validation (Crucial for Backend)
     if (calculatedConfig.price <= 0) {
       alert("Price is calculating... please wait a moment.");
       return;
     }
 
-    const { flatNo, society, area, city, state, pincode } = address;
-    if (!flatNo || !society || !area || !city || !state || !pincode) {
-      alert("Please fill in all address details.");
+    // Use validateShipping helper
+    const validationError = validateShipping(address);
+    if (validationError) {
+      alert(validationError);
       return;
     }
 
     setIsSubmitting(true);
 
-    // Construct size string (e.g., "10x12")
     const sizeString = `${calculatedConfig.height}x${calculatedConfig.width}`;
 
     const payload = {
       category: product.category || "General",
-      material: calculatedConfig.material, // Use user-selected material
+      material: calculatedConfig.material,
       size: sizeString,
       totalSqInch: calculatedConfig.totalSqInch,
       frontendPrice: calculatedConfig.price,
       lightingIncluded: calculatedConfig.withLighting,
       fittingIncluded: calculatedConfig.withFitting,
       customerAddress: {
-        fullName: "Valued Customer",
-        email: "customer@example.com",
-        phone: "9999999999",
-        street: `${flatNo}, ${society}, ${area}`,
-        city: city,
-        state: state,
-        zipCode: pincode,
+        fullName: address.name,
+        email: address.email,
+        phone: address.mobile,
+        street: `${address.flatNo}, ${address.society}, ${address.area}`,
+        city: address.city,
+        state: address.state,
+        country: address.country,
+        zipCode: address.pincode,
       },
     };
 
     try {
       const response = await fetch(`${import.meta.env.VITE_APP_URL}/checkout`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
       if (response.ok) {
-        const data = await response.json(); // Expecting Order object or ID
+        const data = await response.json();
         console.log("Order Placed! ID:", data.id || data);
         alert("Order Placed!");
         onClose();
@@ -117,185 +154,98 @@ const ProductDetailsModal = ({ product, onClose }) => {
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  // Determine if product has light (heuristic or prop if available)
-  // Assuming product.hasLight might exist, or we default to false.
-  // The prompt says "Accept a prop... from the parent".
-  // Since we are in the modal, we pass it to PriceCalculator.
-  // We'll assume the product object has this info.
-  const productHasLight = product.hasLight || false;
+  }, [calculatedConfig, address, product, onClose]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm overflow-y-auto">
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto flex flex-col md:flex-row relative animate-fadeIn">
-        {/* Close Button */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 z-10 p-2 bg-white rounded-full shadow-md hover:bg-gray-100 text-gray-600"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
+    /* Modal Overlay - fixed, handles backdrop click */
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+      onClick={(e) => {
+        // Close on backdrop click only
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      {/* Modal Container - positioned, contains header + body */}
+      <div
+        className="relative bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col animate-fadeIn"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Sticky Header with Close Button - ALWAYS visible */}
+        <div className="sticky top-0 z-20 flex justify-end p-3 bg-white/95 backdrop-blur-sm rounded-t-xl border-b border-gray-100">
+          <button
+            onClick={onClose}
+            className="p-2 bg-gray-100 hover:bg-gray-200 rounded-full text-gray-600 transition-colors"
+            aria-label="Close modal"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
               strokeWidth={2}
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </button>
-
-        {/* Left: Amazon-Style Gallery */}
-        <div className="w-full md:w-1/2 p-6 bg-gray-50 flex flex-col items-center">
-          {/* Main Image */}
-          <div className="w-full aspect-square bg-white rounded-lg shadow-sm overflow-hidden mb-4 relative">
-            <LazyLoadImage
-              src={selectedImage}
-              alt={product.name}
-              className="w-full h-full object-contain"
-            />
-          </div>
-
-          {/* Thumbnails Strip */}
-          {allImages.length > 1 && (
-            <div className="flex gap-2 overflow-x-auto w-full py-2 px-1 scrollbar-hide">
-              {allImages.map((img, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setSelectedImage(img)}
-                  className={`w-16 h-16 rounded-md overflow-hidden border-2 flex-shrink-0 transition-all ${selectedImage === img ? "border-pink-500 scale-105" : "border-gray-200 hover:border-pink-300"}`}
-                >
-                  <LazyLoadImage
-                    src={img}
-                    alt={`View ${idx + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                </button>
-              ))}
-            </div>
-          )}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
         </div>
 
-        {/* Right: Details, Calculator & Checkout */}
-        <div className="w-full md:w-1/2 p-6 flex flex-col">
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">
-            {product.name}
-          </h2>
-          <p className="text-gray-600 mb-4 text-sm">{product.description}</p>
-
-          <div className="grid grid-cols-2 gap-4 text-sm text-gray-500 mb-4">
-            <div>
-              <span className="font-semibold">Shape:</span> {product.shape}
-            </div>
-            <div>
-              <span className="font-semibold">Default Size:</span>{" "}
-              {product.size}
-            </div>
-          </div>
-
-          <hr className="my-2 border-gray-200" />
-
-          {/* Nameplate Editor for customizable products */}
-          {product.editorConfig?.enabled && (
-            <div className="mb-4">
-              <NameplateEditor
-                product={product}
-                onOrderReady={setNameplatePayload}
-                onDimensionsChange={setEditorDimensions}
-              />
-            </div>
-          )}
-
-          {/* Calculator */}
-          <PriceCalculator
-            initialMaterial={product.material}
-            initialSize={product.size}
-            productHasLight={productHasLight}
-            onPriceChange={setCalculatedConfig}
-            externalDimensions={
-              product.editorConfig?.enabled ? editorDimensions : null
-            }
+        {/* Scrollable Modal Body */}
+        <div
+          className="flex-1 overflow-y-auto flex flex-col md:flex-row"
+          style={{ WebkitOverflowScrolling: "touch" }}
+        >
+          {/* Left: Gallery */}
+          <Gallery
+            images={allImages}
+            selectedImage={selectedImage}
+            onSelectImage={handleSelectImage}
+            productName={product.name}
           />
 
-          {/* Shipping Details Form */}
-          <div className="mt-6">
-            <h4 className="text-lg font-semibold mb-3 text-gray-800">
-              Shipping Details
-            </h4>
-            <div className="grid grid-cols-2 gap-3">
-              <input
-                type="text"
-                name="flatNo"
-                placeholder="Flat / Residence No."
-                value={address.flatNo}
-                onChange={handleAddressChange}
-                className="border rounded px-3 py-2 text-sm w-full"
-              />
-              <input
-                type="text"
-                name="society"
-                placeholder="Society / Building"
-                value={address.society}
-                onChange={handleAddressChange}
-                className="border rounded px-3 py-2 text-sm w-full"
-              />
-            </div>
-            <input
-              type="text"
-              name="area"
-              placeholder="Area / Locality"
-              value={address.area}
-              onChange={handleAddressChange}
-              className="border rounded px-3 py-2 text-sm w-full mt-3"
-            />
-            <div className="grid grid-cols-3 gap-3 mt-3">
-              <input
-                type="text"
-                name="city"
-                placeholder="City"
-                value={address.city}
-                onChange={handleAddressChange}
-                className="border rounded px-3 py-2 text-sm w-full"
-              />
-              <input
-                type="text"
-                name="state"
-                placeholder="State"
-                value={address.state}
-                onChange={handleAddressChange}
-                className="border rounded px-3 py-2 text-sm w-full"
-              />
-              <input
-                type="text"
-                name="pincode"
-                placeholder="Pincode"
-                value={address.pincode}
-                onChange={handleAddressChange}
-                className="border rounded px-3 py-2 text-sm w-full"
-              />
-            </div>
-          </div>
+          {/* Right: Details, Calculator & Checkout */}
+          <div className="w-full md:w-1/2 p-6 pb-8 flex flex-col">
+            <ProductInfo product={product} />
 
-          {/* Checkout Button */}
-          <button
-            onClick={handlePlaceOrder}
-            disabled={!calculatedConfig?.isValid || isSubmitting}
-            className={`mt-6 w-full font-bold py-3 rounded-lg shadow-md transition-all transform hover:scale-[1.02] 
-                            ${
-                              !calculatedConfig?.isValid || isSubmitting
-                                ? "bg-gray-400 cursor-not-allowed"
-                                : "bg-green-600 hover:bg-green-700 text-white"
-                            }`}
-          >
-            {isSubmitting
-              ? "Processing..."
-              : `Place Order & Pay - ₹${calculatedConfig?.price || 0}`}
-          </button>
+            {/* Nameplate Editor for customizable products */}
+            {product.editorConfig?.enabled && (
+              <div className="mb-4">
+                <NameplateEditor
+                  product={product}
+                  onDimensionsChange={setEditorDimensions}
+                />
+              </div>
+            )}
+
+            {/* Calculator */}
+            <PriceCalculator
+              initialMaterial={product.material}
+              initialSize={product.size}
+              productHasLight={productHasLight}
+              onPriceChange={setCalculatedConfig}
+              externalDimensions={
+                product.editorConfig?.enabled ? editorDimensions : null
+              }
+            />
+
+            {/* Shipping Form */}
+            <ShippingForm
+              address={address}
+              onAddressChange={handleAddressChange}
+            />
+
+            {/* Checkout Button */}
+            <CheckoutButton
+              isValid={calculatedConfig?.isValid}
+              isSubmitting={isSubmitting}
+              price={calculatedConfig?.price}
+              onClick={handlePlaceOrder}
+            />
+          </div>
         </div>
       </div>
     </div>

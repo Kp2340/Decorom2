@@ -1,59 +1,76 @@
-import { useState, useEffect } from "react";
-// import { useParams } from "react-router-dom";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import ProductCard from "../components/ProductCard";
 import ProductDetailsModal from "../components/ProductDetailsModal";
 import { useParams } from "react-router-dom";
 
+/**
+ * HandleInquiry - Product gallery page with filtering and pagination.
+ *
+ * Optimizations:
+ * - useMemo for filteredProducts to prevent recalculation on every render
+ * - useCallback for setSelectedProduct to prevent ProductCard re-renders
+ * - Pagination to reduce initial memory footprint (12 products at a time)
+ */
+const PRODUCTS_PER_PAGE = 12;
+
 const HandleInquiry = () => {
   const { type } = useParams();
-  const [product, setProduct] = useState([]);
+  const [products, setProducts] = useState([]);
   const [material, setMaterial] = useState("");
   const [shape, setShape] = useState("");
-  const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [visibleCount, setVisibleCount] = useState(PRODUCTS_PER_PAGE);
 
-  const productTypes = [
-    "banner",
-    "commercial",
-    "film",
-    "interior",
-    "nameplate",
-    "offer",
-    "radium",
-    "safety",
-  ];
-
+  // Load product data
   useEffect(() => {
-    // if (!type || !productTypes.includes(type)) {
-    //     setProduct([]);
-    //     return;
-    // }
-    // import(`../data/${type}.js`)
+    // Dynamic import based on type (currently hardcoded to nameplate)
     import(`../data/nameplate.js`)
-      .then((module) => setProduct(module.types))
+      .then((module) => setProducts(module.types))
       .catch((error) => {
-        console.log(error);
-        setProduct([]);
+        console.error("Failed to load products:", error);
+        setProducts([]);
       });
   }, [type]);
 
-  useEffect(() => {
-    const filtered = product.filter(
+  // Memoized filtered products - only recalculates when products/material/shape change
+  const filteredProducts = useMemo(() => {
+    return products.filter(
       (p) =>
         (!material || p.material === material) && (!shape || p.shape === shape),
     );
-    setFilteredProducts(filtered);
-  }, [product, material, shape]);
+  }, [products, material, shape]);
 
-  return !product ? (
-    <header className="bg-pink-600 text-white py-6 mb-8">
-      <div className="max-w-7xl mx-auto px-4">
-        <h1 className="text-3xl font-bold">
-          {type.charAt(0).toUpperCase() + type.slice(1)} Products
-        </h1>
+  // Reset visible count when filters change
+  useEffect(() => {
+    setVisibleCount(PRODUCTS_PER_PAGE);
+  }, [material, shape]);
+
+  // Stable callback for product selection - prevents ProductCard re-renders
+  const handleProductClick = useCallback((product) => {
+    setSelectedProduct(product);
+  }, []);
+
+  const handleCloseModal = useCallback(() => {
+    setSelectedProduct(null);
+  }, []);
+
+  const handleLoadMore = useCallback(() => {
+    setVisibleCount((prev) => prev + PRODUCTS_PER_PAGE);
+  }, []);
+
+  // Products to display (paginated)
+  const displayedProducts = filteredProducts.slice(0, visibleCount);
+  const hasMore = visibleCount < filteredProducts.length;
+
+  if (!products.length) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-gray-500">Loading products...</p>
       </div>
-    </header>
-  ) : (
+    );
+  }
+
+  return (
     <div>
       {/* Hero Section */}
       <section id="hero" className="text-center py-16 bg-gray-50">
@@ -72,6 +89,7 @@ const HandleInquiry = () => {
       >
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-4 justify-center items-center px-4">
           <select
+            value={material}
             onChange={(e) => setMaterial(e.target.value)}
             className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500 w-full md:w-auto"
           >
@@ -81,6 +99,7 @@ const HandleInquiry = () => {
             <option value="Stainless Steel">Stainless Steel</option>
           </select>
           <select
+            value={shape}
             onChange={(e) => setShape(e.target.value)}
             className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500 w-full md:w-auto"
           >
@@ -95,25 +114,43 @@ const HandleInquiry = () => {
       </section>
 
       {/* Gallery */}
-      {filteredProducts && (
-        <section id="gallery" className="py-12 bg-gray-50">
-          <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-4">
-            {filteredProducts.map((product) => (
+      <section id="gallery" className="py-12 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4">
+          {/* Product count */}
+          <p className="text-gray-500 text-sm mb-6 text-center">
+            Showing {displayedProducts.length} of {filteredProducts.length}{" "}
+            products
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            {displayedProducts.map((product) => (
               <ProductCard
                 key={product.id}
                 product={product}
-                onClick={setSelectedProduct}
+                onClick={handleProductClick}
               />
             ))}
           </div>
-        </section>
-      )}
+
+          {/* Load More Button */}
+          {hasMore && (
+            <div className="text-center mt-10">
+              <button
+                onClick={handleLoadMore}
+                className="px-8 py-3 bg-pink-500 hover:bg-pink-600 text-white font-semibold rounded-lg shadow-md transition-all"
+              >
+                Load More ({filteredProducts.length - visibleCount} remaining)
+              </button>
+            </div>
+          )}
+        </div>
+      </section>
 
       {/* Product Details Modal */}
       {selectedProduct && (
         <ProductDetailsModal
           product={selectedProduct}
-          onClose={() => setSelectedProduct(null)}
+          onClose={handleCloseModal}
         />
       )}
     </div>

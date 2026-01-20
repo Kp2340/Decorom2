@@ -1,7 +1,18 @@
-import React from "react";
+import React, { memo } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
-const ProductCard = ({ product, onClick }) => {
+/**
+ * ProductCard - Displays a single product in the gallery grid.
+ * Wrapped with React.memo to prevent re-renders when product prop is unchanged.
+ *
+ * Image Memory Note:
+ * Even with lazy loading, decoded images consume memory (4 bytes/pixel).
+ * A 1000x1000 image = 4MB in memory regardless of file size.
+ * decoding="async" offloads decoding from main thread.
+ *
+ * TODO: Replace src with CDN URL helper when available for responsive images.
+ */
+const ProductCard = memo(({ product, onClick }) => {
   // Handle image: support both string and array
   const imageSrc = Array.isArray(product.link) ? product.link[0] : product.link;
 
@@ -10,11 +21,12 @@ const ProductCard = ({ product, onClick }) => {
       className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow duration-300 overflow-hidden flex flex-col cursor-pointer group"
       onClick={() => onClick(product)}
     >
-      {/* Image Container */}
+      {/* Image Container - Fixed aspect ratio prevents layout shift */}
       <div className="relative w-full" style={{ paddingBottom: "100%" }}>
         <LazyLoadImage
           src={imageSrc}
           alt={product.name}
+          decoding="async"
           className="absolute inset-0 w-full h-full object-contain bg-gray-100 group-hover:scale-105 transition-transform duration-500"
         />
       </div>
@@ -36,6 +48,8 @@ const ProductCard = ({ product, onClick }) => {
       </div>
     </div>
   );
-};
+});
+
+ProductCard.displayName = "ProductCard";
 
 export default ProductCard;
