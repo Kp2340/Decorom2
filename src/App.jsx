@@ -13,7 +13,7 @@ import RefundPolicy from "./pages/RefundPolicy.jsx";
 import ShippingPolicy from "./pages/ShippingPolicy.jsx";
 
 // Analytic
-import { Analytics } from "@vercel/analytics/react"
+import { Analytics } from "@vercel/analytics/react";
 
 //Components
 import Header from "./components/Header.jsx";
@@ -29,7 +29,7 @@ const App = () => (
     <main className="pt-20 min-h-screen">
       <Routes>
         <Route path="*" element={<HandleInquiry />} />
-        <Route path="/" element={<HandleInquiry/>} />
+        <Route path="/" element={<HandleInquiry />} />
         {/*
         <Route path="*" element={<div> <Carousel /> <Categories /> </div>} />
         <Route path="/" element={<div> <Carousel /> <Categories /> </div>} />

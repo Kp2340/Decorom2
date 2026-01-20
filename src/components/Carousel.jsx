@@ -42,10 +42,17 @@ const Carousel = () => {
   return (
     <div className="relative w-full  mx-auto overflow-hidden">
       {/* Images */}
-      <div className="flex transition-transform duration-700 ease-in-out" style={{ transform: `translateX(-${current * 100}%)` }}>
+      <div
+        className="flex transition-transform duration-700 ease-in-out"
+        style={{ transform: `translateX(-${current * 100}%)` }}
+      >
         {images.map((img, index) => (
           <div key={index} className="min-w-full flex-shrink-0">
-            <img src={img} alt={`Slide ${index}`} className="w-full h-64 md:h-96 object-cover" />
+            <img
+              src={img}
+              alt={`Slide ${index}`}
+              className="w-full h-64 md:h-96 object-cover"
+            />
           </div>
         ))}
       </div>

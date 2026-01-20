@@ -12,7 +12,7 @@ const ContactUs = () => {
         "service_6f1m0vg", // Your Service ID
         "template_6i1vxdl", // Your EmailJS template ID
         form.current,
-        "O3-Z2OeVM5bXRKscz" // Your Public Key
+        "O3-Z2OeVM5bXRKscz", // Your Public Key
       )
       .then(
         (result) => {
@@ -23,7 +23,7 @@ const ContactUs = () => {
         (error) => {
           console.error(error.text);
           alert("❌ Failed to send message. Please try again.");
-        }
+        },
       );
   };
 
@@ -53,9 +53,13 @@ const ContactUs = () => {
               📍
             </div>
             <h3 className="text-lg font-semibold text-gray-800">Address</h3>
-            <p className="mt-2 text-gray-600">Decorom, Shop-2, Under Ruchir Apartment,</p>
+            <p className="mt-2 text-gray-600">
+              Decorom, Shop-2, Under Ruchir Apartment,
+            </p>
             <p className="mt-2 text-gray-600">Near Nilkanth Mahadev Temple,</p>
-            <p className="mt-2 text-gray-600">Ghatlodia, Ahmedabad, PIN-380061</p>
+            <p className="mt-2 text-gray-600">
+              Ghatlodia, Ahmedabad, PIN-380061
+            </p>
           </div>
 
           {/* Email */}
@@ -85,7 +89,11 @@ const ContactUs = () => {
           {/* Contact Form */}
           <div className="flex-1 bg-white p-6 rounded-lg shadow-md flex flex-col">
             <h3 className="text-xl font-semibold mb-6">Get In Touch</h3>
-            <form ref={form} onSubmit={sendEmail} className="space-y-4 flex-1 flex flex-col">
+            <form
+              ref={form}
+              onSubmit={sendEmail}
+              className="space-y-4 flex-1 flex flex-col"
+            >
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <input
                   type="text"
