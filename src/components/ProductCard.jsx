@@ -13,8 +13,10 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
  * TODO: Replace src with CDN URL helper when available for responsive images.
  */
 const ProductCard = memo(({ product, onClick }) => {
-  // Handle image: support both string and array
-  const imageSrc = Array.isArray(product.link) ? product.link[0] : product.link;
+  // Handle image: use thumbnailUrl from backend, fallback to link for backwards compatibility
+  const imageSrc =
+    product.thumbnailUrl ||
+    (Array.isArray(product.link) ? product.link[0] : product.link);
 
   return (
     <div
@@ -37,13 +39,19 @@ const ProductCard = memo(({ product, onClick }) => {
           {product.name}
         </h3>
         <div className="text-gray-600 text-sm mb-4 space-y-1">
-          <p>Material: {product.material}</p>
-          <p>Shape: {product.shape}</p>
-          <p>Size: {product.size}</p>
+          {product.material && <p>Material: {product.material}</p>}
+          {product.shape && <p>Shape: {product.shape}</p>}
+          {(product.defaultSize || product.size) && (
+            <p>Size: {product.defaultSize || product.size}</p>
+          )}
         </div>
 
+        <p className="text-pink-600 font-bold text-lg mb-3">
+          ₹{product.basePrice || product.price}
+        </p>
+
         <button className="mt-auto bg-green-500 hover:bg-green-600 text-white font-medium py-2 rounded-md transition-colors w-full">
-          Checkout
+          View Details
         </button>
       </div>
     </div>

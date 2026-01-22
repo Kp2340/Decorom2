@@ -1,9 +1,15 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider } from "./auth/AuthContext";
+import ProtectedRoute from "./auth/ProtectedRoute";
 
-//Categories
-import HandleInquiry from "./pages/HandleInquiry.jsx";
+// Pages
+import Home from "./pages/Home";
+import ProductDetails from "./pages/ProductDetails";
+import Checkout from "./pages/Checkout";
+import AdminLogin from "./pages/AdminLogin";
+import AdminDashboard from "./pages/AdminDashboard";
 
-//Pages
+// Existing Pages
 import ContactUs from "./pages/Contact";
 import AboutUs from "./pages/About";
 import PaymentSuccess from "./pages/PaymentSuccess.jsx";
@@ -12,40 +18,52 @@ import TermsAndConditions from "./pages/TermsAndConditions.jsx";
 import RefundPolicy from "./pages/RefundPolicy.jsx";
 import ShippingPolicy from "./pages/ShippingPolicy.jsx";
 
-// Analytic
-import { Analytics } from "@vercel/analytics/react";
-
-//Components
+// Components
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
+import { Analytics } from "@vercel/analytics/react";
 
 const App = () => (
-  <BrowserRouter>
-    <ScrollToTop />
-    <Header />
-    <main className="pt-20 min-h-screen">
-      <Routes>
-        <Route path="*" element={<HandleInquiry />} />
-        <Route path="/" element={<HandleInquiry />} />
-        {/*
-        <Route path="*" element={<div> <Carousel /> <Categories /> </div>} />
-        <Route path="/" element={<div> <Carousel /> <Categories /> </div>} />
-        <Route path="/products" element={<Categories />} />
-        <Route path="/products/:type" element={<HandleInquiry />} />
-        */}
-        {/*<Route path="/products" element={<HandleInquiry />} />*/}
-        <Route path="/contact" element={<ContactUs />} />
-        <Route path="/about" element={<AboutUs />} />
-        <Route path="/payment-success" element={<PaymentSuccess />} />
-        <Route path="/privacy" element={<PrivacyPolicy />} />
-        <Route path="/terms" element={<TermsAndConditions />} />
-        <Route path="/refund-policy" element={<RefundPolicy />} />
-        <Route path="/shipping-policy" element={<ShippingPolicy />} />
-      </Routes>
-    </main>
-    <Footer />
-    <Analytics />
-  </BrowserRouter>
+  <AuthProvider>
+    <BrowserRouter>
+      <ScrollToTop />
+      {/* Header - might want to hide on admin pages or make it smart */}
+      <Header />
+
+      <main className="pt-20 min-h-screen">
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<Home />} />
+          <Route path="/products/:productId" element={<ProductDetails />} />
+          <Route path="/products/:productId/checkout" element={<Checkout />} />
+
+          <Route path="/contact" element={<ContactUs />} />
+          <Route path="/about" element={<AboutUs />} />
+          <Route path="/payment-success" element={<PaymentSuccess />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<TermsAndConditions />} />
+          <Route path="/refund-policy" element={<RefundPolicy />} />
+          <Route path="/shipping-policy" element={<ShippingPolicy />} />
+
+          {/* Admin Routes */}
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Fallback */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </main>\
+      <Footer />
+      <Analytics />
+    </BrowserRouter>
+  </AuthProvider>
 );
 export default App;
