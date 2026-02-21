@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { deleteProductImage } from "../api/admin.api";
 
 const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
   const [formData, setFormData] = useState({
@@ -12,15 +13,17 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
     editorConfig: "",
   });
   const [images, setImages] = useState([]); // File objects
-  const [existingImages, setExistingImages] = useState([]); // URLs
+  const [imagePreviews, setImagePreviews] = useState([]); // Preview URLs for new images
+  const [existingImages, setExistingImages] = useState([]); // {id, url} objects
   const [error, setError] = useState("");
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   useEffect(() => {
     if (initialData) {
       setFormData({
         name: initialData.name || "",
         description: initialData.description || "",
-        price: initialData.price || "",
+        price: initialData.price || initialData.basePrice || "",
         shape: initialData.shape || "",
         material: initialData.material || "",
         defaultSize: initialData.defaultSize || "",
@@ -29,15 +32,33 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
           ? JSON.stringify(initialData.editorConfig, null, 2)
           : "",
       });
-      // Handle existing images - could be array or string
-      const imgs = Array.isArray(initialData.link)
-        ? initialData.link
-        : initialData.link
-          ? [initialData.link]
-          : [];
-      setExistingImages(imgs);
+
+      // Handle existing images with IDs - backend returns 'images' array
+      if (initialData.images && Array.isArray(initialData.images)) {
+        setExistingImages(initialData.images.map(img => ({
+          id: img.id,
+          url: img.imageUrl || img.url
+        })));
+      } else if (initialData.thumbnailUrl) {
+        // Fallback: Single thumbnail from list view
+        setExistingImages([{ id: 'thumbnail', url: initialData.thumbnailUrl }]);
+      } else if (Array.isArray(initialData.link)) {
+        setExistingImages(initialData.link.map((url, idx) => ({
+          id: `link-${idx}`,
+          url
+        })));
+      } else if (initialData.link) {
+        setExistingImages([{ id: 'link-0', url: initialData.link }]);
+      }
     }
   }, [initialData]);
+
+  // Cleanup preview URLs on unmount
+  useEffect(() => {
+    return () => {
+      imagePreviews.forEach(url => URL.revokeObjectURL(url));
+    };
+  }, [imagePreviews]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -49,14 +70,69 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
 
   const handleImageChange = (e) => {
     if (e.target.files) {
-      setImages(Array.from(e.target.files));
+      const files = Array.from(e.target.files);
+      const totalImages = existingImages.length + images.length + files.length;
+
+      if (totalImages > 10) {
+        setError(`Maximum 10 images allowed. You currently have ${existingImages.length + images.length} images.`);
+        return;
+      }
+
+      setError("");
+      setImages(prev => [...prev, ...files]);
+
+      // Create preview URLs
+      const newPreviews = files.map(file => URL.createObjectURL(file));
+      setImagePreviews(prev => [...prev, ...newPreviews]);
     }
   };
 
-  const handleSubmit = (e) => {
+  const removeNewImage = (index) => {
+    setImages(prev => prev.filter((_, i) => i !== index));
+
+    // Revoke and remove preview URL
+    URL.revokeObjectURL(imagePreviews[index]);
+    setImagePreviews(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const removeExistingImage = async (imageId) => {
+    if (!initialData?.id) {
+      // If no product ID, just remove from state
+      setExistingImages(prev => prev.filter(img => img.id !== imageId));
+      return;
+    }
+
+    const imageIdStr = imageId.toString();
+    // Check if this is a temporary/fallback ID (not from backend)
+    if (imageIdStr.startsWith('temp-') || imageIdStr.startsWith('link-') || imageIdStr === 'thumbnail') {
+      // Just remove from state, no backend call needed
+      setExistingImages(prev => prev.filter(img => img.id !== imageId));
+      return;
+    }
+
+    // Real backend image - confirm and delete via API
+    const confirmed = window.confirm("Delete this image permanently from the product?");
+    if (!confirmed) return;
+
+    try {
+      await deleteProductImage(initialData.id, imageId);
+      setExistingImages(prev => prev.filter(img => img.id !== imageId));
+    } catch (err) {
+      setError(`Failed to delete image: ${err.message}`);
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+
     if (!formData.name || !formData.price) {
       setError("Name and Price are required.");
+      return;
+    }
+
+    if (existingImages.length === 0 && images.length === 0) {
+      setError("At least one image is required.");
       return;
     }
 
@@ -90,13 +166,14 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
       data.append("images", file); // backend expects "images"
     });
 
-    // For Update: we might need to handle keeping existing images vs replacing them.
-    // The prompt says "Allow image replacement / addition".
-    // Usually backend handles this. If I send new images, what happens to old ones?
-    // User instruction: "Calls PUT /api/admin/products/{id} (multipart)".
-    // I'll just send what I have.
-
-    onSubmit(data);
+    try {
+      setUploadProgress(10);
+      await onSubmit(data);
+      setUploadProgress(100);
+    } catch (err) {
+      setError(err.message || "Failed to save product");
+      setUploadProgress(0);
+    }
   };
 
   return (
@@ -143,26 +220,39 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
           <label className="block text-sm font-medium text-gray-700">
             Material
           </label>
-          <input
-            type="text"
+          <select
             name="material"
             value={formData.material}
             onChange={handleChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 border p-2"
-          />
+          >
+            <option value="">Select Material</option>
+            <option value="Acrylic">Acrylic</option>
+            <option value="ACP">ACP</option>
+            <option value="Wooden">Wooden</option>
+            <option value="MS">MS</option>
+            <option value="SS">SS</option>
+          </select>
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700">
             Shape
           </label>
-          <input
-            type="text"
+          <select
             name="shape"
             value={formData.shape}
             onChange={handleChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 border p-2"
-          />
+          >
+            <option value="">Select Shape</option>
+            <option value="Square">Square</option>
+            <option value="Rectangle">Rectangle</option>
+            <option value="Round">Round</option>
+            <option value="Oval">Oval</option>
+            <option value="Capsule">Capsule</option>
+            <option value="Unique">Unique</option>
+          </select>
         </div>
       </div>
 
@@ -227,32 +317,94 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Images
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Images ({existingImages.length + images.length}/10)
         </label>
+
+        {/* Existing Images */}
         {existingImages.length > 0 && (
-          <div className="flex space-x-2 my-2 overflow-x-auto">
-            {existingImages.map((src, i) => (
-              <img
-                key={i}
-                src={src}
-                alt="Existing"
-                className="h-20 w-20 object-cover rounded border"
-              />
-            ))}
+          <div className="mb-3">
+            <p className="text-xs text-gray-600 mb-2">Existing Images</p>
+            <div className="grid grid-cols-4 gap-2">
+              {existingImages.map((img) => (
+                <div key={img.id} className="relative group">
+                  <img
+                    src={img.url}
+                    alt="Existing"
+                    className="h-24 w-full object-cover rounded border"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeExistingImage(img.id)}
+                    className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                    title="Delete image"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
         )}
+
+        {/* New Image Previews */}
+        {images.length > 0 && (
+          <div className="mb-3">
+            <p className="text-xs text-gray-600 mb-2">New Images (to be uploaded)</p>
+            <div className="grid grid-cols-4 gap-2">
+              {imagePreviews.map((preview, index) => (
+                <div key={index} className="relative group">
+                  <img
+                    src={preview}
+                    alt={`Preview ${index + 1}`}
+                    className="h-24 w-full object-cover rounded border border-green-500"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeNewImage(index)}
+                    className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                    title="Remove image"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                  <div className="absolute bottom-1 left-1 bg-green-600 text-white text-xs px-1 rounded">
+                    New
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* File Input */}
         <input
           type="file"
           multiple
           accept="image/*"
           onChange={handleImageChange}
-          className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-pink-50 file:text-pink-700 hover:file:bg-pink-100"
+          disabled={existingImages.length + images.length >= 10}
+          className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-pink-50 file:text-pink-700 hover:file:bg-pink-100 disabled:opacity-50"
         />
         <p className="text-xs text-gray-500 mt-1">
-          Uploading new images may replace existing ones depending on backend
-          logic.
+          Select up to 10 images. You can add more images or remove existing ones.
         </p>
+
+        {/* Upload Progress */}
+        {uploadProgress > 0 && uploadProgress < 100 && (
+          <div className="mt-2">
+            <div className="bg-gray-200 rounded-full h-2">
+              <div
+                className="bg-pink-600 h-2 rounded-full transition-all duration-300"
+                style={{ width: `${uploadProgress}%` }}
+              />
+            </div>
+            <p className="text-xs text-gray-500 mt-1">Uploading... {uploadProgress}%</p>
+          </div>
+        )}
       </div>
 
       <div className="flex justify-end space-x-3 pt-4 border-t">

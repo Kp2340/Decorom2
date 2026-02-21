@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { processCheckout } from "../api/checkout.api";
 import { getProductById } from "../api/products.api";
+import { toImageUrls } from "../utils/imageUtils";
 
 const Checkout = () => {
   const location = useLocation();
@@ -46,6 +47,9 @@ const Checkout = () => {
   }, [config, navigate, productId]);
 
   if (!product || !config) return null;
+  const productImages = toImageUrls(product);
+  const productImageSrc =
+    productImages[0] || "https://via.placeholder.com/64x64?text=No+Image";
 
   const handleChange = (e) => {
     setShipping({ ...shipping, [e.target.name]: e.target.value });
@@ -135,11 +139,7 @@ const Checkout = () => {
           </h2>
           <div className="flex items-center space-x-4 mb-4">
             <img
-              src={
-                product.images && product.images.length > 0
-                  ? product.images[0].imageUrl
-                  : "https://via.placeholder.com/64x64?text=No+Image"
-              }
+              src={productImageSrc}
               alt={product.name}
               className="w-16 h-16 object-cover rounded"
             />

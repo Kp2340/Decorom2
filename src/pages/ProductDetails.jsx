@@ -93,7 +93,10 @@ const ProductDetails = () => {
           </div>
 
           <div className="mb-8">
-            <ProductPriceCalculator product={product} onChange={handlePriceChange} />
+            <ProductPriceCalculator
+              product={product}
+              onChange={handlePriceChange}
+            />
           </div>
 
           <button

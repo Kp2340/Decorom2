@@ -17,11 +17,11 @@ const Header = () => {
   return (
     <>
       {/* Header */}
-      <header className="bg-yellow-100 shadow-md fixed w-full top-0 z-50">
-        <nav className="flex justify-between items-center px-4 py-3 md:px-8 lg:px-12 max-w-7xl mx-auto">
+      <header className="fixed w-full top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-100">
+        <nav className="flex items-center justify-between h-16 px-4 md:px-8 lg:px-12 max-w-7xl mx-auto">
           {/* Mobile Toggle Button (Left) */}
           <button
-            className="md:hidden flex flex-col justify-center items-center z-50 bg-yellow-100 p-2 rounded"
+            className="md:hidden flex flex-col justify-center items-center z-50 p-2 rounded-md hover:bg-gray-100 transition"
             onClick={toggleMenu}
             aria-label="Toggle menu"
           >
@@ -43,20 +43,24 @@ const Header = () => {
           </button>
 
           {/* Logo (Center) */}
-          <div className="flex-1 flex justify-center md:justify-start z-50">
-            <img src="/logo/logo.png" alt="logo" className="h-14 w-auto" />
+          <div className="flex-1 flex justify-center md:justify-start z-40">
+            <img
+              src="/logo/logo.png"
+              alt="Decorom"
+              className="h-12 w-auto drop-shadow-sm"
+            />
           </div>
 
           {/* Desktop Menu */}
-          <ul className="hidden md:flex items-center space-x-8">
+          <ul className="hidden md:flex items-center space-x-8 text-sm font-medium text-gray-800">
             {menuItems.map((item) => (
               <li key={item.name}>
                 <Link
                   to={item.path}
-                  className="text-black hover:text-yellow-600 font-medium transition-colors duration-300 relative group"
+                  className="relative group py-2 px-1 hover:text-pink-600 transition-colors"
                 >
                   {item.name}
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-yellow-600 group-hover:w-full transition-all duration-300"></span>
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-pink-500 group-hover:w-full transition-all duration-300"></span>
                 </Link>
               </li>
             ))}
@@ -66,7 +70,7 @@ const Header = () => {
 
       {/* Mobile Overlay */}
       <div
-        className={`fixed inset-0 bg-black bg-opacity-40 z-40 md:hidden transition-opacity duration-300 ${
+        className={`fixed inset-0 bg-black/40 z-40 md:hidden transition-opacity duration-300 ${
           isMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
         onClick={closeMenu}
@@ -74,16 +78,16 @@ const Header = () => {
 
       {/* Mobile Menu Panel (Left Slide) */}
       <div
-        className={`fixed top-0 left-0 h-full w-4/5 max-w-xs bg-yellow-100 z-50 transform transition-transform duration-300 ease-out ${
+        className={`fixed top-0 left-0 h-full w-4/5 max-w-xs bg-white z-50 transform transition-transform duration-300 ease-out shadow-xl ${
           isMenuOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         {/* Mobile Logo + Close */}
-        <div className="flex items-center justify-center p-4 border-b relative">
-          <img src="/logo/logo.png" alt="logo" className="h-14 w-auto" />
+        <div className="flex items-center justify-between p-4 border-b">
+          <img src="/logo/logo.png" alt="Decorom" className="h-12 w-auto" />
           <button
             onClick={closeMenu}
-            className="absolute right-4 p-2 md:hidden"
+            className="p-2 md:hidden"
             aria-label="Close menu"
           >
             <svg
@@ -103,13 +107,13 @@ const Header = () => {
         </div>
 
         {/* Mobile Menu Items */}
-        <ul className="flex flex-col py-6 space-y-3 pl-6">
+        <ul className="flex flex-col py-6 space-y-3 px-6">
           {menuItems.map((item) => (
             <li key={item.name}>
               <Link
                 to={item.path}
                 onClick={closeMenu}
-                className="block text-black hover:text-yellow-600 font-medium text-lg transition-colors duration-300"
+                className="block text-gray-900 hover:text-pink-600 font-semibold text-base transition-colors"
               >
                 {item.name}
               </Link>

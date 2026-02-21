@@ -55,12 +55,15 @@ const Home = () => {
     return <div className="text-center py-20 text-red-500">{error}</div>;
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">
+    <div className="container mx-auto px-4 pt-4 pb-8">
+      <h1 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-center text-gray-900">
         Our Collection
       </h1>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div
+        className="grid mobile-four-fit scrollbar-hide sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[var(--grid-gap)] sm:gap-5"
+        style={{ "--header-h": "80px", "--heading-h": "96px", "--grid-gap": "12px" }}
+      >
         {products.map((product) => (
           <ProductCard
             key={product.id}

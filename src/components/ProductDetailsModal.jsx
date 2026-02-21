@@ -1,10 +1,20 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
-import PriceCalculator from "./PriceCalculator";
-import NameplateEditor from "../editor/NameplateEditor";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  lazy,
+  Suspense,
+} from "react";
 import Gallery from "./model/Gallery";
 import ProductInfo from "./model/ProductInfo";
 import ShippingForm, { validateShipping } from "./model/ShippingForm";
 import CheckoutButton from "./model/CheckoutButton";
+import ImageCarousel from "./ImageCarousel";
+import { PLACEHOLDER_IMAGE, toImageUrls } from "../utils/imageUtils";
+
+const PriceCalculator = lazy(() => import("./PriceCalculator"));
+const NameplateEditor = lazy(() => import("../editor/NameplateEditor"));
 
 /**
  * ProductDetailsModal - Main product modal.
@@ -46,12 +56,17 @@ const ProductDetailsModal = ({ product, onClose }) => {
 
   if (!product) return null;
 
-  // Gallery Logic: Main image + extra images
-  const allImages = useMemo(
-    () => [product.link, ...(product.images || [])],
-    [product.link, product.images],
-  );
+  // Gallery Logic: Normalize all available images (link + images array)
+  const allImages = useMemo(() => {
+    const urls = toImageUrls(product);
+    return urls.length > 0 ? urls : [PLACEHOLDER_IMAGE];
+  }, [product]);
   const [selectedImage, setSelectedImage] = useState(allImages[0]);
+
+  // Reset selected image when product changes
+  useEffect(() => {
+    setSelectedImage(allImages[0]);
+  }, [allImages]);
 
   // Calculator State
   const [calculatedConfig, setCalculatedConfig] = useState(null);
@@ -159,7 +174,7 @@ const ProductDetailsModal = ({ product, onClose }) => {
   return (
     /* Modal Overlay - fixed, handles backdrop click */
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/50 backdrop-blur-sm"
       onClick={(e) => {
         // Close on backdrop click only
         if (e.target === e.currentTarget) onClose();
@@ -167,7 +182,7 @@ const ProductDetailsModal = ({ product, onClose }) => {
     >
       {/* Modal Container - positioned, contains header + body */}
       <div
-        className="relative bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col animate-fadeIn"
+        className="relative bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[92vh] flex flex-col animate-fadeIn overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Sticky Header with Close Button - ALWAYS visible */}
@@ -199,38 +214,49 @@ const ProductDetailsModal = ({ product, onClose }) => {
           className="flex-1 overflow-y-auto flex flex-col md:flex-row"
           style={{ WebkitOverflowScrolling: "touch" }}
         >
-          {/* Left: Gallery */}
-          <Gallery
-            images={allImages}
-            selectedImage={selectedImage}
-            onSelectImage={handleSelectImage}
-            productName={product.name}
-          />
+          {/* Left: Gallery - mobile carousel first, desktop thumbs */}
+          <div className="w-full md:w-1/2">
+            <div className="md:hidden px-4 pt-2 pb-4">
+              <ImageCarousel images={allImages} />
+            </div>
+            <div className="hidden md:block">
+              <Gallery
+                images={allImages}
+                selectedImage={selectedImage}
+                onSelectImage={handleSelectImage}
+                productName={product.name}
+              />
+            </div>
+          </div>
 
           {/* Right: Details, Calculator & Checkout */}
-          <div className="w-full md:w-1/2 p-6 pb-8 flex flex-col">
+          <div className="w-full md:w-1/2 p-4 md:p-6 pb-24 md:pb-8 flex flex-col gap-4">
             <ProductInfo product={product} />
 
             {/* Nameplate Editor for customizable products */}
             {product.editorConfig?.enabled && (
-              <div className="mb-4">
-                <NameplateEditor
-                  product={product}
-                  onDimensionsChange={setEditorDimensions}
-                />
-              </div>
+              <Suspense fallback={<div className="h-32 bg-gray-100 animate-pulse rounded-lg" />}>
+                <div className="mb-2">
+                  <NameplateEditor
+                    product={product}
+                    onDimensionsChange={setEditorDimensions}
+                  />
+                </div>
+              </Suspense>
             )}
 
             {/* Calculator */}
-            <PriceCalculator
-              initialMaterial={product.material}
-              initialSize={product.size}
-              productHasLight={productHasLight}
-              onPriceChange={setCalculatedConfig}
-              externalDimensions={
-                product.editorConfig?.enabled ? editorDimensions : null
-              }
-            />
+            <Suspense fallback={<div className="h-28 bg-gray-100 animate-pulse rounded-lg" />}>
+              <PriceCalculator
+                initialMaterial={product.material}
+                initialSize={product.size}
+                productHasLight={productHasLight}
+                onPriceChange={setCalculatedConfig}
+                externalDimensions={
+                  product.editorConfig?.enabled ? editorDimensions : null
+                }
+              />
+            </Suspense>
 
             {/* Shipping Form */}
             <ShippingForm
@@ -239,13 +265,25 @@ const ProductDetailsModal = ({ product, onClose }) => {
             />
 
             {/* Checkout Button */}
-            <CheckoutButton
-              isValid={calculatedConfig?.isValid}
-              isSubmitting={isSubmitting}
-              price={calculatedConfig?.price}
-              onClick={handlePlaceOrder}
-            />
+            <div className="hidden md:block">
+              <CheckoutButton
+                isValid={calculatedConfig?.isValid}
+                isSubmitting={isSubmitting}
+                price={calculatedConfig?.price}
+                onClick={handlePlaceOrder}
+              />
+            </div>
           </div>
+        </div>
+
+        {/* Sticky mobile checkout bar */}
+        <div className="md:hidden sticky bottom-0 left-0 right-0 bg-white/95 backdrop-blur px-4 pt-3 pb-4 border-t border-gray-100">
+          <CheckoutButton
+            isValid={calculatedConfig?.isValid}
+            isSubmitting={isSubmitting}
+            price={calculatedConfig?.price}
+            onClick={handlePlaceOrder}
+          />
         </div>
       </div>
     </div>

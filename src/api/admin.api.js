@@ -35,14 +35,14 @@ export const addProductImages = async (productId, formData) => {
       headers: {
         // Don't set Content-Type - let axios/browser set it for multipart/form-data
       },
-    }
+    },
   );
   return response;
 };
 
 export const deleteProductImage = async (productId, imageId) => {
   const response = await apiClient.delete(
-    `/api/admin/products/${productId}/images/${imageId}`
+    `/api/admin/products/${productId}/images/${imageId}`,
   );
   return response;
 };

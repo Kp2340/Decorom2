@@ -18,3 +18,33 @@
   --gold-dark: #b8860b;
   --plate-black: #0a0a0a;
 }
+
+@layer utilities {
+  /* Mobile grid helper: keeps 4 cards visible (2x2) within the viewport */
+  @media (max-width: 640px) {
+    .mobile-four-fit {
+      --header-h: 72px;
+      --grid-gap: 12px;
+      --heading-h: 72px;
+      height: calc(100vh - var(--header-h) - var(--heading-h));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-auto-rows: calc(
+        (100vh - var(--header-h) - var(--heading-h) - (var(--grid-gap) * 3)) /
+          2
+      );
+      overflow-y: auto;
+    }
+    .mobile-four-fit > * {
+      min-height: 0;
+    }
+  }
+
+  /* Hide scrollbars on mobile grids for cleaner look */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}

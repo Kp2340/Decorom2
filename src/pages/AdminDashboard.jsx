@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getProducts } from "../api/products.api";
+import { getProducts, getProductById } from "../api/products.api";
 import { createProduct, updateProduct, deleteProduct } from "../api/admin.api";
 import ProductForm from "../components/ProductForm";
 import ConfirmModal from "../components/ConfirmModal";
@@ -86,9 +86,18 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleEditClick = (product) => {
-    setSelectedProduct(product);
-    setView("edit");
+  const handleEditClick = async (product) => {
+    setActionLoading(true);
+    try {
+      // Fetch full product details including all images
+      const fullProduct = await getProductById(product.id);
+      setSelectedProduct(fullProduct);
+      setView("edit");
+    } catch (err) {
+      alert(`Failed to fetch product details: ${err.message}`);
+    } finally {
+      setActionLoading(false);
+    }
   };
 
   const handleLogout = () => {
@@ -108,12 +117,20 @@ const AdminDashboard = () => {
       <header className="bg-white shadow">
         <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
           <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-          <button
-            onClick={handleLogout}
-            className="text-red-600 hover:text-red-800 font-medium"
-          >
-            Logout
-          </button>
+          <div className="flex items-center gap-4">
+            <a
+              href="/admin/api-test"
+              className="text-blue-600 hover:text-blue-800 font-medium text-sm"
+            >
+              🧪 API Test Panel
+            </a>
+            <button
+              onClick={handleLogout}
+              className="text-red-600 hover:text-red-800 font-medium"
+            >
+              Logout
+            </button>
+          </div>
         </div>
       </header>
 

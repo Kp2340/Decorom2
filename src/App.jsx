@@ -8,6 +8,7 @@ import ProductDetails from "./pages/ProductDetails";
 import Checkout from "./pages/Checkout";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminApiTest from "./pages/AdminApiTest";
 
 // Existing Pages
 import ContactUs from "./pages/Contact";
@@ -30,7 +31,6 @@ const App = () => (
       <ScrollToTop />
       {/* Header - might want to hide on admin pages or make it smart */}
       <Header />
-
       <main className="pt-20 min-h-screen">
         <Routes>
           {/* Public Routes */}
@@ -56,11 +56,20 @@ const App = () => (
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/admin/api-test"
+            element={
+              <ProtectedRoute>
+                <AdminApiTest />
+              </ProtectedRoute>
+            }
+          />
 
           {/* Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-      </main>\
+      </main>
+      \
       <Footer />
       <Analytics />
     </BrowserRouter>

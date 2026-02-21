@@ -27,7 +27,7 @@ apiClient.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 // Response interceptor - Handle errors with backend error messages
@@ -51,13 +51,15 @@ apiClient.interceptors.response.use(
       return Promise.reject(customError);
     } else if (error.request) {
       // Request made but no response received
-      const customError = new Error("Network error. Please check your connection.");
+      const customError = new Error(
+        "Network error. Please check your connection.",
+      );
       return Promise.reject(customError);
     } else {
       // Something else happened
       return Promise.reject(error);
     }
-  }
+  },
 );
 
 export default apiClient;

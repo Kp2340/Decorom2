@@ -62,7 +62,14 @@ const ProductPriceCalculator = ({ product, onChange }) => {
         isValid,
       });
     }
-  }, [width, height, basePrice, defaultDims.width, defaultDims.height, onChange]);
+  }, [
+    width,
+    height,
+    basePrice,
+    defaultDims.width,
+    defaultDims.height,
+    onChange,
+  ]);
 
   return (
     <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 mt-4">
@@ -116,4 +123,3 @@ const ProductPriceCalculator = ({ product, onChange }) => {
 };
 
 export default ProductPriceCalculator;
-

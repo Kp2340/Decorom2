@@ -1,12 +1,19 @@
-import React, { useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
+import { responsiveImageProps } from "../utils/imageUtils";
 
 const ImageCarousel = ({ images }) => {
   const [current, setCurrent] = useState(0);
+  const touchStartX = useRef(null);
 
   if (!images || images.length === 0) return null;
 
   const length = images.length;
+
+  const responsive = useMemo(
+    () => images.map((img) => responsiveImageProps(img)),
+    [images],
+  );
 
   const prevSlide = () => {
     setCurrent(current === 0 ? length - 1 : current - 1);
@@ -17,11 +24,32 @@ const ImageCarousel = ({ images }) => {
   };
 
   return (
-    <div className="relative w-full mx-auto overflow-hidden rounded-lg shadow-md bg-white">
+    <div
+      className="relative w-full mx-auto overflow-hidden rounded-xl shadow-md bg-white"
+      onTouchStart={(e) => {
+        touchStartX.current = e.touches[0].clientX;
+      }}
+      onTouchEnd={(e) => {
+        if (touchStartX.current === null) return;
+        const delta = e.changedTouches[0].clientX - touchStartX.current;
+        if (Math.abs(delta) > 40) {
+          delta > 0 ? prevSlide() : nextSlide();
+        }
+        touchStartX.current = null;
+      }}
+      style={{ touchAction: "pan-y" }}
+    >
       {/* Images */}
       <div className="relative h-64 md:h-96 w-full">
         <img
-          src={images[current]}
+          src={responsive[current]?.src || images[current]}
+          srcSet={responsive[current]?.srcSet}
+          sizes={responsive[current]?.sizes}
+          loading="lazy"
+          decoding="async"
+          onError={(e) => {
+            e.currentTarget.src = images[current];
+          }}
           alt={`Slide ${current}`}
           className="w-full h-full object-contain"
         />
@@ -48,15 +76,15 @@ const ImageCarousel = ({ images }) => {
           {/* Thumbnails / Dots */}
           <div className="absolute bottom-4 w-full flex justify-center space-x-2">
             {images.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrent(index)}
-                className={`w-2.5 h-2.5 rounded-full transition-colors ${
-                  index === current ? "bg-white" : "bg-white/50"
-                }`}
-              />
-            ))}
-          </div>
+          <button
+            key={index}
+            onClick={() => setCurrent(index)}
+            className={`w-2.5 h-2.5 rounded-full transition-colors ${
+              index === current ? "bg-white" : "bg-white/50"
+            }`}
+          />
+        ))}
+      </div>
         </>
       )}
     </div>

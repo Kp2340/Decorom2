@@ -1,5 +1,11 @@
-import React, { memo } from "react";
+import React, { memo, useMemo } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import {
+  BLUR_PLACEHOLDER,
+  PLACEHOLDER_IMAGE,
+  responsiveImageProps,
+  toImageUrls,
+} from "../utils/imageUtils";
 
 /**
  * ProductCard - Displays a single product in the gallery grid.
@@ -13,32 +19,49 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
  * TODO: Replace src with CDN URL helper when available for responsive images.
  */
 const ProductCard = memo(({ product, onClick }) => {
-  // Handle image: use thumbnailUrl from backend, fallback to link for backwards compatibility
-  const imageSrc =
-    product.thumbnailUrl ||
-    (Array.isArray(product.link) ? product.link[0] : product.link);
+  const primaryImage = useMemo(() => {
+    const urls = toImageUrls(product);
+    return urls[0] || PLACEHOLDER_IMAGE;
+  }, [product]);
+
+  const { src, srcSet, sizes } = useMemo(
+    () => responsiveImageProps(primaryImage),
+    [primaryImage],
+  );
 
   return (
     <div
-      className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow duration-300 overflow-hidden flex flex-col cursor-pointer group"
+      className="bg-white rounded-xl shadow-sm hover:shadow-lg border border-gray-100 transition-all duration-300 overflow-hidden flex flex-col cursor-pointer group focus:outline-none focus:ring-2 focus:ring-pink-400 h-full"
       onClick={() => onClick(product)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onClick(product);
+        }
+      }}
+      tabIndex={0}
     >
       {/* Image Container - Fixed aspect ratio prevents layout shift */}
-      <div className="relative w-full" style={{ paddingBottom: "100%" }}>
+      <div className="relative w-full aspect-[3/4] bg-gray-100">
         <LazyLoadImage
-          src={imageSrc}
+          src={src}
+          srcSet={srcSet}
+          sizes={sizes}
+          placeholderSrc={BLUR_PLACEHOLDER}
           alt={product.name}
           decoding="async"
-          className="absolute inset-0 w-full h-full object-contain bg-gray-100 group-hover:scale-105 transition-transform duration-500"
+          className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          effect="blur"
         />
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>
 
       {/* Product Info */}
-      <div className="p-4 flex flex-col flex-1">
-        <h3 className="text-lg font-semibold text-gray-800 mb-2 line-clamp-2">
+      <div className="p-3 sm:p-4 flex flex-col flex-1 space-y-2">
+        <h3 className="text-base sm:text-lg font-semibold text-gray-900 leading-snug line-clamp-2">
           {product.name}
         </h3>
-        <div className="text-gray-600 text-sm mb-4 space-y-1">
+        <div className="text-gray-600 text-xs sm:text-sm space-y-1">
           {product.material && <p>Material: {product.material}</p>}
           {product.shape && <p>Shape: {product.shape}</p>}
           {(product.defaultSize || product.size) && (
@@ -46,11 +69,11 @@ const ProductCard = memo(({ product, onClick }) => {
           )}
         </div>
 
-        <p className="text-pink-600 font-bold text-lg mb-3">
+        <p className="text-pink-600 font-bold text-lg sm:text-xl">
           ₹{product.basePrice || product.price}
         </p>
 
-        <button className="mt-auto bg-green-500 hover:bg-green-600 text-white font-medium py-2 rounded-md transition-colors w-full">
+        <button className="mt-auto bg-black text-white font-semibold py-2.5 rounded-lg transition-transform duration-300 hover:-translate-y-0.5 active:scale-95">
           View Details
         </button>
       </div>
