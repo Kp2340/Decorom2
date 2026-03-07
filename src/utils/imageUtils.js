@@ -59,8 +59,23 @@ const isCloudinary = (url) =>
 
 const withCloudinaryTransform = (url, width) => {
   if (!isCloudinary(url)) return url;
-  // Inject transformation right after /upload/
-  return url.replace("/upload/", `/upload/f_auto,q_auto,w_${width}/`);
+
+  // 1. Normalize: Remove existing transformation segments if any
+  // Transformation segments appear between /upload/ and either the version (/v1234/) or the public ID
+  let normalizedUrl = url;
+
+  // If there's a version string (e.g., /v1771698199/), strip everything between /upload/ and that version
+  const versionMatch = url.match(/\/upload\/(?:.*)\/(v\d+)\//);
+  if (versionMatch) {
+    normalizedUrl = url.replace(/\/upload\/.*?\/(v\d+)\//, "/upload/$1/");
+  } else {
+    // Fallback: If no version, try to strip segments that look like transformations (no file extension dot)
+    // and stop before the last part (file name/id)
+    normalizedUrl = url.replace(/\/upload\/[^.]*?\//, "/upload/");
+  }
+
+  // 2. Inject our optimized transformation segment
+  return normalizedUrl.replace("/upload/", `/upload/f_auto,q_auto,w_${width}/`);
 };
 
 /**

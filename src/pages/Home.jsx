@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { getProducts } from "../api/products.api";
 import ProductCard from "../components/ProductCard";
 import Pagination from "../components/Pagination";
+import ProductFilters from "../components/ProductFilters";
 
 const Home = () => {
   const [products, setProducts] = useState([]);
@@ -10,6 +11,8 @@ const Home = () => {
   const [error, setError] = useState(null);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const [selectedMaterial, setSelectedMaterial] = useState("");
+  const [selectedShape, setSelectedShape] = useState("");
   const pageSize = 12;
 
   const navigate = useNavigate();
@@ -18,21 +21,19 @@ const Home = () => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        const data = await getProducts(page, pageSize);
-        // data structure depends on backend. Assuming standard Spring Pageable or similar.
-        // If array is returned directly:
+        const data = await getProducts(
+          page,
+          pageSize,
+          selectedMaterial,
+          selectedShape,
+        );
         if (Array.isArray(data)) {
           setProducts(data);
-          // If no total pages info, disable pagination or infer?
-          // "Calls GET /api/products?page=0&size=12" implies pagination.
-          // Typically returns { content: [], totalPages: 5, ... }
-          // I'll assume standard page object wrapper, but fallback to array.
-          setTotalPages(1); // Default if unknown
+          setTotalPages(1);
         } else if (data && data.content) {
           setProducts(data.content);
           setTotalPages(data.totalPages || 0);
         } else {
-          // Fallback
           setProducts([]);
         }
       } catch (err) {
@@ -44,7 +45,12 @@ const Home = () => {
     };
 
     fetchProducts();
-  }, [page]);
+  }, [page, selectedMaterial, selectedShape]);
+
+  // Reset to first page when filters change
+  useEffect(() => {
+    setPage(0);
+  }, [selectedMaterial, selectedShape]);
 
   const handleProductClick = (product) => {
     navigate(`/products/${product.id}`);
@@ -60,9 +66,20 @@ const Home = () => {
         Our Collection
       </h1>
 
+      <ProductFilters
+        selectedMaterial={selectedMaterial}
+        setSelectedMaterial={setSelectedMaterial}
+        selectedShape={selectedShape}
+        setSelectedShape={setSelectedShape}
+      />
+
       <div
         className="grid mobile-four-fit scrollbar-hide sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[var(--grid-gap)] sm:gap-5"
-        style={{ "--header-h": "80px", "--heading-h": "96px", "--grid-gap": "12px" }}
+        style={{
+          "--header-h": "80px",
+          "--heading-h": "96px",
+          "--grid-gap": "12px",
+        }}
       >
         {products.map((product) => (
           <ProductCard
