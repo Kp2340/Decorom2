@@ -51,7 +51,6 @@ const ProductCard = memo(({ product, onClick }) => {
           alt={product.name}
           decoding="async"
           className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          effect="blur"
         />
         <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>
