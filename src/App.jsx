@@ -18,6 +18,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy.jsx";
 import TermsAndConditions from "./pages/TermsAndConditions.jsx";
 import RefundPolicy from "./pages/RefundPolicy.jsx";
 import ShippingPolicy from "./pages/ShippingPolicy.jsx";
+import OrderTracking from "./pages/OrderTracking.jsx";
 
 // Components
 import Header from "./components/Header.jsx";
@@ -45,6 +46,7 @@ const App = () => (
           <Route path="/terms" element={<TermsAndConditions />} />
           <Route path="/refund-policy" element={<RefundPolicy />} />
           <Route path="/shipping-policy" element={<ShippingPolicy />} />
+          <Route path="/track/:orderId" element={<OrderTracking />} />
 
           {/* Admin Routes */}
           <Route path="/admin/login" element={<AdminLogin />} />
