@@ -82,8 +82,9 @@ const CustomDesign = () => {
               <form onSubmit={handleSubmit} className="space-y-6 text-left">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-[10px] uppercase font-black text-gray-400 tracking-wider">Full Name</label>
+                    <label htmlFor="fullName" className="text-[10px] uppercase font-black text-gray-400 tracking-wider">Full Name</label>
                     <input
+                      id="fullName"
                       required
                       type="text"
                       className="w-full px-5 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-pink-500 transition-all font-bold text-gray-700"
@@ -93,8 +94,9 @@ const CustomDesign = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] uppercase font-black text-gray-400 tracking-wider">Mobile Number</label>
+                    <label htmlFor="phone" className="text-[10px] uppercase font-black text-gray-400 tracking-wider">Mobile Number</label>
                     <input
+                      id="phone"
                       required
                       type="tel"
                       className="w-full px-5 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-pink-500 transition-all font-bold text-gray-700"
@@ -107,8 +109,9 @@ const CustomDesign = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-[10px] uppercase font-black text-gray-400 tracking-wider">Email (Optional)</label>
+                    <label htmlFor="email" className="text-[10px] uppercase font-black text-gray-400 tracking-wider">Email (Optional)</label>
                     <input
+                      id="email"
                       type="email"
                       className="w-full px-5 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-pink-500 transition-all font-bold text-gray-700"
                       placeholder="email@example.com"
@@ -117,8 +120,9 @@ const CustomDesign = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] uppercase font-black text-gray-400 tracking-wider">City</label>
+                    <label htmlFor="city" className="text-[10px] uppercase font-black text-gray-400 tracking-wider">City</label>
                     <input
+                      id="city"
                       required
                       type="text"
                       className="w-full px-5 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-pink-500 transition-all font-bold text-gray-700"
@@ -130,8 +134,9 @@ const CustomDesign = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] uppercase font-black text-gray-400 tracking-wider">Share Your Idea</label>
+                  <label htmlFor="description" className="text-[10px] uppercase font-black text-gray-400 tracking-wider">Share Your Idea</label>
                   <textarea
+                    id="description"
                     required
                     rows="4"
                     className="w-full px-5 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-pink-500 transition-all font-bold text-gray-700 resize-none"

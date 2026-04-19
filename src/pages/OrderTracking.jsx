@@ -16,6 +16,34 @@ const OrderTracking = () => {
     return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
   };
 
+  useEffect(() => {
+    let isMounted = true;
+
+    if (!orderId) {
+      setError("No order ID provided");
+      setLoading(false);
+      return;
+    }
+
+    const fetchOrder = async () => {
+        try {
+            const data = await apiClient.get(`/api/orders/public/${orderId}`);
+            if (isMounted) {
+                setOrderData(data);
+                setLoading(false);
+            }
+        } catch (err) {
+            if (isMounted) {
+                setError(err.message || "Failed to load order. Please double check your Order ID.");
+                setLoading(false);
+            }
+        }
+    };
+
+    fetchOrder();
+    return () => { isMounted = false; };
+  }, [orderId]);
+
   const renderContent = () => {
     if (loading) {
       return (
@@ -50,6 +78,11 @@ const OrderTracking = () => {
     const progress = orderData?.estimatedProgress ?? 0;
     const stages = getStagesForTrack(orderData?.orderType || 'ONLINE');
     const activeIdxInTrack = stages.findIndex(s => s.key === orderData?.status);
+
+    const isAttentionNeeded = orderData?.advanceStatus === 'NEEDED' || 
+                             (orderData?.orderType === 'OFFLINE' && orderData?.amountConfirmed === false) ||
+                             (orderData?.status === 'QUOTATION_SENT' && !orderData?.first50Paid) ||
+                             (orderData?.status === 'VIDEO_SENT' && !orderData?.second50Paid);
 
     return (
       <div className="min-h-screen bg-gray-50 py-12 px-4 font-sans">
@@ -92,10 +125,7 @@ const OrderTracking = () => {
           </div>
 
           {/* Next Step / Action Required Box */}
-          {(orderData?.advanceStatus === 'NEEDED' || 
-            (orderData?.orderType === 'OFFLINE' && orderData?.amountConfirmed === false) ||
-            (orderData?.status === 'QUOTATION_SENT' && !orderData?.first50Paid) ||
-            (orderData?.status === 'VIDEO_SENT' && !orderData?.second50Paid)) && (
+          {isAttentionNeeded && (
             <div className={`mb-6 p-6 rounded-3xl border-2 animate-in zoom-in duration-700 delay-300
               ${orderData?.advanceStatus === 'NEEDED' || !orderData?.amountConfirmed 
                 ? 'bg-orange-50 border-orange-200' 

@@ -23,11 +23,14 @@ const PaymentSuccess = () => {
       return;
     }
 
-    let attempts = 0;
+    let isCancelled = false;
+    let timerId = null;
 
     const fetchOrder = async () => {
       try {
         const res = await apiClient.get(`/api/orders/public/${orderId}`);
+        if (isCancelled) return;
+        
         const data = res?.data ?? res;
 
         // Poll if paymentStatus is PENDING or null (missing)
@@ -38,7 +41,7 @@ const PaymentSuccess = () => {
             setLoading(false);
             return;
           }
-          setTimeout(fetchOrder, POLL_INTERVAL_MS);
+          timerId = setTimeout(fetchOrder, POLL_INTERVAL_MS);
           return;
         }
 
@@ -57,19 +60,25 @@ const PaymentSuccess = () => {
         } else {
             if (attempts < POLL_MAX_ATTEMPTS) {
                 attempts++;
-                setTimeout(fetchOrder, POLL_INTERVAL_MS);
+                timerId = setTimeout(fetchOrder, POLL_INTERVAL_MS);
             } else {
                 setPaymentPending(true);
                 setLoading(false);
             }
         }
       } catch (err) {
-        setError(err.message || "Failed to load order details");
-        setLoading(false);
+        if (!isCancelled) {
+          setError(err.message || "Failed to load order details");
+          setLoading(false);
+        }
       }
     };
 
     fetchOrder();
+    return () => {
+      isCancelled = true;
+      if (timerId) clearTimeout(timerId);
+    };
   }, [searchParams]);
 
   const orderId = searchParams.get("orderId");
