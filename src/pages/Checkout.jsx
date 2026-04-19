@@ -76,10 +76,12 @@ const Checkout = () => {
     };
 
     try {
-      const response = await processCheckout(payload);
+      const res = await processCheckout(payload);
+      // Handle both axios response wrapper and direct data
+      const response = res?.data ?? res;
       
       // 1. Check for payment redirect
-      if (response && response.paymentUrl && !response.mockMode) {
+      if (response && response.paymentUrl) {
         setLoading(true); // Keep loading state until we leave the page
         window.location.href = response.paymentUrl;
         return;
@@ -97,6 +99,8 @@ const Checkout = () => {
     } catch (err) {
       setError(err.message || "Checkout failed. Please try again.");
     } finally {
+      // Only unset loading if we're NOT redirecting
+      // If we are redirecting, we want the button to stay disabled/loading
       setLoading(false);
     }
   };
