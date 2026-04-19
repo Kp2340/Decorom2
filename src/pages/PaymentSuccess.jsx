@@ -25,6 +25,7 @@ const PaymentSuccess = () => {
 
     let isCancelled = false;
     let timerId = null;
+    let attempts = 0;
 
     const fetchOrder = async () => {
       try {
@@ -88,7 +89,7 @@ const PaymentSuccess = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-600 via-blue-600 to-indigo-700 font-sans">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-white-500"></div>
+          <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-white"></div>
           <p className="mt-4 text-white text-xl font-semibold outline-none ring-0 border-none">
             Verifying payment...
           </p>
@@ -207,8 +208,37 @@ const PaymentSuccess = () => {
                 />
                 <button
                   onClick={() => {
-                      navigator.clipboard.writeText(trackingUrl);
-                      alert("Tracking link copied!");
+                      if (navigator.clipboard && navigator.clipboard.writeText) {
+                          navigator.clipboard.writeText(trackingUrl)
+                              .then(() => alert("Tracking link copied!"))
+                              .catch(() => {
+                                  // Fallback to execCommand
+                                  const textArea = document.createElement("textarea");
+                                  textArea.value = trackingUrl;
+                                  document.body.appendChild(textArea);
+                                  textArea.select();
+                                  try {
+                                      document.execCommand('copy');
+                                      alert("Tracking link copied!");
+                                  } catch (err) {
+                                      alert("Failed to copy. Please copy the link manually.");
+                                  }
+                                  document.body.removeChild(textArea);
+                              });
+                      } else {
+                          // Standard fallback
+                          const textArea = document.createElement("textarea");
+                          textArea.value = trackingUrl;
+                          document.body.appendChild(textArea);
+                          textArea.select();
+                          try {
+                              document.execCommand('copy');
+                              alert("Tracking link copied!");
+                          } catch (err) {
+                              alert("Please copy the link manually: " + trackingUrl);
+                          }
+                          document.body.removeChild(textArea);
+                      }
                   }}
                   className="bg-blue-600 text-white px-4 py-3 rounded-lg font-bold text-xs hover:bg-blue-700 active:scale-95 transition-all shadow-md"
                 >
