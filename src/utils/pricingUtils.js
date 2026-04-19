@@ -55,5 +55,6 @@ export const calculateFinalPrice = (material = "", width = 0, height = 0, lighti
 };
 
 const isMetal = (mat) => {
-    return mat.includes("ss") || mat.includes("ms") || mat.includes("metal") || mat.includes("steel");
+    const tokens = mat.toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
+    return tokens.some((t) => ["ss", "ms", "metal", "steel"].includes(t));
 };

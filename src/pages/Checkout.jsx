@@ -67,7 +67,7 @@ const Checkout = () => {
         width: config.width,
         area: config.totalSqInch,
       },
-      size: `${config.height}x${config.width}`,
+      size: `${config.width}x${config.height}`,
       material: config.material,
       lightingIncluded: config.withLighting,
       fittingIncluded: config.withFitting,
@@ -89,6 +89,10 @@ const Checkout = () => {
       if (response && response.orderId) {
         setBackendPrice(response.finalPrice || "CONFIRMED");
         setSuccess(true);
+      } else {
+        // Response exists but has no actionable data — surface a visible error
+        setSuccess(false);
+        setError("Checkout failed: unexpected server response. Please try again.");
       }
     } catch (err) {
       setError(err.message || "Checkout failed. Please try again.");

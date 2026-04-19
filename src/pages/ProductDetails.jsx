@@ -36,7 +36,11 @@ const ProductDetails = () => {
         prev.width === newConfig.width &&
         prev.height === newConfig.height &&
         prev.price === newConfig.price &&
-        prev.isValid === newConfig.isValid
+        prev.isValid === newConfig.isValid &&
+        prev.material === newConfig.material &&
+        prev.withLighting === newConfig.withLighting &&
+        prev.withFitting === newConfig.withFitting &&
+        prev.totalSqInch === newConfig.totalSqInch
       ) {
         return prev;
       }

@@ -182,7 +182,7 @@ const ProductDetailsModal = ({ product, onClose }) => {
     >
       {/* Modal Container - positioned, contains header + body */}
       <div
-        className="relative bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[92vh] flex flex-col animate-fadeIn overflow-hidden"
+        className="relative bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[92vh] flex flex-col animate-fade-in overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Sticky Header with Close Button - ALWAYS visible */}

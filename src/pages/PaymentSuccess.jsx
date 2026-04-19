@@ -81,7 +81,7 @@ const PaymentSuccess = () => {
     <div className="min-h-screen bg-gradient-to-br from-purple-600 via-blue-600 to-indigo-700 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
         {/* Success Animation Card */}
-        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden animate-fadeIn">
+        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden animate-fade-in">
           {/* Header with Checkmark */}
           <div className="bg-gradient-to-r from-green-400 to-emerald-500 p-8 text-center">
             <div className="inline-flex items-center justify-center w-24 h-24 bg-white rounded-full shadow-lg animate-bounce-slow mb-4">

@@ -36,11 +36,15 @@ const ProductPriceCalculator = ({ product, onChange }) => {
   const [withFitting, setWithFitting] = useState(false);
   const [finalPrice, setFinalPrice] = useState(basePrice || 0);
 
-  // Keep local inputs in sync if backend default size changes
+  // Keep local inputs in sync if backend default size changes.
+  // Also reset add-on flags so selections don't carry over between products.
   useEffect(() => {
     setWidth(defaultDims.width || 0);
     setHeight(defaultDims.height || 0);
-  }, [defaultDims.width, defaultDims.height]);
+    setWithLighting(false);
+    setWithFitting(false);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product?.id]);
 
   useEffect(() => {
     const w = Number(width) || 0;
