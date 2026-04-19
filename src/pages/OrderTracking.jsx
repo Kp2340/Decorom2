@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import apiClient from "../api/client";
 
-import { STAGES } from "../constants/orderStages";
+import { ALL_STAGES, getStagesForTrack } from "../constants/orderStages";
 
 const OrderTracking = () => {
   const { orderId } = useParams();
@@ -61,8 +61,10 @@ const OrderTracking = () => {
     );
   }
 
-  const currentIdx = Math.max(0, STAGES.findIndex((s) => s.key === orderData?.status));
+  const currentIdx = Math.max(0, ALL_STAGES.findIndex((s) => s.key === orderData?.status));
   const progress = orderData?.estimatedProgress ?? 0;
+  const stages = getStagesForTrack(orderData?.orderType || 'ONLINE');
+  const activeIdxInTrack = stages.findIndex(s => s.key === orderData?.status);
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 font-sans">
@@ -73,7 +75,12 @@ const OrderTracking = () => {
           
           <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
             <div>
-                <h1 className="text-3xl font-black text-gray-900 mb-1">Track Order</h1>
+                <div className="flex items-center gap-2 mb-1">
+                    <h1 className="text-3xl font-black text-gray-900">Track Order</h1>
+                    <span className="text-[9px] bg-gray-900 text-white px-2 py-0.5 rounded font-black tracking-widest uppercase">
+                        {orderData?.orderType || 'ONLINE'} TRACK
+                    </span>
+                </div>
                 <p className="text-xs text-gray-400 font-mono tracking-tighter">ID: {orderData?.orderId}</p>
             </div>
             <div className="flex items-center gap-2">
@@ -98,6 +105,82 @@ const OrderTracking = () => {
             </div>
           </div>
         </div>
+
+        {/* Next Step / Action Required Box */}
+        {orderData?.status !== 'SHIPPED' && orderData?.status !== 'CANCELLED' && (
+          <div className={`mb-6 p-6 rounded-3xl border-2 animate-in zoom-in duration-700 delay-300
+            ${orderData?.advanceStatus === 'NEEDED' || !orderData?.amountConfirmed 
+              ? 'bg-orange-50 border-orange-200' 
+              : 'bg-blue-50 border-blue-200'}`}>
+            <div className="flex items-start gap-4">
+              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0
+                ${orderData?.advanceStatus === 'NEEDED' || !orderData?.amountConfirmed ? 'bg-orange-500' : 'bg-blue-600'}`}>
+                {orderData?.advanceStatus === 'NEEDED' ? '🎯' : !orderData?.amountConfirmed ? '⚖️' : '🚀'}
+              </div>
+              <div className="flex-1">
+                <h3 className={`text-lg font-black ${orderData?.advanceStatus === 'NEEDED' || !orderData?.amountConfirmed ? 'text-orange-900' : 'text-blue-900'}`}>
+                  {orderData?.advanceStatus === 'NEEDED' ? "Design Advance Required" : 
+                   !orderData?.amountConfirmed ? "Price Confirmation Needed" : 
+                   "Current Status: " + (stages[activeIdxInTrack]?.label || "Processing")}
+                </h3>
+                
+                <div className="mt-2 text-sm leading-relaxed opacity-80">
+                  {orderData?.advanceStatus === 'NEEDED' && (
+                    <div className="space-y-2">
+                       <p>To start your custom design, a small advance of <strong>₹500</strong> is required. This will be deducted from your final bill.</p>
+                       <button className="bg-orange-600 text-white px-6 py-2.5 rounded-xl font-bold shadow-lg shadow-orange-200 active:scale-95 transition-all">Pay ₹500 Now</button>
+                    </div>
+                  )}
+
+                  {orderData?.advanceStatus === 'PAID' && !orderData?.amountConfirmed && (
+                    <div className="space-y-2">
+                       <p>Your design is ready! Please confirm the final quotation of <strong>₹{orderData?.price?.toLocaleString()}</strong> to proceed to manufacturing.</p>
+                       <div className="flex gap-2">
+                         <button className="bg-green-600 text-white px-6 py-2.5 rounded-xl font-bold active:scale-95 transition-all">Confirm Price</button>
+                         <button className="bg-white border text-gray-500 px-6 py-2.5 rounded-xl font-bold active:scale-95 transition-all text-xs">Request Revision</button>
+                       </div>
+                    </div>
+                  )}
+
+                  {orderData?.status === 'QUOTATION_SENT' && orderData?.amountConfirmed && !orderData?.first50Paid && (
+                    <div className="space-y-2">
+                       <p>Please pay the first 50% deposit to start manufacturing.</p>
+                       <div className="p-3 bg-white/50 rounded-xl border border-blue-100 flex justify-between items-center">
+                          <span className="text-xs font-bold text-gray-500">Amount Due Now</span>
+                          <span className="text-xl font-black text-blue-900">
+                             ₹{orderData?.advanceStatus === 'PAID' 
+                               ? Math.round((orderData.price - 500) / 2).toLocaleString()
+                               : Math.round(orderData.price / 2).toLocaleString()}
+                          </span>
+                       </div>
+                       <button className="w-full bg-blue-600 text-white py-3 rounded-xl font-bold shadow-lg shadow-blue-100 active:scale-95 transition-all">Pay 50% Advance</button>
+                    </div>
+                  )}
+
+                  {orderData?.status === 'VIDEO_SENT' && !orderData?.second50Paid && (
+                    <div className="space-y-2">
+                       <p>Your nameplate is ready! Pay the balance amount for safe dispatch.</p>
+                       <div className="p-3 bg-white/50 rounded-xl border border-blue-100 flex justify-between items-center">
+                          <span className="text-xs font-bold text-gray-500">Balance Due</span>
+                          <span className="text-xl font-black text-blue-900">
+                             ₹{orderData?.advanceStatus === 'PAID' 
+                               ? Math.round((orderData.price - 500) / 2).toLocaleString()
+                               : Math.round(orderData.price / 2).toLocaleString()}
+                          </span>
+                       </div>
+                       <button className="w-full bg-indigo-600 text-white py-3 rounded-xl font-bold shadow-lg shadow-indigo-100 active:scale-95 transition-all">Pay Balance & Complete Order</button>
+                    </div>
+                  )}
+
+                  {/* Fallback for other states */}
+                  {(orderData?.status === 'DESIGN_MAKING' || orderData?.status === 'IN_MANUFACTURING') && (
+                    <p>Sit back and relax! Our team is working hard on your order. We will update you as soon as the next stage is ready.</p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Info Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
@@ -129,9 +212,9 @@ const OrderTracking = () => {
             <div className="absolute left-6 top-2 bottom-2 w-0.5 bg-gray-100" />
 
             <div className="flex flex-col gap-8">
-              {STAGES.map((stage, idx) => {
-                const isDone = idx <= currentIdx;
-                const isCurrent = idx === currentIdx;
+              {stages.map((stage, idx) => {
+                const isDone = idx <= activeIdxInTrack;
+                const isCurrent = idx === activeIdxInTrack;
                 return (
                   <div key={stage.key} className="flex items-start gap-6 relative group">
                     {/* Status Circle */}
@@ -146,8 +229,8 @@ const OrderTracking = () => {
                       <p className={`font-black text-sm uppercase tracking-tight ${isCurrent ? "text-pink-700" : isDone ? "text-green-700" : "text-gray-400"}`}>
                         {stage.label}
                         {isCurrent && (
-                          <span className="ml-3 text-[10px] bg-pink-100 text-pink-600 px-2 py-0.5 rounded-md font-black animate-pulse">
-                            ACTIVE
+                          <span className="ml-3 text-[9px] bg-pink-100 text-pink-600 px-2 py-0.5 rounded-md font-black animate-pulse uppercase">
+                            Active
                           </span>
                         )}
                       </p>
