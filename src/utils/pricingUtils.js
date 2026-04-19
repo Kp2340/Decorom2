@@ -4,7 +4,7 @@
  */
 
 export const calculateFinalPrice = (material = "", width = 0, height = 0, lighting = false, fitting = false) => {
-    const minDim = 5.0;
+    const minDim = 1.0;
     const maxDim = 96.0;
 
     // Validate dimensions
