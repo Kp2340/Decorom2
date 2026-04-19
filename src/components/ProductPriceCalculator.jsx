@@ -53,8 +53,8 @@ const ProductPriceCalculator = ({ product, onChange }) => {
     // Calculate price using synchronized utility
     const calculated = calculateFinalPrice(material, w, h, withLighting, withFitting);
     
-    // New Range: 5x5 to 96x96
-    const isValid = w >= 5 && w <= 96 && h >= 5 && h <= 96 && calculated > 0;
+    // New Range: 1x1 to 96x96
+    const isValid = w >= 1 && w <= 96 && h >= 1 && h <= 96 && calculated > 0;
 
     setFinalPrice(calculated);
 
@@ -92,7 +92,7 @@ const ProductPriceCalculator = ({ product, onChange }) => {
           </label>
           <input
             type="number"
-            min="5"
+            min="1"
             max="96"
             value={height}
             onChange={(e) => setHeight(e.target.value)}
@@ -105,7 +105,7 @@ const ProductPriceCalculator = ({ product, onChange }) => {
           </label>
           <input
             type="number"
-            min="5"
+            min="1"
             max="96"
             value={width}
             onChange={(e) => setWidth(e.target.value)}
@@ -141,7 +141,7 @@ const ProductPriceCalculator = ({ product, onChange }) => {
       </div>
 
       <div className="space-y-1 text-[10px] text-gray-500 uppercase tracking-tight mb-3">
-        <p>Min: 5x5" | Max: 96x96"</p>
+        <p>Min: 1x1" | Max: 96x96"</p>
         <p>Material Strategy: {material || "Default"}</p>
       </div>
 

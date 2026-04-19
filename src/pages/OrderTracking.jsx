@@ -2,16 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import apiClient from "../api/client";
 
-const STAGES = [
-  { key: "PAYMENT_DONE", label: "Payment Received", icon: "💳", description: "We have received your full payment." },
-  { key: "PAYMENT_DONE_500", label: "Advance Paid", icon: "✅", description: "Advance payment of ₹500 received." },
-  { key: "DESIGN_MAKING", label: "Design in Progress", icon: "✏️", description: "Our team is crafting your custom design." },
-  { key: "DESIGN_CONFIRMED", label: "Design Approved", icon: "👍", description: "Design finalized and approved." },
-  { key: "IN_MANUFACTURING", label: "Manufacturing", icon: "🔨", description: "Your nameplate is being manufactured." },
-  { key: "MANUFACTURED", label: "Ready", icon: "📦", description: "Your order is ready for dispatch." },
-  { key: "DISPATCHED", label: "Dispatched", icon: "🚚", description: "Your order has left our facility." },
-  { key: "SHIPPED", label: "Shipped", icon: "🎉", description: "Your order is on its way to you!" },
-];
+import { STAGES } from "../constants/orderStages";
 
 const OrderTracking = () => {
   const { orderId } = useParams();
@@ -29,8 +20,7 @@ const OrderTracking = () => {
 
     const fetchOrder = async () => {
         try {
-            const res = await apiClient.get(`/api/orders/public/${orderId}`);
-            const data = res?.data ?? res;
+            const data = await apiClient.get(`/api/orders/public/${orderId}`);
             setOrderData(data);
             setLoading(false);
         } catch (err) {
@@ -71,7 +61,7 @@ const OrderTracking = () => {
     );
   }
 
-  const currentIdx = STAGES.findIndex((s) => s.key === orderData?.status);
+  const currentIdx = Math.max(0, STAGES.findIndex((s) => s.key === orderData?.status));
   const progress = orderData?.estimatedProgress ?? 0;
 
   return (
@@ -113,7 +103,7 @@ const OrderTracking = () => {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
                 <p className="text-[10px] uppercase font-bold text-gray-400 mb-1 tracking-wider">Product Size</p>
-                <p className="font-bold text-gray-800">{orderData?.size} Inch</p>
+                <p className="font-bold text-gray-800">{orderData?.size ? `${orderData.size} Inch` : "N/A"}</p>
             </div>
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
                 <p className="text-[10px] uppercase font-bold text-gray-400 mb-1 tracking-wider">Total Value</p>
@@ -126,7 +116,7 @@ const OrderTracking = () => {
                     ? new Date(orderData.lastUpdated).toLocaleDateString("en-IN", {
                         day: "2-digit", month: "short", year: "numeric",
                         })
-                    : "Fetching..."}
+                    : "Not available"}
                 </p>
             </div>
         </div>

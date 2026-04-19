@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import apiClient from "../api/client";
+import { STAGES } from "../constants/orderStages";
 
 const POLL_INTERVAL_MS = 3000;
 const POLL_MAX_ATTEMPTS = 10;
@@ -12,6 +13,19 @@ const PaymentSuccess = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [paymentPending, setPaymentPending] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
+  
+  // Use a ref for the polling timer to allow cleanup
+  const pollTimerRef = React.useRef(null);
+  const isMountedRef = React.useRef(true);
+
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+      if (pollTimerRef.current) clearTimeout(pollTimerRef.current);
+    };
+  }, []);
 
   useEffect(() => {
     const orderId = searchParams.get("orderId");
@@ -27,34 +41,41 @@ const PaymentSuccess = () => {
     const fetchOrder = async () => {
       try {
         // Use the correct public endpoint
-        const res = await apiClient.get(`/api/orders/public/${orderId}`);
-        const data = res?.data ?? res;
+        const data = await apiClient.get(`/api/orders/public/${orderId}`);
 
         // If payment is still PENDING (user hit back/timeout), poll until confirmed
         // We also check for FAILED if it was processed while we were waiting
         if (data?.paymentStatus === "PENDING") {
           attempts++;
           if (attempts >= POLL_MAX_ATTEMPTS) {
-            setPaymentPending(true);
-            setLoading(false);
+            if (isMountedRef.current) {
+              setPaymentPending(true);
+              setLoading(false);
+            }
             return;
           }
           // Poll again after interval
-          setTimeout(fetchOrder, POLL_INTERVAL_MS);
+          pollTimerRef.current = setTimeout(fetchOrder, POLL_INTERVAL_MS);
           return;
         }
 
         if (data?.paymentStatus === "FAILED" || data?.status === "CANCELLED") {
-            setPaymentPending(true); // Treat FAILED as "not confirmed" so we show the orange screen
-            setLoading(false);
+            if (isMountedRef.current) {
+              setPaymentPending(true); // Treat FAILED as "not confirmed" so we show the orange screen
+              setLoading(false);
+            }
             return;
         }
 
-        setOrderData(data);
-        setLoading(false);
+        if (isMountedRef.current) {
+          setOrderData(data);
+          setLoading(false);
+        }
       } catch (err) {
-        setError(err.message || "Failed to load order details");
-        setLoading(false);
+        if (isMountedRef.current) {
+          setError(err.message || "Failed to load order details");
+          setLoading(false);
+        }
       }
     };
 
@@ -169,13 +190,26 @@ const PaymentSuccess = () => {
                   className="flex-1 text-xs bg-white border border-blue-300 rounded px-3 py-2 font-mono text-blue-700 outline-none"
                 />
                 <button
-                  onClick={() => {
-                      navigator.clipboard.writeText(trackingUrl);
-                      alert("Link copied to clipboard!");
+                  onClick={async () => {
+                      try {
+                          await navigator.clipboard.writeText(trackingUrl);
+                          setIsCopied(true);
+                          setTimeout(() => setIsCopied(false), 2000);
+                      } catch (err) {
+                          console.error("Failed to copy", err);
+                      }
                   }}
-                  className="text-xs bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-700 transition whitespace-nowrap active:scale-95"
+                  className={`text-xs px-3 py-2 rounded transition whitespace-nowrap active:scale-95 flex items-center gap-1
+                    ${isCopied ? "bg-green-600 text-white" : "bg-blue-600 text-white hover:bg-blue-700"}`}
                 >
-                  Copy
+                  {isCopied ? (
+                    <>
+                      <span>✓</span>
+                      <span>Copied!</span>
+                    </>
+                  ) : (
+                    "Copy"
+                  )}
                 </button>
               </div>
               <p className="text-xs text-blue-500 mt-2">
@@ -204,7 +238,7 @@ const PaymentSuccess = () => {
                 </div>
                 <div className="bg-gray-50 rounded-lg p-4">
                   <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Size</p>
-                  <p className="text-lg font-semibold text-gray-800">{orderData?.size} Inch</p>
+                  <p className="text-lg font-semibold text-gray-800">{orderData?.size ? `${orderData.size} Inch` : "N/A"}</p>
                 </div>
                 <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-4 border-2 border-green-200">
                   <p className="text-xs text-green-600 uppercase tracking-wider mb-1">Paid Amount</p>
@@ -240,20 +274,10 @@ const PaymentSuccess = () => {
   );
 };
 
-// Order status stages (consistent with backend)
-const STAGES = [
-  { key: "PAYMENT_DONE", label: "Payment Received" },
-  { key: "PAYMENT_DONE_500", label: "Advance Paid" },
-  { key: "DESIGN_MAKING", label: "Design Process" },
-  { key: "DESIGN_CONFIRMED", label: "Design Approved" },
-  { key: "IN_MANUFACTURING", label: "Manufacturing" },
-  { key: "MANUFACTURED", label: "Quality Check" },
-  { key: "DISPATCHED", label: "Dispatched" },
-  { key: "SHIPPED", label: "Delivered" },
-];
+// STAGES import moved to top
 
 const OrderStatusTracker = ({ status, progress }) => {
-  const currentIdx = STAGES.findIndex((s) => s.key === status);
+  const currentIdx = Math.max(0, STAGES.findIndex((s) => s.key === status));
 
   return (
     <div className="relative">
