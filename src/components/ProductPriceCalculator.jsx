@@ -1,12 +1,12 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { calculateFinalPrice } from "../utils/pricingUtils";
 
 /**
  * ProductPriceCalculator
  *
  * Rules:
  * - Uses ONLY backend data (basePrice, defaultSize) as the starting point
- * - Parses defaultSize (e.g. "48*12" or "48x12") into width × height
- * - Any calculation starts from basePrice and scales with area
+ * - Mirrors backend Tiered Pricing Logic from PricingService.java
  * - No hardcoded product prices
  */
 const parseSize = (sizeStr) => {
@@ -26,31 +26,35 @@ const parseSize = (sizeStr) => {
 };
 
 const ProductPriceCalculator = ({ product, onChange }) => {
-  const { basePrice = 0, defaultSize } = product || {};
+  const { basePrice = 0, defaultSize, material = "" } = product || {};
 
   const defaultDims = useMemo(() => parseSize(defaultSize), [defaultSize]);
 
   const [width, setWidth] = useState(defaultDims.width || 0);
   const [height, setHeight] = useState(defaultDims.height || 0);
+  const [withLighting, setWithLighting] = useState(false);
+  const [withFitting, setWithFitting] = useState(false);
   const [finalPrice, setFinalPrice] = useState(basePrice || 0);
 
-  // Keep local inputs in sync if backend default size changes
+  // Keep local inputs in sync if backend default size changes.
+  // Also reset add-on flags so selections don't carry over between products.
   useEffect(() => {
     setWidth(defaultDims.width || 0);
     setHeight(defaultDims.height || 0);
-  }, [defaultDims.width, defaultDims.height]);
+    setWithLighting(false);
+    setWithFitting(false);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product?.id]);
 
   useEffect(() => {
     const w = Number(width) || 0;
     const h = Number(height) || 0;
-    const isValid = w > 0 && h > 0 && basePrice > 0;
-
-    const defaultArea =
-      (defaultDims.width || 0) * (defaultDims.height || 0) || 1;
-    const currentArea = w * h || defaultArea;
-
-    const multiplier = currentArea / defaultArea;
-    const calculated = Math.round((basePrice || 0) * multiplier);
+    
+    // Calculate price using synchronized utility
+    const calculated = calculateFinalPrice(material, w, h, withLighting, withFitting);
+    
+    // New Range: 5x5 to 96x96
+    const isValid = w >= 5 && w <= 96 && h >= 5 && h <= 96 && calculated > 0;
 
     setFinalPrice(calculated);
 
@@ -59,15 +63,19 @@ const ProductPriceCalculator = ({ product, onChange }) => {
         width: w,
         height: h,
         price: calculated,
+        withLighting,
+        withFitting,
+        material,
+        totalSqInch: w * h,
         isValid,
       });
     }
   }, [
     width,
     height,
-    basePrice,
-    defaultDims.width,
-    defaultDims.height,
+    withLighting,
+    withFitting,
+    material,
     onChange,
   ]);
 
@@ -84,6 +92,8 @@ const ProductPriceCalculator = ({ product, onChange }) => {
           </label>
           <input
             type="number"
+            min="5"
+            max="96"
             value={height}
             onChange={(e) => setHeight(e.target.value)}
             className="w-full border rounded px-2 py-1 border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
@@ -95,6 +105,8 @@ const ProductPriceCalculator = ({ product, onChange }) => {
           </label>
           <input
             type="number"
+            min="5"
+            max="96"
             value={width}
             onChange={(e) => setWidth(e.target.value)}
             className="w-full border rounded px-2 py-1 border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
@@ -102,21 +114,45 @@ const ProductPriceCalculator = ({ product, onChange }) => {
         </div>
       </div>
 
-      <div className="space-y-1 text-sm text-gray-600 mb-3">
-        <p>
-          <span className="font-medium">Default Size:</span>{" "}
-          {defaultSize || "Not specified"}
-        </p>
-        <p>
-          <span className="font-medium">Base Price:</span> ₹{basePrice || 0}
-        </p>
+      <div className="space-y-3 border-t pt-3 mb-4">
+        <label className="flex items-center space-x-3 cursor-pointer group">
+          <input
+            type="checkbox"
+            checked={withLighting}
+            onChange={(e) => setWithLighting(e.target.checked)}
+            className="w-4 h-4 rounded text-pink-600 focus:ring-pink-500"
+          />
+          <span className="text-sm text-gray-700 font-medium group-hover:text-black">
+            Include LED Lighting (Front/Back)
+          </span>
+        </label>
+
+        <label className="flex items-center space-x-3 cursor-pointer group">
+          <input
+            type="checkbox"
+            checked={withFitting}
+            onChange={(e) => setWithFitting(e.target.checked)}
+            className="w-4 h-4 rounded text-pink-600 focus:ring-pink-500"
+          />
+          <span className="text-sm text-gray-700 font-medium group-hover:text-black">
+            Professional Installation (+₹500)
+          </span>
+        </label>
+      </div>
+
+      <div className="space-y-1 text-[10px] text-gray-500 uppercase tracking-tight mb-3">
+        <p>Min: 5x5" | Max: 96x96"</p>
+        <p>Material Strategy: {material || "Default"}</p>
       </div>
 
       <div className="flex items-center justify-between border-t pt-3">
-        <span className="text-gray-600">Calculated Price:</span>
-        <span className="text-2xl font-bold text-pink-600">
-          ₹{finalPrice || 0}
-        </span>
+        <span className="text-gray-600 font-medium">Authoritative Price:</span>
+        <div className="text-right">
+          <span className="text-2xl font-bold text-pink-600">
+            ₹{finalPrice.toLocaleString()}
+          </span>
+          <p className="text-[10px] text-gray-400">Secure Backend Sync</p>
+        </div>
       </div>
     </div>
   );

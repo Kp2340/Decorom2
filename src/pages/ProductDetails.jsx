@@ -29,9 +29,24 @@ const ProductDetails = () => {
     fetchProduct();
   }, [productId]);
 
-  const handlePriceChange = (newConfig) => {
-    setConfig(newConfig);
-  };
+  const handlePriceChange = React.useCallback((newConfig) => {
+    setConfig((prev) => {
+      if (
+        prev &&
+        prev.width === newConfig.width &&
+        prev.height === newConfig.height &&
+        prev.price === newConfig.price &&
+        prev.isValid === newConfig.isValid &&
+        prev.material === newConfig.material &&
+        prev.withLighting === newConfig.withLighting &&
+        prev.withFitting === newConfig.withFitting &&
+        prev.totalSqInch === newConfig.totalSqInch
+      ) {
+        return prev;
+      }
+      return newConfig;
+    });
+  }, []);
 
   const handleBuyNow = () => {
     if (!config || !config.isValid) {

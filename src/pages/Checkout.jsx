@@ -67,25 +67,32 @@ const Checkout = () => {
         width: config.width,
         area: config.totalSqInch,
       },
+      size: `${config.width}x${config.height}`,
       material: config.material,
-      lighting: config.withLighting,
-      fitting: config.withFitting,
+      lightingIncluded: config.withLighting,
+      fittingIncluded: config.withFitting,
+      frontendPrice: config.price || 0,
       shipping: shipping,
     };
 
     try {
       const response = await processCheckout(payload);
-      // Assuming response contains the final price
-      if (response && response.finalPrice) {
-        setBackendPrice(response.finalPrice);
+      
+      // 1. Check for payment redirect
+      if (response && response.paymentUrl && !response.mockMode) {
+        setLoading(true); // Keep loading state until we leave the page
+        window.location.href = response.paymentUrl;
+        return;
+      }
+
+      // 2. Fallback to success UI (for mock mode or edge cases)
+      if (response && response.orderId) {
+        setBackendPrice(response.finalPrice || "CONFIRMED");
         setSuccess(true);
       } else {
-        // If backend just says "Success" or similar but doesn't return price in obvious field
-        // We might fallback or show a generic success message.
-        // Rule says: "Displays backend-calculated final price"
-        // I will assume it is sent back.
-        setBackendPrice(response.price || response.total || "N/A");
-        setSuccess(true);
+        // Response exists but has no actionable data — surface a visible error
+        setSuccess(false);
+        setError("Checkout failed: unexpected server response. Please try again.");
       }
     } catch (err) {
       setError(err.message || "Checkout failed. Please try again.");
