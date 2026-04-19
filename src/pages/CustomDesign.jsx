@@ -21,13 +21,14 @@ const CustomDesign = () => {
 
     try {
       const response = await apiClient.post("/api/orders/custom-inquiry", formData);
-      if (response.orderId) {
+      if (response && response.orderId) {
         navigate(`/track/${response.orderId}`);
+      } else {
+        throw new Error("Failed to generate Order ID. Please contact support.");
       }
     } catch (err) {
       setError(err.message || "Something went wrong. Please try again.");
-    } finally {
-      setSubmitting(false);
+      setSubmitting(false); // Only reset on error; navigation handles success reset
     }
   };
 

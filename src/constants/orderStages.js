@@ -6,6 +6,7 @@ export const ALL_STAGES = [
   // Start (Online)
   { 
       key: "PAYMENT_DONE", 
+      tracks: ["ONLINE"],
       label: "Full Payment", 
       icon: "💳", 
       description: "Full payment received. Priority processing initiated." 
@@ -13,6 +14,7 @@ export const ALL_STAGES = [
   // Start (Offline)
   { 
       key: "PAYMENT_DONE_500", 
+      tracks: ["OFFLINE"],
       label: "Advance Paid", 
       icon: "✅", 
       description: "Design advance of ₹500 received." 
@@ -20,12 +22,14 @@ export const ALL_STAGES = [
   // Shared
   { 
       key: "DESIGN_MAKING", 
+      tracks: ["ONLINE", "OFFLINE"],
       label: "Designing", 
       icon: "✏️", 
       description: "Our design team is crafting your custom artwork." 
   },
   { 
       key: "DESIGN_CONFIRMED", 
+      tracks: ["ONLINE", "OFFLINE"],
       label: "Design Approved", 
       icon: "👍", 
       description: "Artwork finalized and approved by you." 
@@ -33,12 +37,14 @@ export const ALL_STAGES = [
   // Offline Only track
   { 
       key: "QUOTATION_SENT", 
+      tracks: ["OFFLINE"],
       label: "Price Quoted", 
       icon: "📄", 
       description: "Custom quotation sent based on your requirements." 
   },
   { 
       key: "PAYMENT_50_PERCENT", 
+      tracks: ["OFFLINE"],
       label: "50% Paid", 
       icon: "💰", 
       description: "Initial 50% payment received. Order moving to production." 
@@ -46,6 +52,7 @@ export const ALL_STAGES = [
   // Shared / Production
   { 
       key: "IN_MANUFACTURING", 
+      tracks: ["ONLINE", "OFFLINE"],
       label: "Production", 
       icon: "🔨", 
       description: "Your nameplate is currently being manufactured." 
@@ -53,12 +60,14 @@ export const ALL_STAGES = [
   // Offline Only
   { 
       key: "VIDEO_SENT", 
+      tracks: ["OFFLINE"],
       label: "Video Sent", 
       icon: "🎥", 
       description: "We've sent you a video of the finished product." 
   },
   { 
       key: "PAYMENT_COMPLETED", 
+      tracks: ["OFFLINE"],
       label: "Payment Done", 
       icon: "🏦", 
       description: "Balance payment received in full." 
@@ -66,18 +75,21 @@ export const ALL_STAGES = [
   // Final stages
   { 
       key: "MANUFACTURED", 
+      tracks: ["ONLINE", "OFFLINE"],
       label: "Ready", 
       icon: "📦", 
       description: "Quality check complete. Ready for shipping." 
   },
   { 
       key: "DISPATCHED", 
+      tracks: ["ONLINE", "OFFLINE"],
       label: "Dispatched", 
       icon: "🚚", 
       description: "Order hand-over to our courier partner." 
   },
   { 
       key: "SHIPPED", 
+      tracks: ["ONLINE", "OFFLINE"],
       label: "Received", 
       icon: "🎉", 
       description: "Order successfully delivered. Hope it looks great!" 
@@ -90,19 +102,6 @@ export const ALL_STAGES = [
  * @returns {Array} - List of stages for that track
  */
 export const getStagesForTrack = (type) => {
-    if (type === 'OFFLINE') {
-        // Offline track includes the granular quote/video steps
-        return ALL_STAGES.filter(s => s.key !== 'PAYMENT_DONE'); 
-    }
-    // Online track is simpler/faster
-    const onlineKeys = [
-        'PAYMENT_DONE', 
-        'DESIGN_MAKING', 
-        'DESIGN_CONFIRMED', 
-        'IN_MANUFACTURING', 
-        'MANUFACTURED', 
-        'DISPATCHED', 
-        'SHIPPED'
-    ];
-    return ALL_STAGES.filter(s => onlineKeys.includes(s.key));
+    const track = type || 'ONLINE';
+    return ALL_STAGES.filter(s => s.tracks.includes(track));
 };

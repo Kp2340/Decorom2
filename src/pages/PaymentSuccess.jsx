@@ -12,6 +12,7 @@ const PaymentSuccess = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [paymentPending, setPaymentPending] = useState(false);
+  const [paymentFailed, setPaymentFailed] = useState(false);
 
   useEffect(() => {
     const orderId = searchParams.get("orderId");
@@ -30,7 +31,6 @@ const PaymentSuccess = () => {
         const data = res?.data ?? res;
 
         // Poll if paymentStatus is PENDING or null (missing)
-        // Note: Backend now returns 'PENDING', 'SUCCESS', or 'FAILED'
         if (!data?.paymentStatus || data?.paymentStatus === "PENDING") {
           attempts++;
           if (attempts >= POLL_MAX_ATTEMPTS) {
@@ -44,7 +44,8 @@ const PaymentSuccess = () => {
 
         // If payment explicitly FAILED
         if (data?.paymentStatus === "FAILED" || data?.status === "CANCELLED") {
-            setPaymentPending(true); 
+            setPaymentFailed(true);
+            setPaymentPending(false); 
             setLoading(false);
             return;
         }
@@ -54,7 +55,6 @@ const PaymentSuccess = () => {
             setOrderData(data);
             setLoading(false);
         } else {
-            // Unexpected state: poll more until timeout
             if (attempts < POLL_MAX_ATTEMPTS) {
                 attempts++;
                 setTimeout(fetchOrder, POLL_INTERVAL_MS);
@@ -89,29 +89,51 @@ const PaymentSuccess = () => {
     );
   }
 
-  // Payment not confirmed cases (Orange/Pending/Failed screen)
+  // Payment explicitly failed case
+  if (paymentFailed) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 font-sans">
+        <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full text-center border-t-8 border-red-500">
+          <div className="mb-6 text-6xl">🔴</div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Payment Unsuccessful</h2>
+          <p className="text-gray-600 mb-6 text-sm">
+            The transaction was declined by your bank or the payment gateway. 
+            If money was deducted from your account, it will be refunded automatically by your bank within 5-7 working days.
+          </p>
+          <div className="bg-gray-100 p-3 rounded-lg flex items-center justify-center gap-2 mb-6">
+              <span className="text-gray-500 font-mono text-xs italic">Ref: {orderId?.substring(0, 8)}...</span>
+          </div>
+          <button
+            onClick={() => navigate("/")}
+            className="w-full bg-red-600 text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:bg-red-700 transition-all active:scale-95"
+          >
+            Try buying again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Payment not confirmed yet (Timeout case)
   if (paymentPending) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 font-sans">
         <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full text-center border-t-8 border-orange-500">
           <div className="mb-6 text-6xl">🟠</div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Payment Pending</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Verification Timeout</h2>
           <p className="text-gray-600 mb-4 text-sm">
             We haven't received confirmation from the payment gateway yet. 
-            If your account was debited, your order will be updated automatically within a few minutes.
+            This usually happens due to slow internet or bank delays.
           </p>
-          <div className="bg-gray-100 p-3 rounded-lg flex items-center justify-center gap-2 mb-6">
-              <span className="text-gray-500 font-mono text-xs">ID: {orderId?.substring(0, 8)}...</span>
-          </div>
+          <p className="text-gray-500 text-[11px] mb-6">
+            Your order will update automatically once we receive the confirmation. You can check the status on your tracking page in a few minutes.
+          </p>
           <button
-            onClick={() => navigate("/")}
+            onClick={() => navigate(`/track/${orderId}`)}
             className="w-full bg-orange-500 text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:bg-orange-600 transition-all active:scale-95"
           >
-            Go back to shop
+            Go to Tracking Page
           </button>
-          <p className="mt-4 text-[10px] text-gray-400">
-              Need help? Contact kppremium0002@gmail.com
-          </p>
         </div>
       </div>
     );

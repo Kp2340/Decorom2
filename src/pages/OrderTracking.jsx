@@ -66,6 +66,11 @@ const OrderTracking = () => {
   const stages = getStagesForTrack(orderData?.orderType || 'ONLINE');
   const activeIdxInTrack = stages.findIndex(s => s.key === orderData?.status);
 
+  const generateWhatsAppLink = (message) => {
+    const phone = "919016707658";
+    return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 font-sans">
       <div className="max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -107,7 +112,10 @@ const OrderTracking = () => {
         </div>
 
         {/* Next Step / Action Required Box */}
-        {orderData?.status !== 'SHIPPED' && orderData?.status !== 'CANCELLED' && (
+        {(orderData?.advanceStatus === 'NEEDED' || 
+          (orderData?.orderType === 'OFFLINE' && orderData?.amountConfirmed === false) ||
+          (orderData?.status === 'QUOTATION_SENT' && !orderData?.first50Paid) ||
+          (orderData?.status === 'VIDEO_SENT' && !orderData?.second50Paid)) && (
           <div className={`mb-6 p-6 rounded-3xl border-2 animate-in zoom-in duration-700 delay-300
             ${orderData?.advanceStatus === 'NEEDED' || !orderData?.amountConfirmed 
               ? 'bg-orange-50 border-orange-200' 
@@ -121,31 +129,44 @@ const OrderTracking = () => {
                 <h3 className={`text-lg font-black ${orderData?.advanceStatus === 'NEEDED' || !orderData?.amountConfirmed ? 'text-orange-900' : 'text-blue-900'}`}>
                   {orderData?.advanceStatus === 'NEEDED' ? "Design Advance Required" : 
                    !orderData?.amountConfirmed ? "Price Confirmation Needed" : 
-                   "Current Status: " + (stages[activeIdxInTrack]?.label || "Processing")}
+                   "Payment Milestone Pending"}
                 </h3>
                 
                 <div className="mt-2 text-sm leading-relaxed opacity-80">
                   {orderData?.advanceStatus === 'NEEDED' && (
-                    <div className="space-y-2">
+                    <div className="space-y-4">
                        <p>To start your custom design, a small advance of <strong>₹500</strong> is required. This will be deducted from your final bill.</p>
-                       <button className="bg-orange-600 text-white px-6 py-2.5 rounded-xl font-bold shadow-lg shadow-orange-200 active:scale-95 transition-all">Pay ₹500 Now</button>
+                       <a 
+                         href={generateWhatsAppLink(`Hello, I want to pay the ₹500 advance for my custom design order ${orderData.orderId}. Please provide the QR code/details.`)}
+                         target="_blank"
+                         rel="noopener noreferrer"
+                         className="bg-orange-600/10 text-orange-700 px-4 py-3 rounded-xl border border-orange-200 text-xs font-bold flex items-center justify-between hover:bg-orange-600/20 transition-all cursor-pointer"
+                       >
+                          <span>Pay ₹500 via Official WhatsApp</span>
+                          <span className="bg-white px-2 py-0.5 rounded text-[10px] shadow-sm">Click to Chat</span>
+                       </a>
                     </div>
                   )}
 
                   {orderData?.advanceStatus === 'PAID' && !orderData?.amountConfirmed && (
-                    <div className="space-y-2">
+                    <div className="space-y-4">
                        <p>Your design is ready! Please confirm the final quotation of <strong>₹{orderData?.price?.toLocaleString()}</strong> to proceed to manufacturing.</p>
-                       <div className="flex gap-2">
-                         <button className="bg-green-600 text-white px-6 py-2.5 rounded-xl font-bold active:scale-95 transition-all">Confirm Price</button>
-                         <button className="bg-white border text-gray-500 px-6 py-2.5 rounded-xl font-bold active:scale-95 transition-all text-xs">Request Revision</button>
-                       </div>
+                       <a 
+                         href={generateWhatsAppLink(`Hello, I confirm the price of ₹${orderData.price} for my order ${orderData.orderId}. Please proceed with manufacturing.`)}
+                         target="_blank"
+                         rel="noopener noreferrer"
+                         className="bg-green-600/10 text-green-700 px-4 py-3 rounded-xl border border-green-200 text-xs font-bold flex items-center justify-between hover:bg-green-600/20 transition-all cursor-pointer"
+                       >
+                          <span>Confirm Price & Proceed</span>
+                          <span className="bg-white px-2 py-0.5 rounded text-[10px] shadow-sm">Contact Admin</span>
+                       </a>
                     </div>
                   )}
 
                   {orderData?.status === 'QUOTATION_SENT' && orderData?.amountConfirmed && !orderData?.first50Paid && (
-                    <div className="space-y-2">
+                    <div className="space-y-4">
                        <p>Please pay the first 50% deposit to start manufacturing.</p>
-                       <div className="p-3 bg-white/50 rounded-xl border border-blue-100 flex justify-between items-center">
+                       <div className="p-3 bg-white/50 rounded-xl border border-blue-100 flex justify-between items-center mb-2">
                           <span className="text-xs font-bold text-gray-500">Amount Due Now</span>
                           <span className="text-xl font-black text-blue-900">
                              ₹{orderData?.advanceStatus === 'PAID' 
@@ -153,14 +174,22 @@ const OrderTracking = () => {
                                : Math.round(orderData.price / 2).toLocaleString()}
                           </span>
                        </div>
-                       <button className="w-full bg-blue-600 text-white py-3 rounded-xl font-bold shadow-lg shadow-blue-100 active:scale-95 transition-all">Pay 50% Advance</button>
+                       <a 
+                         href={generateWhatsAppLink(`Hello, I want to pay the first 50% payment for my order ${orderData.orderId}. Please provide the QR code/details.`)}
+                         target="_blank"
+                         rel="noopener noreferrer"
+                         className="bg-blue-600/10 text-blue-700 px-4 py-3 rounded-xl border border-blue-200 text-xs font-bold flex items-center justify-between hover:bg-blue-600/20 transition-all cursor-pointer"
+                       >
+                          <span>Request QR for 50% Payment</span>
+                          <span className="bg-white px-2 py-0.5 rounded text-[10px] shadow-sm">Contact Admin</span>
+                       </a>
                     </div>
                   )}
 
                   {orderData?.status === 'VIDEO_SENT' && !orderData?.second50Paid && (
-                    <div className="space-y-2">
+                    <div className="space-y-4">
                        <p>Your nameplate is ready! Pay the balance amount for safe dispatch.</p>
-                       <div className="p-3 bg-white/50 rounded-xl border border-blue-100 flex justify-between items-center">
+                       <div className="p-3 bg-white/50 rounded-xl border border-blue-100 flex justify-between items-center mb-2">
                           <span className="text-xs font-bold text-gray-500">Balance Due</span>
                           <span className="text-xl font-black text-blue-900">
                              ₹{orderData?.advanceStatus === 'PAID' 
@@ -168,13 +197,16 @@ const OrderTracking = () => {
                                : Math.round(orderData.price / 2).toLocaleString()}
                           </span>
                        </div>
-                       <button className="w-full bg-indigo-600 text-white py-3 rounded-xl font-bold shadow-lg shadow-indigo-100 active:scale-95 transition-all">Pay Balance & Complete Order</button>
+                       <a 
+                         href={generateWhatsAppLink(`Hello, I'm ready to pay the final balance for my order ${orderData.orderId}. Please provide the QR/details for dispatch.`)}
+                         target="_blank"
+                         rel="noopener noreferrer"
+                         className="bg-indigo-600/10 text-indigo-700 px-4 py-3 rounded-xl border border-indigo-200 text-xs font-bold flex items-center justify-between hover:bg-indigo-600/20 transition-all cursor-pointer"
+                       >
+                          <span>Pay Balance for Dispatch</span>
+                          <span className="bg-white px-2 py-0.5 rounded text-[10px] shadow-sm">Contact Admin</span>
+                       </a>
                     </div>
-                  )}
-
-                  {/* Fallback for other states */}
-                  {(orderData?.status === 'DESIGN_MAKING' || orderData?.status === 'IN_MANUFACTURING') && (
-                    <p>Sit back and relax! Our team is working hard on your order. We will update you as soon as the next stage is ready.</p>
                   )}
                 </div>
               </div>
