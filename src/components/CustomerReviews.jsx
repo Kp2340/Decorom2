@@ -1,8 +1,6 @@
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Navigation } from "swiper/modules";
+import { Autoplay } from "swiper/modules";
 import "swiper/css";
-import "swiper/css/navigation";
-import { useRef } from "react";
 import { GOOGLE_MAPS_REVIEWS_URL } from "../constants/contact";
 
 const GOOGLE_LOGO = (
@@ -96,7 +94,7 @@ const ReviewCard = ({ review, colorClass, onReadMore }) => {
   const preview = isLong ? review.text.slice(0, PREVIEW_LENGTH) + "…" : review.text;
 
   return (
-    <div className="bg-white border border-gray-200 rounded-2xl p-6 h-full flex flex-col shadow-sm hover:shadow-md transition-shadow">
+    <div className="bg-white border border-gray-200 rounded-2xl p-6 flex flex-col shadow-sm hover:shadow-md transition-shadow h-[260px]">
       {/* Header */}
       <div className="flex items-center gap-3 mb-3">
         <div className={`w-10 h-10 rounded-full ${colorClass} flex items-center justify-center text-white font-bold text-sm flex-shrink-0`}>
@@ -131,15 +129,11 @@ const ReviewCard = ({ review, colorClass, onReadMore }) => {
   );
 };
 
-const CustomerReviews = () => {
-  const prevRef = useRef(null);
-  const nextRef = useRef(null);
-
-  return (
-    <section className="py-20 bg-gray-50">
+const CustomerReviews = () => (
+    <section className="py-16 bg-gray-50">
       <div className="container mx-auto px-4">
-        {/* Header row */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-10">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-8">
           <div>
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900 flex items-center flex-wrap gap-2">
               Reviews on {GOOGLE_LOGO}
@@ -150,57 +144,32 @@ const CustomerReviews = () => {
               <span className="text-gray-500 text-sm">· {GOOGLE_REVIEW_COUNT} reviews</span>
             </div>
           </div>
-
-          <div className="flex items-center gap-3">
-            {/* Prev / Next arrows */}
-            <button
-              ref={prevRef}
-              className="w-10 h-10 rounded-full border border-gray-300 bg-white flex items-center justify-center hover:bg-gray-100 transition-colors shadow-sm"
-              aria-label="Previous review"
-            >
-              <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-            <button
-              ref={nextRef}
-              className="w-10 h-10 rounded-full border border-gray-300 bg-white flex items-center justify-center hover:bg-gray-100 transition-colors shadow-sm"
-              aria-label="Next review"
-            >
-              <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-            <a
-              href={GOOGLE_MAPS_REVIEWS_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-5 py-2 rounded-full border border-gray-300 bg-white text-sm font-semibold text-gray-700 hover:bg-gray-100 transition-colors shadow-sm whitespace-nowrap"
-            >
-              View on Google
-            </a>
-          </div>
+          <a
+            href={GOOGLE_MAPS_REVIEWS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="self-start sm:self-auto px-5 py-2 rounded-full border border-gray-300 bg-white text-sm font-semibold text-gray-700 hover:bg-gray-100 transition-colors shadow-sm whitespace-nowrap"
+          >
+            View on Google
+          </a>
         </div>
 
-        {/* Carousel */}
+        {/* Carousel — 1 on mobile, up to 5 on desktop, slow autoplay */}
         <Swiper
-          modules={[Autoplay, Navigation]}
-          spaceBetween={20}
-          slidesPerView={1.1}
-          autoplay={{ delay: 4000, disableOnInteraction: false }}
-          navigation={{ prevEl: prevRef.current, nextEl: nextRef.current }}
-          onBeforeInit={(swiper) => {
-            swiper.params.navigation.prevEl = prevRef.current;
-            swiper.params.navigation.nextEl = nextRef.current;
-          }}
+          modules={[Autoplay]}
+          spaceBetween={16}
+          slidesPerView={1}
+          autoplay={{ delay: 5000, disableOnInteraction: false }}
+          loop
           breakpoints={{
-            640: { slidesPerView: 2.1 },
-            1024: { slidesPerView: 3.1 },
+            640:  { slidesPerView: 2, spaceBetween: 20 },
+            1024: { slidesPerView: 4, spaceBetween: 20 },
+            1280: { slidesPerView: 5, spaceBetween: 20 },
           }}
-          className="!overflow-visible"
         >
-          {REVIEWS.map((review, i) => (
-            <SwiperSlide key={review.id}>
+          {/* Duplicate for seamless loop */}
+          {[...REVIEWS, ...REVIEWS].map((review, i) => (
+            <SwiperSlide key={`${review.id}-${i}`}>
               <ReviewCard
                 review={review}
                 colorClass={AVATAR_COLORS[i % AVATAR_COLORS.length]}
@@ -224,6 +193,5 @@ const CustomerReviews = () => {
       </div>
     </section>
   );
-};
 
 export default CustomerReviews;
