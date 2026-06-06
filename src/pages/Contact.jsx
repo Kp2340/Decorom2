@@ -15,13 +15,11 @@ const ContactUs = () => {
         "O3-Z2OeVM5bXRKscz", // Your Public Key
       )
       .then(
-        (result) => {
-          console.log(result.text);
+        () => {
           alert("✅ Message sent successfully!");
           e.target.reset();
         },
-        (error) => {
-          console.error(error.text);
+        () => {
           alert("❌ Failed to send message. Please try again.");
         },
       );
@@ -81,7 +79,6 @@ const ContactUs = () => {
               className="w-full h-full rounded-lg"
               style={{ border: 0 }}
               allowFullScreen
-              // loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
             ></iframe>
           </div>
@@ -132,9 +129,9 @@ const ContactUs = () => {
 
               <button
                 type="submit"
-                className="w-fullbg-green-500 text-white font-medium py-3 rounded-md hover:bg-green-600 transition-colors mt-auto"
+                className="w-full bg-black text-white font-bold py-4 rounded-xl hover:bg-gray-800 transform hover:-translate-y-1 transition-all duration-300 shadow-lg hover:shadow-xl active:scale-95 mt-4"
               >
-                Submit
+                Send Message
               </button>
             </form>
           </div>

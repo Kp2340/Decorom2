@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Large media files — serve via Cloudinary, not GitHub/Vercel
+public/videos/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

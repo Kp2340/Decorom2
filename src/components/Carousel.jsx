@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const images = [
   "carousel/1.jpg",
@@ -63,7 +63,7 @@ const Carousel = () => {
         className="absolute top-1/2 left-4 -translate-y-1/2 bg-white bg-opacity-70 p-2 rounded-full shadow hover:bg-opacity-100 transition"
         aria-label="Previous Slide"
       >
-        <ChevronLeftIcon className="h-6 w-6 text-black" />
+        <ChevronLeft className="h-6 w-6 text-black" />
       </button>
 
       {/* Right Arrow */}
@@ -72,7 +72,7 @@ const Carousel = () => {
         className="absolute top-1/2 right-4 -translate-y-1/2 bg-white bg-opacity-70 p-2 rounded-full shadow hover:bg-opacity-100 transition"
         aria-label="Next Slide"
       >
-        <ChevronRightIcon className="h-6 w-6 text-black" />
+        <ChevronRight className="h-6 w-6 text-black" />
       </button>
 
       {/* Dots */}

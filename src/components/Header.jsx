@@ -9,16 +9,18 @@ const Header = () => {
 
   const menuItems = [
     { name: "Home", path: "/" },
-    // { name: "Products", path: "/products" },
+    { name: "Products", path: "/products" },
+    { name: "Customers", path: "/customers" },
     { name: "Custom Design", path: "/custom-design" },
     { name: "Contact Us", path: "/contact" },
     { name: "About Us", path: "/about" },
   ];
 
+
   return (
     <>
       {/* Header */}
-      <header className="fixed w-full top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-100">
+      <header className="fixed w-full top-0 z-50 bg-yellow-100 border-b border-yellow-200">
         <nav className="flex items-center justify-between h-16 px-4 md:px-8 lg:px-12 max-w-7xl mx-auto">
           {/* Mobile Toggle Button (Left) */}
           <button
@@ -79,12 +81,12 @@ const Header = () => {
 
       {/* Mobile Menu Panel (Left Slide) */}
       <div
-        className={`fixed top-0 left-0 h-full w-4/5 max-w-xs bg-white z-50 transform transition-transform duration-300 ease-out shadow-xl ${
+        className={`fixed top-0 left-0 h-full w-4/5 max-w-xs bg-yellow-100 z-50 transform transition-transform duration-300 ease-out shadow-xl ${
           isMenuOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         {/* Mobile Logo + Close */}
-        <div className="flex items-center justify-between p-4 border-b">
+        <div className="flex items-center justify-between p-4 border-b border-yellow-200">
           <img src="/logo/logo.png" alt="Decorom" className="h-12 w-auto" />
           <button
             onClick={closeMenu}

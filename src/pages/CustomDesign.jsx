@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import apiClient from "../api/client";
+import { submitCustomInquiry } from "../api/orders.api";
 
 const CustomDesign = () => {
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ const CustomDesign = () => {
     setError(null);
 
     try {
-      const response = await apiClient.post("/api/orders/custom-inquiry", formData);
+      const response = await submitCustomInquiry(formData);
       if (response && response.orderId) {
         navigate(`/track/${response.orderId}`);
       } else {

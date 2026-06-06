@@ -2,7 +2,6 @@ import axios from "axios";
 
 const BASE_URL = import.meta.env.VITE_APP_URL || "https://api.decorom.in";
 
-// Create axios instance
 const apiClient = axios.create({
   baseURL: BASE_URL,
   headers: {
@@ -10,55 +9,43 @@ const apiClient = axios.create({
   },
 });
 
-// Request interceptor - Add JWT token to requests
 apiClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("adminToken");
+    const token = sessionStorage.getItem("adminToken");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-
-    // If body is FormData, remove Content-Type to let browser set it with boundary
     if (config.data instanceof FormData) {
       delete config.headers["Content-Type"];
     }
-
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  },
+  (error) => Promise.reject(error),
 );
 
-// Response interceptor - Handle errors with backend error messages
 apiClient.interceptors.response.use(
-  (response) => {
-    return response.data;
-  },
+  (response) => response.data,
   (error) => {
-    // Handle error response
     if (error.response) {
-      // Server responded with error status
+      if (error.response.status === 401) {
+        sessionStorage.removeItem("adminToken");
+        if (window.location.pathname.startsWith("/admin") && window.location.pathname !== "/admin/login") {
+          window.location.href = "/admin/login";
+        }
+      }
       const errorMessage =
         error.response.data?.message ||
         error.response.data?.error ||
         error.response.data ||
         `HTTP error! status: ${error.response.status}`;
-
       const customError = new Error(errorMessage);
       customError.status = error.response.status;
       customError.response = error.response.data;
       return Promise.reject(customError);
     } else if (error.request) {
-      // Request made but no response received
-      const customError = new Error(
-        "Network error. Please check your connection.",
-      );
-      return Promise.reject(customError);
-    } else {
-      // Something else happened
-      return Promise.reject(error);
+      return Promise.reject(new Error("Network error. Please check your connection."));
     }
+    return Promise.reject(error);
   },
 );
 

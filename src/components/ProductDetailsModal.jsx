@@ -153,7 +153,6 @@ const ProductDetailsModal = ({ product, onClose }) => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("Order Placed! ID:", data.id || data);
         alert("Order Placed!");
         onClose();
       } else if (response.status === 400) {
@@ -164,7 +163,6 @@ const ProductDetailsModal = ({ product, onClose }) => {
         alert(`Order Failed: ${errorMsg}`);
       }
     } catch (error) {
-      console.error("Checkout error:", error);
       alert("An error occurred while placing the order.");
     } finally {
       setIsSubmitting(false);

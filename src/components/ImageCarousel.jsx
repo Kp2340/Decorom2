@@ -1,5 +1,5 @@
 import React, { useMemo, useRef, useState } from "react";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { responsiveImageProps } from "../utils/imageUtils";
 
 const ImageCarousel = ({ images }) => {
@@ -62,7 +62,7 @@ const ImageCarousel = ({ images }) => {
             onClick={prevSlide}
             className="absolute top-1/2 left-2 -translate-y-1/2 bg-black/30 hover:bg-black/50 p-2 rounded-full text-white transition"
           >
-            <ChevronLeftIcon className="h-6 w-6" />
+            <ChevronLeft className="h-6 w-6" />
           </button>
 
           {/* Right Arrow */}
@@ -70,7 +70,7 @@ const ImageCarousel = ({ images }) => {
             onClick={nextSlide}
             className="absolute top-1/2 right-2 -translate-y-1/2 bg-black/30 hover:bg-black/50 p-2 rounded-full text-white transition"
           >
-            <ChevronRightIcon className="h-6 w-6" />
+            <ChevronRight className="h-6 w-6" />
           </button>
 
           {/* Thumbnails / Dots */}

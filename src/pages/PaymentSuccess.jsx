@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import apiClient from "../api/client";
+import { getPublicOrder } from "../api/orders.api";
 
 const POLL_INTERVAL_MS = 3000;
 const POLL_MAX_ATTEMPTS = 15; // Increased slightly for slower webhooks
@@ -29,10 +29,10 @@ const PaymentSuccess = () => {
 
     const fetchOrder = async () => {
       try {
-        const res = await apiClient.get(`/api/orders/public/${orderId}`);
+        const res = await getPublicOrder(orderId);
         if (isCancelled) return;
         
-        const data = res?.data ?? res;
+        const data = res;
 
         // Poll if paymentStatus is PENDING or null (missing)
         if (!data?.paymentStatus || data?.paymentStatus === "PENDING") {

@@ -1,5 +1,5 @@
 import React from "react";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   if (totalPages <= 1) return null;
@@ -23,7 +23,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
             : "border-gray-300 text-gray-600 hover:bg-gray-50"
         }`}
       >
-        <ChevronLeftIcon className="h-5 w-5" />
+        <ChevronLeft className="h-5 w-5" />
       </button>
 
       <span className="text-gray-700 font-medium">
@@ -39,7 +39,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
             : "border-gray-300 text-gray-600 hover:bg-gray-50"
         }`}
       >
-        <ChevronRightIcon className="h-5 w-5" />
+        <ChevronRight className="h-5 w-5" />
       </button>
     </div>
   );

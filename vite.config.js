@@ -4,7 +4,13 @@ import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
 
 export default defineConfig({
   base: "/",
-  // base: '/Decorom2/',
+  server: {
+    proxy: {
+      "/api": "http://localhost:8080",
+      "/checkout": "http://localhost:8080",
+      "/payment-notification": "http://localhost:8080",
+    },
+  },
   plugins: [
     react(),
     ViteImageOptimizer({
@@ -13,11 +19,6 @@ export default defineConfig({
       jpeg: { quality: 70 },
       webp: { quality: 70 },
       avif: { quality: 70 },
-      // png: { quality: 80 },
-      // jpg: { quality: 70 },
-      // jpeg: { quality: 75 },
-      // webp: { quality: 80 },
-      // avif: { quality: 70 },
       svg: {
         plugins: [
           { name: "removeViewBox", active: false },
