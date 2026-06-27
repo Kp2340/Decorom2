@@ -1,102 +1,75 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { getProducts } from "../api/products.api";
-import ProductCard from "../components/ProductCard";
-import Pagination from "../components/Pagination";
-import ProductFilters from "../components/ProductFilters";
+import React from "react";
+import { Helmet } from "react-helmet-async";
+import Hero from "../components/Hero";
+import TrustBadges from "../components/TrustBadges";
+import HorizontalRail from "../components/HorizontalRail";
+import CategoryBrowse from "../components/CategoryBrowse";
+import VideoShowcase from "../components/VideoShowcase";
+import FAQ from "../components/FAQ";
+import CustomerReviews from "../components/CustomerReviews";
+import InstagramGrid from "../components/InstagramGrid";
+import SEO from "../components/SEO";
 
-const Home = () => {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [page, setPage] = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
-  const [selectedMaterial, setSelectedMaterial] = useState("");
-  const [selectedShape, setSelectedShape] = useState("");
-  const pageSize = 12;
+const LOCAL_BUSINESS_JSON_LD = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  name: "Decorom",
+  image: "https://decorom.in/logo/logo.png",
+  telephone: "+91-9016707658",
+  email: "decorom213@gmail.com",
+  url: "https://decorom.in",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress:
+      "Shop A/7, Second Floor, Shreekunj Shopping Centre, Near HDFC Bank, K.K. Nagar, Ghatlodiya",
+    addressLocality: "Ahmedabad",
+    postalCode: "380061",
+    addressCountry: "IN",
+  },
+  openingHours: "Mo-Sa 09:00-19:00",
+  priceRange: "₹₹",
+  servesCuisine: undefined,
+  hasMap:
+    "https://www.google.com/maps/place/Decorom/@23.067602,72.5427599,17z",
+});
 
-  const navigate = useNavigate();
+const Home = () => (
+  <div className="flex flex-col min-h-screen">
+    <SEO
+      title="Premium Designer Nameplates in Ahmedabad"
+      description="Discover the best designer nameplates in Ahmedabad, Gujarat. Handcrafted custom nameplates for your home and office. Shop our collection now."
+      keywords="Designer Nameplates Ahmedabad, Custom Nameplates Gujarat, Home Entrance Decor, LED Nameplates Ahmedabad"
+    />
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      setLoading(true);
-      try {
-        const data = await getProducts(
-          page,
-          pageSize,
-          selectedMaterial,
-          selectedShape,
-        );
-        if (Array.isArray(data)) {
-          setProducts(data);
-          setTotalPages(1);
-        } else if (data && data.content) {
-          setProducts(data.content);
-          setTotalPages(data.totalPages || 0);
-        } else {
-          setProducts([]);
-        }
-      } catch (err) {
-        setError("Failed to load products");
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
+    {/* LocalBusiness structured data for Google */}
+    <Helmet>
+      <script type="application/ld+json">{LOCAL_BUSINESS_JSON_LD}</script>
+    </Helmet>
 
-    fetchProducts();
-  }, [page, selectedMaterial, selectedShape]);
+    {/* 1. Hero */}
+    <Hero />
 
-  // Reset to first page when filters change
-  useEffect(() => {
-    setPage(0);
-  }, [selectedMaterial, selectedShape]);
+    {/* 2. Trust badges strip */}
+    <TrustBadges />
 
-  const handleProductClick = (product) => {
-    navigate(`/products/${product.id}`);
-  };
+    {/* 3. Best Selling Nameplates */}
+    <HorizontalRail />
 
-  if (loading) return <div className="text-center py-20">Loading...</div>;
-  if (error)
-    return <div className="text-center py-20 text-red-500">{error}</div>;
+    {/* 4. Browse by Category */}
+    <CategoryBrowse />
 
-  return (
-    <div className="container mx-auto px-4 pt-4 pb-8">
-      <h1 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-center text-gray-900">
-        Our Collection
-      </h1>
+    {/* 5. Video showcase */}
+    <VideoShowcase />
 
-      <ProductFilters
-        selectedMaterial={selectedMaterial}
-        setSelectedMaterial={setSelectedMaterial}
-        selectedShape={selectedShape}
-        setSelectedShape={setSelectedShape}
-      />
+    {/* 6. FAQ */}
+    <FAQ />
 
-      <div
-        className="grid mobile-four-fit scrollbar-hide sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[var(--grid-gap)] sm:gap-5"
-        style={{
-          "--header-h": "80px",
-          "--heading-h": "96px",
-          "--grid-gap": "12px",
-        }}
-      >
-        {products.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            onClick={handleProductClick}
-          />
-        ))}
-      </div>
+    {/* 7. Google Reviews */}
+    <CustomerReviews />
 
-      <Pagination
-        currentPage={page}
-        totalPages={totalPages}
-        onPageChange={setPage}
-      />
-    </div>
-  );
-};
+    {/* 8. Instagram grid */}
+    <InstagramGrid />
+  </div>
+);
 
 export default Home;

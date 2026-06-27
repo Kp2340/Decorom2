@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     // Check for existing token
-    const token = localStorage.getItem("adminToken");
+    const token = sessionStorage.getItem("adminToken");
     if (token) {
       // In a real app we might validate the token's expiry here
       setIsAuthenticated(true);
@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await loginAdmin(email, password);
       if (response && response.token) {
-        localStorage.setItem("adminToken", response.token);
+        sessionStorage.setItem("adminToken", response.token);
         setIsAuthenticated(true);
         return true;
       }
@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.removeItem("adminToken");
+    sessionStorage.removeItem("adminToken");
     setIsAuthenticated(false);
   };
 

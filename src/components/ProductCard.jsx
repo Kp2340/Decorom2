@@ -18,11 +18,28 @@ import {
  *
  * TODO: Replace src with CDN URL helper when available for responsive images.
  */
+import { calculateFinalPrice } from "../utils/pricingUtils";
+
+const parseSize = (sizeStr) => {
+  if (!sizeStr || typeof sizeStr !== "string") return { w: 0, h: 0 };
+  const match = sizeStr.toLowerCase().match(/(\d+(?:\.\d+)?)\s*[x\*]\s*(\d+(?:\.\d+)?)/);
+  return match ? { w: parseFloat(match[1]), h: parseFloat(match[2]) } : { w: 0, h: 0 };
+};
+
 const ProductCard = memo(({ product, onClick }) => {
+  const { w, h } = useMemo(() => parseSize(product.defaultSize || product.size), [product]);
+  const calculatedPrice = useMemo(() => {
+    return calculateFinalPrice(product.material, w, h);
+  }, [product.material, w, h]);
+
+  const displayPrice = calculatedPrice > 0 ? calculatedPrice : (product.basePrice || product.price || 0);
+
+  
   const primaryImage = useMemo(() => {
     const urls = toImageUrls(product);
     return urls[0] || PLACEHOLDER_IMAGE;
   }, [product]);
+
 
   const { src, srcSet, sizes } = useMemo(
     () => responsiveImageProps(primaryImage),
@@ -56,11 +73,12 @@ const ProductCard = memo(({ product, onClick }) => {
       </div>
 
       {/* Product Info */}
-      <div className="p-3 sm:p-4 flex flex-col flex-1 space-y-2">
+      <div className="p-3 sm:p-4 flex flex-col flex-1 gap-2">
         <h3 className="text-base sm:text-lg font-semibold text-gray-900 leading-snug line-clamp-2">
           {product.name}
         </h3>
-        <div className="text-gray-600 text-xs sm:text-sm space-y-1">
+        {/* flex-1 pushes price + button to the bottom, aligning all cards in a row */}
+        <div className="text-gray-600 text-xs sm:text-sm space-y-0.5 flex-1">
           {product.material && <p>Material: {product.material}</p>}
           {product.shape && <p>Shape: {product.shape}</p>}
           {(product.defaultSize || product.size) && (
@@ -69,10 +87,10 @@ const ProductCard = memo(({ product, onClick }) => {
         </div>
 
         <p className="text-pink-600 font-bold text-lg sm:text-xl">
-          ₹{product.basePrice || product.price}
+          ₹{displayPrice.toLocaleString()}
         </p>
 
-        <button className="mt-auto bg-black text-white font-semibold py-2.5 rounded-lg transition-transform duration-300 hover:-translate-y-0.5 active:scale-95">
+        <button className="bg-black text-white font-semibold py-2.5 rounded-lg transition-transform duration-300 hover:-translate-y-0.5 active:scale-95">
           View Details
         </button>
       </div>

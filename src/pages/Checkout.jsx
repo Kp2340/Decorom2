@@ -15,10 +15,16 @@ const Checkout = () => {
   const [shipping, setShipping] = useState({
     fullName: "",
     address: "",
-    city: "",
+    city: "Ahmedabad", // Defaulting to city mentioned in contact
     pincode: "",
     phone: "",
     email: "",
+  });
+
+  const [customDetails, setCustomDetails] = useState({
+    namePlateDetails: "",
+    height: config?.height || 12,
+    width: config?.width || 24,
   });
 
   const [loading, setLoading] = useState(false);
@@ -51,8 +57,22 @@ const Checkout = () => {
   const productImageSrc =
     productImages[0] || "https://via.placeholder.com/64x64?text=No+Image";
 
-  const handleChange = (e) => {
+  const handleShippingChange = (e) => {
     setShipping({ ...shipping, [e.target.name]: e.target.value });
+  };
+
+  const handleCustomChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "namePlateDetails") {
+      const lines = value.split("\n");
+      if (lines.length <= 5 && value.length <= 100) {
+        setCustomDetails({ ...customDetails, [name]: value });
+      }
+    } else {
+      // For height and width
+      const val = parseInt(value) || 0;
+      setCustomDetails({ ...customDetails, [name]: val });
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -60,19 +80,42 @@ const Checkout = () => {
     setLoading(true);
     setError("");
 
+    // Basic Validation
+    if (customDetails.height < 1 || customDetails.height > 96 || customDetails.width < 1 || customDetails.width > 96) {
+      setError("Size must be between 1x1 and 96x96 inches.");
+      setLoading(false);
+      return;
+    }
+
+    if (shipping.address.trim().length < 5 || shipping.address.length > 200) {
+        setError("Address must be between 5 and 200 characters.");
+        setLoading(false);
+        return;
+    }
+
+    if (!/^\d{6}$/.test(shipping.pincode)) {
+        setError("Pincode must be exactly 6 digits.");
+        setLoading(false);
+        return;
+    }
+
     const payload = {
       productId: product.id,
       dimensions: {
-        height: config.height,
-        width: config.width,
-        area: config.totalSqInch,
+        height: customDetails.height,
+        width: customDetails.width,
+        area: customDetails.height * customDetails.width,
       },
-      size: `${config.width}x${config.height}`,
+      namePlateDetails: customDetails.namePlateDetails,
+      size: `${customDetails.width}x${customDetails.height}`,
       material: config.material,
       lightingIncluded: config.withLighting,
       fittingIncluded: config.withFitting,
       frontendPrice: config.price || 0,
-      shipping: shipping,
+      shipping: {
+          ...shipping,
+          pincode: parseInt(shipping.pincode)
+      },
     };
 
     try {
@@ -190,106 +233,123 @@ const Checkout = () => {
           </div>
         </div>
 
-        {/* Shipping Form */}
-        <div>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <h2 className="text-xl font-semibold mb-4 text-gray-800">
-              Shipping Details
-            </h2>
+        {/* Checkout Form */}
+        <div className="bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
+          <form onSubmit={handleSubmit} className="space-y-8">
+            {error && <div className="bg-red-50 text-red-600 p-4 rounded-xl text-sm font-medium border border-red-100">{error}</div>}
 
-            {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Full Name
-              </label>
-              <input
-                required
-                type="text"
-                name="fullName"
-                value={shipping.fullName}
-                onChange={handleChange}
-                className="w-full border rounded p-2 focus:ring-2 focus:ring-pink-500 outline-none"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Email
-              </label>
-              <input
-                required
-                type="email"
-                name="email"
-                value={shipping.email}
-                onChange={handleChange}
-                className="w-full border rounded p-2 focus:ring-2 focus:ring-pink-500 outline-none"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Phone
-              </label>
-              <input
-                required
-                type="tel"
-                name="phone"
-                value={shipping.phone}
-                onChange={handleChange}
-                className="w-full border rounded p-2 focus:ring-2 focus:ring-pink-500 outline-none"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Address
-              </label>
-              <textarea
-                required
-                name="address"
-                rows={2}
-                value={shipping.address}
-                onChange={handleChange}
-                className="w-full border rounded p-2 focus:ring-2 focus:ring-pink-500 outline-none"
-              />
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
+            {/* Section 1: Name Plate Details */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
+                <span className="w-8 h-8 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center text-sm">1</span>
+                Name Plate Content
+              </h3>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  City
+                <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">
+                  Lines (Max 5) & Text (Max 100 chars)
                 </label>
-                <input
+                <textarea
                   required
-                  type="text"
-                  name="city"
-                  value={shipping.city}
-                  onChange={handleChange}
-                  className="w-full border rounded p-2 focus:ring-2 focus:ring-pink-500 outline-none"
+                  name="namePlateDetails"
+                  rows={3}
+                  value={customDetails.namePlateDetails}
+                  onChange={handleCustomChange}
+                  placeholder="Enter details as they should appear on the name plate..."
+                  className="w-full border-2 border-gray-100 rounded-xl p-4 focus:border-pink-500 outline-none transition-all resize-none font-medium"
+                />
+                <div className="flex justify-between mt-1 text-[10px] font-bold text-gray-400">
+                    <span>{customDetails.namePlateDetails.split('\n').filter(l => l).length} / 5 Lines</span>
+                    <span>{customDetails.namePlateDetails.length} / 100 Characters</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Section 2: Dimensions */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
+                <span className="w-8 h-8 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center text-sm">2</span>
+                Size (Inches)
+              </h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Height</label>
+                  <input
+                    required
+                    type="number"
+                    name="height"
+                    value={customDetails.height}
+                    onChange={handleCustomChange}
+                    className="w-full border-2 border-gray-100 rounded-xl p-4 focus:border-pink-500 outline-none transition-all font-bold no-spinner"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Width</label>
+                  <input
+                    required
+                    type="number"
+                    name="width"
+                    value={customDetails.width}
+                    onChange={handleCustomChange}
+                    className="w-full border-2 border-gray-100 rounded-xl p-4 focus:border-pink-500 outline-none transition-all font-bold no-spinner"
+                  />
+                </div>
+              </div>
+              <p className="text-[10px] text-gray-400 font-medium">* Acceptable range: 1x1 to 96x96 inches</p>
+            </div>
+
+            {/* Section 3: Delivery Information */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
+                <span className="w-8 h-8 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center text-sm">3</span>
+                Delivery Details
+              </h3>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="col-span-full">
+                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Full Name</label>
+                  <input required type="text" name="fullName" value={shipping.fullName} onChange={handleShippingChange} className="w-full border-2 border-gray-100 rounded-xl p-3 focus:border-pink-500 outline-none transition-all font-medium" />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Email</label>
+                  <input required type="email" name="email" value={shipping.email} onChange={handleShippingChange} className="w-full border-2 border-gray-100 rounded-xl p-3 focus:border-pink-500 outline-none transition-all font-medium" />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Phone</label>
+                  <input required type="tel" name="phone" value={shipping.phone} onChange={handleShippingChange} className="w-full border-2 border-gray-100 rounded-xl p-3 focus:border-pink-500 outline-none transition-all font-medium" />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Address</label>
+                <textarea
+                  required
+                  name="address"
+                  rows={2}
+                  value={shipping.address}
+                  onChange={handleShippingChange}
+                  placeholder="Street, Landmark, Apartment..."
+                  className="w-full border-2 border-gray-100 rounded-xl p-4 focus:border-pink-500 outline-none transition-all resize-none font-medium"
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Pincode
-                </label>
-                <input
-                  required
-                  type="text"
-                  name="pincode"
-                  value={shipping.pincode}
-                  onChange={handleChange}
-                  className="w-full border rounded p-2 focus:ring-2 focus:ring-pink-500 outline-none"
-                />
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">City</label>
+                  <input required type="text" name="city" value={shipping.city} onChange={handleShippingChange} className="w-full border-2 border-gray-100 rounded-xl p-3 focus:border-pink-500 outline-none transition-all font-medium" />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Pincode</label>
+                  <input required type="text" name="pincode" value={shipping.pincode} onChange={handleShippingChange} className="w-full border-2 border-gray-100 rounded-xl p-3 focus:border-pink-500 outline-none transition-all font-medium" />
+                </div>
               </div>
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full mt-6 bg-black text-white font-bold py-3 rounded hover:bg-gray-800 transition disabled:opacity-50"
+              className="w-full mt-8 bg-gradient-to-r from-pink-600 to-rose-600 text-white font-black py-5 rounded-2xl hover:from-pink-700 hover:to-rose-700 transition-all shadow-xl shadow-pink-200 disabled:opacity-50 transform active:scale-95 text-lg uppercase tracking-widest"
             >
-              {loading ? "Processing..." : "Place Order"}
+              {loading ? "Processing..." : "Secure Checkout"}
             </button>
           </form>
         </div>

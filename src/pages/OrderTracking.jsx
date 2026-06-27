@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import apiClient from "../api/client";
+import { getPublicOrder, initiatePayment } from "../api/orders.api";
 
 import { ALL_STAGES, getStagesForTrack } from "../constants/orderStages";
 
@@ -27,7 +27,7 @@ const OrderTracking = () => {
 
     const fetchOrder = async () => {
         try {
-            const data = await apiClient.get(`/api/orders/public/${orderId}`);
+            const data = await getPublicOrder(orderId);
             if (isMounted) {
                 setOrderData(data);
                 setLoading(false);
@@ -78,12 +78,26 @@ const OrderTracking = () => {
     const progress = orderData?.estimatedProgress ?? 0;
     const stages = getStagesForTrack(orderData?.orderType);
     const activeIdxInTrack = stages.findIndex(s => s.key === orderData?.status);
-    const isAttentionNeeded = orderData?.orderType === 'OFFLINE' && (
-        orderData?.advanceStatus === 'NEEDED' || 
-       (orderData?.price > 0 && !orderData?.amountConfirmed) ||
-       (orderData?.amountConfirmed && !orderData?.first50Paid) ||
-       (orderData?.status === 'VIDEO_SENT' && !orderData?.second50Paid)
+    const showPaymentBanner = (
+       orderData?.orderType === 'OFFLINE' && (
+        (orderData?.advanceStatus === 'NEEDED') ||
+        (orderData?.advancePaid && !orderData?.amountConfirmed && orderData?.price > 0) ||
+        (orderData?.amountConfirmed && !orderData?.first50Paid) ||
+        (orderData?.status === 'VIDEO_SENT' && !orderData?.second50Paid)
+       )
     );
+
+    const handlePayment = async (stage) => {
+      try {
+        const response = await initiatePayment(orderId, stage);
+        if (response.paymentUrl) {
+          window.location.href = response.paymentUrl;
+        }
+      } catch (err) {
+        console.error("Payment error:", err);
+        alert("Failed to initiate payment. Please try again or contact support.");
+      }
+    };
 
     return (
       <div className="min-h-screen bg-gray-50 py-12 px-4 font-sans focus:outline-none">
@@ -126,7 +140,7 @@ const OrderTracking = () => {
           </div>
 
           {/* NEXT STEP Milestones */}
-          {isAttentionNeeded && (
+          {showPaymentBanner && (
             <div className={`mb-6 p-6 rounded-3xl border-2 animate-in zoom-in duration-700
               ${orderData?.advanceStatus === 'NEEDED' || !orderData?.amountConfirmed 
                 ? 'bg-orange-50 border-orange-200' 
@@ -148,15 +162,13 @@ const OrderTracking = () => {
                     {orderData?.advanceStatus === 'NEEDED' && (
                       <div className="space-y-4">
                          <p>To begin your custom design, a small advance of <strong>₹500</strong> is required (deductible from final bill).</p>
-                         <a 
-                           href={generateWhatsAppLink(`Hello! Requesting QR for ₹500 advance for order ${orderData.orderId}.`)}
-                           target="_blank"
-                           rel="noopener noreferrer"
-                           className="bg-orange-600/10 text-orange-700 px-4 py-3 rounded-xl border border-orange-200 text-xs font-bold flex items-center justify-between hover:bg-orange-600/20 transition-all cursor-pointer"
+                         <button 
+                           onClick={() => handlePayment('ADVANCE')}
+                           className="w-full bg-orange-600 text-white px-4 py-3 rounded-xl font-bold flex items-center justify-between hover:bg-orange-700 transition-all shadow-lg shadow-orange-100"
                          >
-                            <span>Pay ₹500 via WhatsApp</span>
-                            <span className="bg-white px-2 py-0.5 rounded text-[10px] shadow-sm">Chat Now</span>
-                         </a>
+                            <span>Pay ₹500 Design Advance</span>
+                            <span className="bg-white/20 px-2 py-0.5 rounded text-[10px]">Secure Gateway</span>
+                         </button>
                       </div>
                     )}
 
@@ -184,15 +196,13 @@ const OrderTracking = () => {
                                ₹{Math.round((orderData.price - 500) / 2).toLocaleString()}
                             </span>
                          </div>
-                         <a 
-                           href={generateWhatsAppLink(`Hello! Requesting QR for first 50% payment (₹${Math.round((orderData.price - 500) / 2)}) for order ${orderData.orderId}.`)}
-                           target="_blank"
-                           rel="noopener noreferrer"
-                           className="bg-blue-600/10 text-blue-700 px-4 py-3 rounded-xl border border-blue-200 text-xs font-bold flex items-center justify-between hover:bg-blue-600/20 transition-all cursor-pointer"
+                         <button 
+                           onClick={() => handlePayment('DEPOSIT')}
+                           className="w-full bg-blue-600 text-white px-4 py-3 rounded-xl font-bold flex items-center justify-between hover:bg-blue-700 transition-all shadow-lg shadow-blue-100"
                          >
-                            <span>Request QR for Deposit</span>
-                            <span className="bg-white px-2 py-0.5 rounded text-[10px] shadow-sm">Pay Deposit</span>
-                         </a>
+                            <span>Pay Manufacturing Deposit</span>
+                            <span className="bg-white/20 px-2 py-0.5 rounded text-[10px]">Secure Gateway</span>
+                         </button>
                       </div>
                     )}
 
@@ -205,15 +215,13 @@ const OrderTracking = () => {
                                ₹{Math.round((orderData.price - 500) / 2).toLocaleString()}
                             </span>
                          </div>
-                         <a 
-                           href={generateWhatsAppLink(`Hello! Ready to pay the final balance of ₹${Math.round((orderData.price - 500) / 2)} for order ${orderData.orderId}.`)}
-                           target="_blank"
-                           rel="noopener noreferrer"
-                           className="bg-indigo-600/10 text-indigo-700 px-4 py-3 rounded-xl border border-indigo-200 text-xs font-bold flex items-center justify-between hover:bg-indigo-600/20 transition-all cursor-pointer"
+                         <button 
+                           onClick={() => handlePayment('BALANCE')}
+                           className="w-full bg-indigo-600 text-white px-4 py-3 rounded-xl font-bold flex items-center justify-between hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100"
                          >
-                            <span>Pay Balance for Dispatch</span>
-                            <span className="bg-white px-2 py-0.5 rounded text-[10px] shadow-sm">Dispatch Now</span>
-                         </a>
+                            <span>Pay Final Balance</span>
+                            <span className="bg-white/20 px-2 py-0.5 rounded text-[10px]">Secure Gateway</span>
+                         </button>
                       </div>
                     )}
                   </div>
@@ -226,7 +234,11 @@ const OrderTracking = () => {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
                   <p className="text-[10px] uppercase font-bold text-gray-400 mb-1 tracking-wider">Product Size</p>
-                  <p className="font-bold text-gray-800">{orderData?.size ? `${orderData.size} Inch` : "N/A"}</p>
+                  <p className="font-bold text-gray-800">
+                    {orderData?.height && orderData?.width 
+                      ? `${orderData.width}" x ${orderData.height}"` 
+                      : orderData?.size ? `${orderData.size} Inch` : "N/A"}
+                  </p>
               </div>
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
                   <p className="text-[10px] uppercase font-bold text-gray-400 mb-1 tracking-wider">Total Value</p>
@@ -243,6 +255,18 @@ const OrderTracking = () => {
                   </p>
               </div>
           </div>
+          
+          {/* Name Plate Details */}
+          {orderData?.namePlateDetails && (
+            <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 mb-6">
+               <h2 className="text-xl font-black text-gray-900 mb-4 border-b pb-4 flex items-center gap-2">
+                 <span>📝</span> Name Plate Content
+               </h2>
+               <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100 whitespace-pre-wrap font-medium text-gray-700 italic">
+                 "{orderData.namePlateDetails}"
+               </div>
+            </div>
+          )}
 
           {/* Timeline Card */}
           <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 mb-6">
