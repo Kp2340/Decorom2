@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom"; // <-- Import Link
+import { NavLink } from "react-router-dom";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -16,6 +16,17 @@ const Header = () => {
     { name: "About Us", path: "/about" },
   ];
 
+  const desktopLinkClass = ({ isActive }) =>
+    `relative group py-2 px-1 transition-colors ${
+      isActive ? "text-pink-600" : "hover:text-pink-600 text-gray-800"
+    }`;
+
+  const mobileLinkClass = ({ isActive }) =>
+    `block font-semibold text-base transition-colors py-1 ${
+      isActive
+        ? "text-pink-600 border-l-2 border-pink-500 pl-3"
+        : "text-gray-900 hover:text-pink-600 pl-0"
+    }`;
 
   return (
     <>
@@ -32,39 +43,46 @@ const Header = () => {
               className={`bg-black h-0.5 w-6 rounded-sm transition-all duration-300 ease-out ${
                 isMenuOpen ? "rotate-45 translate-y-1.5" : "-translate-y-1"
               }`}
-            ></span>
+            />
             <span
               className={`bg-black h-0.5 w-6 rounded-sm transition-all duration-300 ease-out ${
                 isMenuOpen ? "opacity-0" : "opacity-100"
               }`}
-            ></span>
+            />
             <span
               className={`bg-black h-0.5 w-6 rounded-sm transition-all duration-300 ease-out ${
                 isMenuOpen ? "-rotate-45 -translate-y-1.5" : "translate-y-1"
               }`}
-            ></span>
+            />
           </button>
 
-          {/* Logo (Center) */}
+          {/* Logo (Center on mobile, left on desktop) */}
           <div className="flex-1 flex justify-center md:justify-start z-40">
-            <img
-              src="/logo/logo.png"
-              alt="Decorom"
-              className="h-12 w-auto drop-shadow-sm"
-            />
+            <NavLink to="/" onClick={closeMenu}>
+              <img
+                src="/logo/logo.png"
+                alt="Decorom"
+                className="h-12 w-auto drop-shadow-sm"
+              />
+            </NavLink>
           </div>
 
           {/* Desktop Menu */}
-          <ul className="hidden md:flex items-center space-x-8 text-sm font-medium text-gray-800">
+          <ul className="hidden md:flex items-center space-x-8 text-sm font-medium">
             {menuItems.map((item) => (
               <li key={item.name}>
-                <Link
-                  to={item.path}
-                  className="relative group py-2 px-1 hover:text-pink-600 transition-colors"
-                >
-                  {item.name}
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-pink-500 group-hover:w-full transition-all duration-300"></span>
-                </Link>
+                <NavLink to={item.path} className={desktopLinkClass} end={item.path === "/"}>
+                  {({ isActive }) => (
+                    <>
+                      {item.name}
+                      <span
+                        className={`absolute bottom-0 left-0 h-0.5 bg-pink-500 transition-all duration-300 ${
+                          isActive ? "w-full" : "w-0 group-hover:w-full"
+                        }`}
+                      />
+                    </>
+                  )}
+                </NavLink>
               </li>
             ))}
           </ul>
@@ -77,7 +95,7 @@ const Header = () => {
           isMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
         onClick={closeMenu}
-      ></div>
+      />
 
       {/* Mobile Menu Panel (Left Slide) */}
       <div
@@ -93,33 +111,24 @@ const Header = () => {
             className="p-2 md:hidden"
             aria-label="Close menu"
           >
-            <svg
-              className="w-6 h-6 text-black"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
+            <svg className="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
 
         {/* Mobile Menu Items */}
-        <ul className="flex flex-col py-6 space-y-3 px-6">
+        <ul className="flex flex-col py-6 space-y-2 px-6">
           {menuItems.map((item) => (
             <li key={item.name}>
-              <Link
+              <NavLink
                 to={item.path}
                 onClick={closeMenu}
-                className="block text-gray-900 hover:text-pink-600 font-semibold text-base transition-colors"
+                className={mobileLinkClass}
+                end={item.path === "/"}
               >
                 {item.name}
-              </Link>
+              </NavLink>
             </li>
           ))}
         </ul>

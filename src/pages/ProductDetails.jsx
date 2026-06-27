@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { getProductById } from "../api/products.api";
 import ProductImageCarousel from "../components/ProductImageCarousel";
 import ProductPriceCalculator from "../components/ProductPriceCalculator";
@@ -90,19 +90,20 @@ const ProductDetails = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <SEO 
-        title={product?.name || "Product Details"} 
+      <SEO
+        title={product?.name || "Product Details"}
         description={product?.description || "High-quality designer nameplate from Decorom."}
         image={product?.images?.[0] || ""}
       />
 
-
-      <button
-        onClick={() => navigate(-1)}
-        className="mb-4 text-gray-600 hover:text-black flex items-center"
-      >
-        &larr; Back
-      </button>
+      {/* Breadcrumb */}
+      <nav className="mb-5 flex items-center gap-1.5 text-sm text-gray-500" aria-label="Breadcrumb">
+        <Link to="/" className="hover:text-pink-600 transition-colors">Home</Link>
+        <span>/</span>
+        <Link to="/products" className="hover:text-pink-600 transition-colors">Products</Link>
+        <span>/</span>
+        <span className="text-gray-900 font-medium truncate max-w-[200px]">{product.name}</span>
+      </nav>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>

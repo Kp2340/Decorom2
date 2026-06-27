@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./auth/AuthContext";
 import ProtectedRoute from "./auth/ProtectedRoute";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -22,10 +22,12 @@ const RefundPolicy = lazy(() => import("./pages/RefundPolicy"));
 const ShippingPolicy = lazy(() => import("./pages/ShippingPolicy"));
 const OrderTracking = lazy(() => import("./pages/OrderTracking"));
 const CustomDesign = lazy(() => import("./pages/CustomDesign"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
+import FloatingButtons from "./components/FloatingButtons.jsx";
 import { Analytics } from "@vercel/analytics/react";
 import { HelmetProvider } from "react-helmet-async";
 
@@ -86,11 +88,12 @@ const App = () => (
                     </ProtectedRoute>
                   }
                 />
-                <Route path="*" element={<Navigate to="/" replace />} />
+                <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>
           </main>
           <Footer />
+          <FloatingButtons />
           <Analytics />
         </BrowserRouter>
       </AuthProvider>
