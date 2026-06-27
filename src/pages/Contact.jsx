@@ -93,7 +93,7 @@ const ContactUs = () => {
               className="w-full h-full rounded-lg min-h-[280px]"
               style={{ border: 0 }}
               allowFullScreen
-              loading="lazy"
+              loading="eager"
               referrerPolicy="no-referrer-when-downgrade"
               title="Decorom location on Google Maps"
             />

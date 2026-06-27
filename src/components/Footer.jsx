@@ -110,8 +110,19 @@ const Footer = () => (
     </div>
 
     {/* Footer Bottom */}
-    <div className="bg-yellow-200 text-black text-center py-4 text-sm">
+    <div className="bg-yellow-200 text-black text-center py-4 text-sm space-y-1">
       <p>&copy; {new Date().getFullYear()} Decorom. All Rights Reserved.</p>
+      <p className="text-sm text-gray-600">
+        Made with <span className="text-red-500 text-base">♥</span> by{" "}
+        <a
+          href="https://zendadigitalsolutions.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:text-gray-700 font-medium transition-colors"
+        >
+          Zenda Digital Solutions
+        </a>
+      </p>
     </div>
   </footer>
 );

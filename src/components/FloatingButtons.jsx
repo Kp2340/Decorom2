@@ -26,7 +26,7 @@ const FloatingButtons = () => (
 
     {/* WhatsApp button with pulse ring */}
     <a
-      href={CONTACT_WHATSAPP_URL("Hi, I'm interested in a custom nameplate from Decorom!")}
+      href={CONTACT_WHATSAPP_URL("🏠 Hi Decorom Team!\n\nI'd love to get a beautiful custom nameplate for my home. Could you please share some designs and pricing? 😊\n\nThank you!")}
       target="_blank"
       rel="noopener noreferrer"
       title="Chat on WhatsApp"

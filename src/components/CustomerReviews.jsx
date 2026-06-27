@@ -94,7 +94,7 @@ const ReviewCard = ({ review, colorClass, onReadMore }) => {
   const preview = isLong ? review.text.slice(0, PREVIEW_LENGTH) + "…" : review.text;
 
   return (
-    <div className="bg-white border border-gray-200 rounded-2xl p-6 flex flex-col shadow-sm hover:shadow-md transition-shadow h-[260px]">
+    <div className="bg-white border border-gray-200 rounded-2xl p-5 flex flex-col shadow-sm hover:shadow-md transition-shadow h-[300px]">
       {/* Header */}
       <div className="flex items-center gap-3 mb-3">
         <div className={`w-10 h-10 rounded-full ${colorClass} flex items-center justify-center text-white font-bold text-sm flex-shrink-0`}>
@@ -120,9 +120,9 @@ const ReviewCard = ({ review, colorClass, onReadMore }) => {
           href={GOOGLE_MAPS_REVIEWS_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-600 text-sm mt-2 hover:underline"
+          className="text-blue-600 text-sm font-medium mt-3 hover:underline inline-block flex-shrink-0"
         >
-          Read more
+          Read more →
         </a>
       )}
     </div>

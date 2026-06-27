@@ -6,11 +6,11 @@ const CLD = (name) =>
   `https://res.cloudinary.com/dowskut5u/video/upload/f_auto,q_auto:good,w_720/${name}`;
 
 const VIDEOS = [
-  { id: 1, title: "Premium Nameplate",    url: CLD("nameplate-1_bgmqhe") },
-  { id: 2, title: "Wooden Collection",    url: CLD("nameplate-2_zzihkw") },
-  { id: 3, title: "Acrylic Design",       url: CLD("nameplate-3_bajgll") },
-  { id: 4, title: "Stainless Steel",      url: CLD("nameplate-4_qb69jf") },
-  { id: 5, title: "Custom Design",        url: CLD("nameplate-5_yhlkrn") },
+  { id: 1, title: "Premium Nameplate",  url: CLD("nameplate-1_bgmqhe") },
+  { id: 2, title: "Wooden Collection",  url: CLD("nameplate-2_zzihkw") },
+  { id: 3, title: "Acrylic Design",     url: CLD("nameplate-3_bajgll") },
+  { id: 4, title: "Stainless Steel",    url: CLD("nameplate-4_qb69jf") },
+  { id: 5, title: "Custom Design",      url: CLD("nameplate-5_yhlkrn") },
 ];
 
 const VideoShowcase = () => (
@@ -34,11 +34,9 @@ const VideoShowcase = () => (
           1280: { slidesPerView: 5,   spaceBetween: 20 },
         }}
       >
-        {/* Duplicate for seamless loop — Swiper needs totalSlides >= slidesPerView × 2 */}
         {[...VIDEOS, ...VIDEOS].map((v, i) => (
           <SwiperSlide key={`${v.id}-${i}`}>
             <div className="relative rounded-2xl overflow-hidden bg-gray-800 group">
-              {/* Portrait aspect ratio for WhatsApp-style vertical videos */}
               <div className="aspect-[9/16]">
                 <video
                   className="w-full h-full object-cover"
@@ -51,7 +49,6 @@ const VideoShowcase = () => (
                   <source src={v.url} type="video/mp4" />
                 </video>
               </div>
-              {/* Label */}
               <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/70 to-transparent px-4 py-3">
                 <p className="text-white text-sm font-semibold">{v.title}</p>
               </div>

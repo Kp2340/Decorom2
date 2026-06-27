@@ -1,17 +1,17 @@
-// Static Instagram-style grid using Cloudinary video thumbnails as product showcase images.
-// Each thumbnail is generated from the product showcase videos at frame 0.
-const CLD_THUMB = (id) =>
-  `https://res.cloudinary.com/dowskut5u/video/upload/so_0,w_400,h_400,c_fill,f_jpg,q_auto/${id}.jpg`;
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules";
+import "swiper/css";
 
 const INSTAGRAM_URL = "https://instagram.com/decorom.in";
 
-const posts = [
-  { id: "nameplate-1_bgmqhe", label: "Premium Nameplate" },
-  { id: "nameplate-2_zzihkw", label: "Wooden Collection" },
-  { id: "nameplate-3_bajgll", label: "Acrylic Design" },
-  { id: "nameplate-4_qb69jf", label: "Stainless Steel" },
-  { id: "nameplate-5_yhlkrn", label: "Custom Design" },
-  { id: "nameplate-1_bgmqhe", label: "Handcrafted Finish" },
+// Client's latest Instagram reels — displayed via official embed
+const REELS = [
+  { id: "DYHrxwAJ_KJ", label: "Latest Design" },
+  { id: "DWv3tVziYsQ", label: "Nameplate Reveal" },
+  { id: "DWJDu5ADbWD", label: "Craftsmanship" },
+  { id: "DZuKMr3JoN7", label: "Premium Finish" },
+  { id: "DX2zqs6JCbW", label: "Custom Order" },
+  { id: "DX2qTC8zoHP", label: "New Collection" },
 ];
 
 const InstagramIcon = () => (
@@ -21,63 +21,67 @@ const InstagramIcon = () => (
 );
 
 const InstagramGrid = () => (
-  <section className="py-14 bg-gray-50">
-    <div className="max-w-5xl mx-auto px-4">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-8">
-        <div>
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900">As Seen on Instagram</h2>
-          <p className="text-gray-500 mt-1 text-sm">Follow us for daily inspiration and new designs.</p>
-        </div>
-        <a
-          href={INSTAGRAM_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="self-start sm:self-auto inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gray-300 bg-white text-sm font-semibold text-gray-700 hover:bg-gray-100 transition-colors shadow-sm whitespace-nowrap"
-        >
-          <InstagramIcon />
-          @decorom.in
-        </a>
+  <section className="py-10 md:py-14 bg-gray-50 overflow-hidden">
+    <div className="container mx-auto px-4 mb-6 md:mb-10 flex items-center justify-between gap-4 flex-wrap">
+      <div>
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Latest from Instagram</h2>
+        <p className="text-gray-500 text-sm md:text-base">Follow us for new designs every week.</p>
       </div>
+      <a
+        href={INSTAGRAM_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400 text-white text-sm font-semibold hover:opacity-90 transition-opacity shadow-md whitespace-nowrap"
+      >
+        <InstagramIcon />
+        @decorom.in
+      </a>
+    </div>
 
-      {/* Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-        {posts.map((post, i) => (
-          <a
-            key={i}
-            href={INSTAGRAM_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="relative group overflow-hidden rounded-xl bg-gray-200 aspect-square block"
-            aria-label={`View ${post.label} on Instagram`}
-          >
-            <img
-              src={CLD_THUMB(post.id)}
-              alt={post.label}
-              loading="lazy"
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-            />
-            {/* Overlay */}
-            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300 flex items-center justify-center">
-              <InstagramIcon />
-              <span className="sr-only">View on Instagram</span>
+    {/* Reel embeds in a Swiper carousel */}
+    <div className="px-4">
+      <Swiper
+        modules={[Autoplay]}
+        spaceBetween={12}
+        slidesPerView={1.4}
+        autoplay={{ delay: 6000, disableOnInteraction: false }}
+        loop={false}
+        breakpoints={{
+          480:  { slidesPerView: 2.2, spaceBetween: 14 },
+          768:  { slidesPerView: 3.2, spaceBetween: 16 },
+          1024: { slidesPerView: 4,   spaceBetween: 20 },
+          1280: { slidesPerView: 5,   spaceBetween: 20 },
+        }}
+      >
+        {REELS.map((reel) => (
+          <SwiperSlide key={reel.id}>
+            <div className="relative rounded-2xl overflow-hidden bg-gray-900 shadow-md"
+                 style={{ aspectRatio: "9/16" }}>
+              <iframe
+                src={`https://www.instagram.com/reel/${reel.id}/embed/`}
+                className="w-full h-full border-0 absolute inset-0"
+                loading="lazy"
+                allowFullScreen
+                scrolling="no"
+                allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                title={`Decorom Reel — ${reel.label}`}
+              />
             </div>
-          </a>
+          </SwiperSlide>
         ))}
-      </div>
+      </Swiper>
+    </div>
 
-      {/* CTA */}
-      <div className="text-center mt-8">
-        <a
-          href={INSTAGRAM_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400 text-white text-sm font-semibold hover:opacity-90 transition-opacity shadow-md"
-        >
-          <InstagramIcon />
-          See More on Instagram
-        </a>
-      </div>
+    <div className="text-center mt-8">
+      <a
+        href={INSTAGRAM_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400 text-white text-sm font-semibold hover:opacity-90 transition-opacity shadow-md"
+      >
+        <InstagramIcon />
+        See all reels on Instagram
+      </a>
     </div>
   </section>
 );

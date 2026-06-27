@@ -26,22 +26,22 @@ const AboutUs = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center mb-16">
             <div>
               <img
-                src="/logo/logo.png"
-                alt="Decorom — Premium Nameplates Ahmedabad"
-                className="w-full max-w-sm mx-auto rounded-xl shadow-md"
+                src="https://res.cloudinary.com/dowskut5u/image/upload/Shubh_Bhavsar_ms9xcl.jpg"
+                alt="Shubh Bhavsar — Founder, Decorom"
+                className="w-full rounded-xl shadow-md object-cover"
               />
             </div>
             <div>
               <h2 className="text-2xl font-semibold text-gray-800 mb-4">
                 Welcome to Decorom
               </h2>
-              <p className="text-gray-600 leading-relaxed mb-4">
+              <p className="text-gray-600 leading-relaxed mb-4 text-justify">
                 Nestled in the heart of Ahmedabad, Decorom stands as a beacon of elegance and innovation in the home décor industry. With a remarkable five-year track record, we have redefined the art of custom nameplates — cementing our status as a trusted local favourite.
               </p>
-              <p className="text-gray-600 leading-relaxed mb-4">
+              <p className="text-gray-600 leading-relaxed mb-4 text-justify">
                 We specialise in creating bespoke solutions that reflect your personal style and enhance the aesthetic appeal of your space. Whether you're looking to personalise your home with a custom nameplate or add a touch of sophistication with unique décor items, Decorom delivers unmatched quality and craftsmanship.
               </p>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-gray-600 leading-relaxed text-justify">
                 Our skilled artisans combine modern technology with traditional techniques to create nameplates that are visually stunning, durable, and weather-resistant — crafted from premium acrylic, wood, steel, and laser-cut designs.
               </p>
             </div>
