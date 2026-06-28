@@ -17,3 +17,8 @@ export const getProductById = async (id) => {
   const response = await apiClient.get(`/api/products/${id}`);
   return response;
 };
+
+export const getFeaturedProducts = async () => {
+  const response = await apiClient.get("/api/products/featured");
+  return response;
+};

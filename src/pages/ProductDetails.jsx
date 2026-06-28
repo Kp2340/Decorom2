@@ -57,7 +57,7 @@ const ProductDetails = () => {
     }
 
     navigate(`/products/${product.id}/checkout`, {
-      state: { config },
+      state: { config, product },
     });
   };
 

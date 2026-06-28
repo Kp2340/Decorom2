@@ -23,6 +23,7 @@ const ShippingPolicy = lazy(() => import("./pages/ShippingPolicy"));
 const OrderTracking = lazy(() => import("./pages/OrderTracking"));
 const CustomDesign = lazy(() => import("./pages/CustomDesign"));
 const NotFound = lazy(() => import("./pages/NotFound"));
+const BestSellers = lazy(() => import("./pages/BestSellers"));
 
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
@@ -70,6 +71,7 @@ const App = () => (
                 <Route path="/refund-policy" element={<RefundPolicy />} />
                 <Route path="/shipping-policy" element={<ShippingPolicy />} />
                 <Route path="/track/:orderId" element={<OrderTracking />} />
+                <Route path="/best-sellers" element={<BestSellers />} />
                 <Route path="/custom-design" element={<CustomDesign />} />
                 <Route path="/admin/login" element={<AdminLogin />} />
                 <Route

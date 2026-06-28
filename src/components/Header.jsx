@@ -10,6 +10,7 @@ const Header = () => {
   const menuItems = [
     { name: "Home", path: "/" },
     { name: "Products", path: "/products" },
+    { name: "Best Sellers", path: "/best-sellers" },
     { name: "Customers", path: "/customers" },
     { name: "Custom Design", path: "/custom-design" },
     { name: "Contact Us", path: "/contact" },

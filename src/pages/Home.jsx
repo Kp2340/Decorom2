@@ -1,5 +1,6 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
+import { Link } from "react-router-dom";
 import Hero from "../components/Hero";
 import TrustBadges from "../components/TrustBadges";
 import HorizontalRail from "../components/HorizontalRail";
@@ -54,6 +55,16 @@ const Home = () => (
 
     {/* 3. Best Selling Nameplates */}
     <HorizontalRail />
+
+    {/* 3b. View All Best Sellers CTA */}
+    <div className="bg-white pb-6 flex justify-center">
+      <Link
+        to="/best-sellers"
+        className="inline-flex items-center gap-2 text-sm font-black text-pink-600 hover:text-pink-700 border border-pink-200 hover:border-pink-400 px-6 py-3 rounded-2xl transition-all hover:shadow-md"
+      >
+        View All Best Sellers →
+      </Link>
+    </div>
 
     {/* 4. Browse by Category */}
     <CategoryBrowse />

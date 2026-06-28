@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { getPublicOrder } from "../api/orders.api";
+import { markUserAsReturning } from "../utils/promoUtils";
 
 const POLL_INTERVAL_MS = 3000;
 const POLL_MAX_ATTEMPTS = 15; // Increased slightly for slower webhooks
@@ -56,6 +57,7 @@ const PaymentSuccess = () => {
 
         // Only show success if paymentStatus is explicitly SUCCESS
         if (data?.paymentStatus === "SUCCESS") {
+            markUserAsReturning();
             setOrderData(data);
             setLoading(false);
         } else {

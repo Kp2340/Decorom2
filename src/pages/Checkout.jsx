@@ -1,16 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { processCheckout } from "../api/checkout.api";
 import { getProductById } from "../api/products.api";
 import { toImageUrls } from "../utils/imageUtils";
+import { initFirstVisit, getEligiblePromo, calculateDiscount } from "../utils/promoUtils";
+import PromoSection from "../components/PromoSection";
 
 const Checkout = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { productId } = useParams();
-  const { config } = location.state || {}; // Config from ProductDetails (dimensions, price)
+  const { config, product: passedProduct } = location.state || {};
 
-  const [product, setProduct] = useState(null);
+  // Use product passed via navigation state; fetch from API only if missing (direct URL access)
+  const [product, setProduct] = useState(passedProduct || null);
 
   const [shipping, setShipping] = useState({
     fullName: "",
@@ -32,7 +35,13 @@ const Checkout = () => {
   const [backendPrice, setBackendPrice] = useState(null); // Price returned from backend
   const [error, setError] = useState("");
 
+  // Promo state
+  const [appliedPromoCode, setAppliedPromoCode] = useState(null);
+  const [promoInfo, setPromoInfo] = useState(null); // Full response from /api/promo/validate
+
   useEffect(() => {
+    initFirstVisit();
+    if (passedProduct) return; // Already have product from navigation state — skip fetch
     const loadProduct = async () => {
       try {
         const data = await getProductById(productId);
@@ -41,9 +50,40 @@ const Checkout = () => {
         setError("Failed to load product details for checkout.");
       }
     };
-
     loadProduct();
   }, [productId]);
+
+  // Re-evaluate eligible promo when base price changes (e.g. user resizes)
+  useEffect(() => {
+    if (!config?.price) return;
+    const eligible = getEligiblePromo(config.price);
+    // Only auto-apply if nothing is currently applied
+    if (!appliedPromoCode && eligible) {
+      setAppliedPromoCode(eligible);
+      const { discountAmount, finalPrice } = calculateDiscount(eligible, config.price);
+      setPromoInfo({
+        code: eligible,
+        deductionAmount: discountAmount,
+        discountedTotal: finalPrice,
+        message: discountAmount > 0 ? `₹${discountAmount} discount applied!` : null,
+      });
+    }
+    // If applied code no longer passes minOrder after resize, clear it
+    if (appliedPromoCode) {
+      const { discountAmount: d } = calculateDiscount(appliedPromoCode, config.price);
+      if (d === 0) handlePromoRemove();
+    }
+  }, [config?.price]);
+
+  const handlePromoApply = useCallback((code, data) => {
+    setAppliedPromoCode(code);
+    setPromoInfo(data);
+  }, []);
+
+  const handlePromoRemove = useCallback(() => {
+    setAppliedPromoCode(null);
+    setPromoInfo(null);
+  }, []);
 
   // Redirect if user hit checkout directly without configuration
   useEffect(() => {
@@ -99,6 +139,28 @@ const Checkout = () => {
         return;
     }
 
+    // Re-validate promo on submit to catch expired codes
+    let finalPromoCode = appliedPromoCode || null;
+    let discountedPrice = promoInfo?.discountedTotal ?? config.price ?? 0;
+    if (appliedPromoCode) {
+      try {
+        const { validatePromoCode } = await import("../api/promos.api");
+        const recheck = await validatePromoCode(appliedPromoCode, config.price);
+        const recheckData = recheck?.data ?? recheck;
+        if (!recheckData.valid) {
+          setError(`Promo code ${appliedPromoCode} is no longer valid: ${recheckData.message}`);
+          handlePromoRemove();
+          setLoading(false);
+          return;
+        }
+        discountedPrice = recheckData.discountedTotal ?? discountedPrice;
+      } catch {
+        // If re-validation call fails, proceed without promo to avoid blocking checkout
+        finalPromoCode = null;
+        discountedPrice = config.price ?? 0;
+      }
+    }
+
     const payload = {
       productId: product.id,
       dimensions: {
@@ -111,7 +173,8 @@ const Checkout = () => {
       material: config.material,
       lightingIncluded: config.withLighting,
       fittingIncluded: config.withFitting,
-      frontendPrice: config.price || 0,
+      frontendPrice: discountedPrice,
+      promoCode: finalPromoCode,
       shipping: {
           ...shipping,
           pincode: parseInt(shipping.pincode)
@@ -220,16 +283,43 @@ const Checkout = () => {
             </div>
           </div>
 
-          <div className="mt-6 p-3 bg-pink-50 rounded text-center">
-            <p className="text-xs text-pink-600 mb-1 font-semibold uppercase">
-              Estimated Frontend Price
-            </p>
-            <p className="text-2xl font-bold text-pink-700">
-              ~ ₹{config.price}
-            </p>
+          <div className="mt-4 p-3 bg-pink-50 rounded text-center">
+            {promoInfo?.deductionAmount > 0 ? (
+              <>
+                <p className="text-xs text-gray-400 mb-0.5 font-semibold uppercase line-through">
+                  ₹{config.price?.toLocaleString()}
+                </p>
+                <p className="text-xs text-green-600 font-bold mb-0.5">
+                  − ₹{promoInfo.deductionAmount?.toLocaleString()} ({appliedPromoCode})
+                </p>
+                <p className="text-2xl font-bold text-pink-700">
+                  ₹{promoInfo.discountedTotal?.toLocaleString()}
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="text-xs text-pink-600 mb-1 font-semibold uppercase">
+                  Estimated Price
+                </p>
+                <p className="text-2xl font-bold text-pink-700">
+                  ~ ₹{config.price?.toLocaleString()}
+                </p>
+              </>
+            )}
             <p className="text-[10px] text-gray-500 mt-1">
-              * Final price will be confirmed by backend.
+              * Final price confirmed by server.
             </p>
+          </div>
+
+          {/* Promo Section */}
+          <div className="mt-4">
+            <PromoSection
+              basePrice={config.price || 0}
+              appliedCode={appliedPromoCode}
+              discountInfo={promoInfo}
+              onApply={handlePromoApply}
+              onRemove={handlePromoRemove}
+            />
           </div>
         </div>
 
@@ -349,7 +439,7 @@ const Checkout = () => {
               disabled={loading}
               className="w-full mt-8 bg-gradient-to-r from-pink-600 to-rose-600 text-white font-black py-5 rounded-2xl hover:from-pink-700 hover:to-rose-700 transition-all shadow-xl shadow-pink-200 disabled:opacity-50 transform active:scale-95 text-lg uppercase tracking-widest"
             >
-              {loading ? "Processing..." : "Secure Checkout"}
+              {loading ? "Processing..." : "Checkout →"}
             </button>
           </form>
         </div>
