@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import emailjs from "emailjs-com";
+import emailjs from "@emailjs/browser";
 import { CONTACT_EMAIL, CONTACT_PHONE, CONTACT_ADDRESS, CONTACT_WHATSAPP_URL } from "../constants/contact";
 
 const ContactUs = () => {

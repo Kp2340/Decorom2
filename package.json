@@ -3,21 +3,19 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://kp2340.github.io/Decorom2",
+  "homepage": "https://decorom.in",
   "scripts": {
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "dev": "vite --host",
-    "predeploy": "vite build",
-    "deploy": "gh-pages -d dist"
+    "dev": "vite --host"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "@fontsource/poppins": "^5.2.7",
     "@tanstack/react-query": "^5.101.0",
     "@vercel/analytics": "^1.6.1",
     "axios": "^1.13.2",
-    "emailjs-com": "^3.2.0",
     "framer-motion": "^12.38.0",
     "lucide-react": "^0.577.0",
     "react": "^19.1.1",
