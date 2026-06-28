@@ -24,7 +24,7 @@ const faqs = [
   },
   {
     q: "What materials are available?",
-    a: "Acrylic, aluminium, natural wood, stainless steel, and mild steel — each with different aesthetics from sleek modern to warm rustic finishes.",
+    a: "Acrylic, aluminium, natural wood, stainless steel, and mild steel — each with different aesthetics from sleek modern to premium elegant design.",
   },
 ];
 

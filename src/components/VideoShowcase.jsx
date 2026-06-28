@@ -6,11 +6,11 @@ const CLD = (name) =>
   `https://res.cloudinary.com/dowskut5u/video/upload/f_auto,q_auto:good,w_720/${name}`;
 
 const VIDEOS = [
-  { id: 1, title: "Premium Nameplate",  url: CLD("nameplate-1_bgmqhe") },
-  { id: 2, title: "Wooden Collection",  url: CLD("nameplate-2_zzihkw") },
-  { id: 3, title: "Acrylic Design",     url: CLD("nameplate-3_bajgll") },
-  { id: 4, title: "Stainless Steel",    url: CLD("nameplate-4_qb69jf") },
-  { id: 5, title: "Custom Design",      url: CLD("nameplate-5_yhlkrn") },
+  { id: 1, title: "Premium Stainless Steel", url: CLD("nameplate-1_bgmqhe") },
+  { id: 2, title: "Golden Acrylic",           url: CLD("nameplate-2_zzihkw") },
+  { id: 3, title: "Wooden Collection",        url: CLD("nameplate-3_bajgll") },
+  { id: 4, title: "LED Dwarka Name Plate",    url: CLD("nameplate-4_qb69jf") },
+  { id: 5, title: "ACP Wooden Theme",         url: CLD("nameplate-5_yhlkrn") },
 ];
 
 const VideoShowcase = () => (
