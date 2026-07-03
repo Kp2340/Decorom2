@@ -5,6 +5,7 @@ import React, { memo, useCallback } from "react";
  * Returns null if valid, error string if invalid.
  * Pure function - no side effects.
  */
+// eslint-disable-next-line react-refresh/only-export-components
 export const validateShipping = (address) => {
   if (!address.name || address.name.trim().length < 3) {
     return "Full name is required (min 3 characters)";

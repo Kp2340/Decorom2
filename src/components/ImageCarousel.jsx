@@ -6,14 +6,14 @@ const ImageCarousel = ({ images }) => {
   const [current, setCurrent] = useState(0);
   const touchStartX = useRef(null);
 
+  const responsive = useMemo(
+    () => (images || []).map((img) => responsiveImageProps(img)),
+    [images],
+  );
+
   if (!images || images.length === 0) return null;
 
   const length = images.length;
-
-  const responsive = useMemo(
-    () => images.map((img) => responsiveImageProps(img)),
-    [images],
-  );
 
   const prevSlide = () => {
     setCurrent(current === 0 ? length - 1 : current - 1);

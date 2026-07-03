@@ -6,7 +6,7 @@ import React, { memo, useMemo } from "react";
  * Auto-fetches design from /designs/blank/{productId}.png
  */
 const SvgRenderer = memo(
-  ({ productId, editorConfig, values, scale = 1, className = "" }) => {
+  ({ productId, editorConfig, values, className = "" }) => {
     const { defaultWidth, defaultHeight, textZones } = editorConfig || {};
 
     // Calculate viewBox based on aspect ratio (normalized to 200 base width)

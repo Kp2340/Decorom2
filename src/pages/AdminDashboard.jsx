@@ -14,7 +14,7 @@ const AdminDashboard = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
   const [actionLoading, setActionLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [, setError] = useState(null);
 
   const { logout } = useAuth();
   const navigate = useNavigate();
@@ -27,7 +27,7 @@ const AdminDashboard = () => {
       if (Array.isArray(data)) setProducts(data);
       else if (data && data.content) setProducts(data.content);
       else setProducts([]);
-    } catch (err) {
+    } catch {
       setError("Failed to fetch products");
     } finally {
       setLoading(false);

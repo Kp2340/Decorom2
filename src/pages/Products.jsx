@@ -20,7 +20,7 @@ const Products = () => {
           try {
             const data = await getProducts(0, 4, cat.id);
             results[cat.id] = data?.content || (Array.isArray(data) ? data.slice(0, 4) : []);
-          } catch (err) {
+          } catch {
             results[cat.id] = [];
           }
         })

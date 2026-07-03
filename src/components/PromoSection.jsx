@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
+import { AnimatePresence } from "framer-motion";
 import { PROMO_CODES } from "../config/promos";
 import { getVisiblePromos, getCountdownTarget } from "../utils/promoUtils";
 import { validatePromoCode } from "../api/promos.api";
@@ -19,7 +19,7 @@ const badgeClasses = {
   orange: "bg-orange-100 text-orange-700 border-orange-200",
 };
 
-const PromoCard = ({ code, basePrice, appliedCode, applying, onApply, onRemove, expiredCodes }) => {
+const PromoCard = ({ code, appliedCode, applying, onApply, onRemove, expiredCodes }) => {
   const promo = PROMO_CODES[code];
   const [timeLeft, setTimeLeft] = useState(null);
   const isApplied = appliedCode === code;

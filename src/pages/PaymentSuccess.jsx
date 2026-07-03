@@ -222,7 +222,7 @@ const PaymentSuccess = () => {
                                   try {
                                       document.execCommand('copy');
                                       alert("Tracking link copied!");
-                                  } catch (err) {
+                                  } catch {
                                       alert("Failed to copy. Please copy the link manually.");
                                   }
                                   document.body.removeChild(textArea);
@@ -236,7 +236,7 @@ const PaymentSuccess = () => {
                           try {
                               document.execCommand('copy');
                               alert("Tracking link copied!");
-                          } catch (err) {
+                          } catch {
                               alert("Please copy the link manually: " + trackingUrl);
                           }
                           document.body.removeChild(textArea);

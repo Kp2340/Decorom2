@@ -141,7 +141,7 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
     if (formData.editorConfig) {
       try {
         JSON.parse(formData.editorConfig);
-      } catch (e) {
+      } catch {
         setError("Invalid JSON in Editor Config");
         return;
       }

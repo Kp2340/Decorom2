@@ -88,7 +88,7 @@ const AVATAR_COLORS = [
   "bg-amber-500", "bg-violet-500", "bg-rose-500", "bg-cyan-500",
 ];
 
-const ReviewCard = ({ review, colorClass, onReadMore }) => {
+const ReviewCard = ({ review, colorClass }) => {
   const PREVIEW_LENGTH = 140;
   const isLong = review.text.length > PREVIEW_LENGTH;
   const preview = isLong ? review.text.slice(0, PREVIEW_LENGTH) + "…" : review.text;

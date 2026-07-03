@@ -74,7 +74,6 @@ const OrderTracking = () => {
       );
     }
 
-    const currentIdx = Math.max(0, ALL_STAGES.findIndex((s) => s.key === orderData?.status));
     const progress = orderData?.estimatedProgress ?? 0;
     const stages = getStagesForTrack(orderData?.orderType);
     const activeIdxInTrack = stages.findIndex(s => s.key === orderData?.status);

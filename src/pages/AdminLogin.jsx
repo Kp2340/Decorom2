@@ -26,7 +26,7 @@ const AdminLogin = () => {
       } else {
         setError("Invalid credentials");
       }
-    } catch (err) {
+    } catch {
       setError("Login failed. Please check your network or credentials.");
     } finally {
       setIsSubmitting(false);

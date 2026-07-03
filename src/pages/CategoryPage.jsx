@@ -30,7 +30,7 @@ const CategoryPage = () => {
         } else {
           setProducts([]);
         }
-      } catch (err) {
+      } catch {
         setError("Failed to load category products");
         setProducts([]);
       } finally {

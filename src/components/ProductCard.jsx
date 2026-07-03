@@ -22,7 +22,7 @@ import { calculateFinalPrice } from "../utils/pricingUtils";
 
 const parseSize = (sizeStr) => {
   if (!sizeStr || typeof sizeStr !== "string") return { w: 0, h: 0 };
-  const match = sizeStr.toLowerCase().match(/(\d+(?:\.\d+)?)\s*[x\*]\s*(\d+(?:\.\d+)?)/);
+  const match = sizeStr.toLowerCase().match(/(\d+(?:\.\d+)?)\s*[x*]\s*(\d+(?:\.\d+)?)/);
   return match ? { w: parseFloat(match[1]), h: parseFloat(match[2]) } : { w: 0, h: 0 };
 };
 

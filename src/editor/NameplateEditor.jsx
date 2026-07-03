@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from "react";
+import React, { useMemo } from "react";
 import NameInput from "./controls/NameInput";
 import FlatInput from "./controls/FlatInput";
 import NameplatePreview from "./components/NameplatePreview";
@@ -55,8 +55,6 @@ const NameplateEditor = ({
       onOrderReady?.(orderPayload);
     }
   }, [isValid, orderPayload, onOrderReady]);
-
-  const { defaultWidth = 24, defaultHeight = 60 } = editorConfig || {};
 
   return (
     <div className={`${className}`}>

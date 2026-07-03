@@ -14,7 +14,7 @@ const parseSize = (sizeStr) => {
     return { width: 0, height: 0 };
   }
 
-  const match = sizeStr.toLowerCase().match(/(\d+)\s*[x\*]\s*(\d+)/);
+  const match = sizeStr.toLowerCase().match(/(\d+)\s*[x*]\s*(\d+)/);
   if (!match) {
     return { width: 0, height: 0 };
   }

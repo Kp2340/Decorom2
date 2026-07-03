@@ -22,7 +22,7 @@ const ProductDetails = () => {
       try {
         const data = await getProductById(productId);
         setProduct(data);
-      } catch (err) {
+      } catch {
         setError("Failed to load product details");
       } finally {
         setLoading(false);

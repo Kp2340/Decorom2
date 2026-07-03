@@ -4,7 +4,6 @@ import {
   updateProduct,
   deleteProduct,
   addProductImages,
-  deleteProductImage,
 } from "../api/admin.api";
 import { getProducts, getProductById } from "../api/products.api";
 

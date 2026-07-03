@@ -54,8 +54,6 @@ const ProductDetailsModal = ({ product, onClose }) => {
     };
   }, [onClose]);
 
-  if (!product) return null;
-
   // Gallery Logic: Normalize all available images (link + images array)
   const allImages = useMemo(() => {
     const urls = toImageUrls(product);
@@ -90,7 +88,7 @@ const ProductDetailsModal = ({ product, onClose }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Determine if product has light
-  const productHasLight = product.hasLight || false;
+  const productHasLight = product?.hasLight || false;
 
   // Stable callbacks
   const handleSelectImage = useCallback((img) => {
@@ -152,7 +150,7 @@ const ProductDetailsModal = ({ product, onClose }) => {
       });
 
       if (response.ok) {
-        const data = await response.json();
+        await response.json();
         alert("Order Placed!");
         onClose();
       } else if (response.status === 400) {
@@ -162,12 +160,14 @@ const ProductDetailsModal = ({ product, onClose }) => {
         const errorMsg = await response.text();
         alert(`Order Failed: ${errorMsg}`);
       }
-    } catch (error) {
+    } catch {
       alert("An error occurred while placing the order.");
     } finally {
       setIsSubmitting(false);
     }
   }, [calculatedConfig, address, product, onClose]);
+
+  if (!product) return null;
 
   return (
     /* Modal Overlay - fixed, handles backdrop click */

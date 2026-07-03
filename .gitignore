@@ -12,6 +12,11 @@ dist
 dist-ssr
 *.local
 
+# Environment / secrets — never commit (EmailJS keys, API URLs)
+.env
+.env.*
+!.env.example
+
 # Large media files — serve via Cloudinary, not GitHub/Vercel
 public/videos/
 /audit-screenshots/
