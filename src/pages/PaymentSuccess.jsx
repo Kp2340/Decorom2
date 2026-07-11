@@ -267,7 +267,12 @@ const PaymentSuccess = () => {
                 </div>
                 <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 border border-green-100 col-span-2">
                   <p className="text-[10px] text-green-600 font-bold uppercase tracking-widest mb-1">Final Amount Paid</p>
-                  <p className="text-3xl font-black text-green-600">₹{orderData?.price?.toLocaleString()}</p>
+                  <p className="text-3xl font-black text-green-600">₹{(orderData?.finalPrice || orderData?.price)?.toLocaleString()}</p>
+                  {orderData?.discountAmount > 0 && (
+                    <p className="text-xs text-green-600 mt-1 font-semibold">
+                      You saved ₹{orderData.discountAmount.toLocaleString()} with a promo code
+                    </p>
+                  )}
                 </div>
               </div>
             </div>

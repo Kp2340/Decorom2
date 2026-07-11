@@ -170,8 +170,11 @@ const AdminDashboard = () => {
                       className="h-12 w-12 rounded object-cover bg-gray-100"
                     />
                     <div>
-                      <p className="text-sm font-medium text-gray-900">
+                      <p className="text-sm font-medium text-gray-900 flex items-center gap-1.5">
                         {product.name}
+                        {product.featured && (
+                          <span className="text-xs bg-yellow-100 text-yellow-700 px-1.5 py-0.5 rounded font-semibold">⭐ Best Seller</span>
+                        )}
                       </p>
                       <p className="text-sm text-gray-500">
                         ID: {product.id} | ₹{product.basePrice || product.price}

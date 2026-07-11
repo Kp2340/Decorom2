@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { PROMO_CODES } from "../config/promos";
 import { getVisiblePromos, getCountdownTarget } from "../utils/promoUtils";
 import { validatePromoCode } from "../api/promos.api";

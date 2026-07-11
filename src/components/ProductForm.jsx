@@ -10,6 +10,7 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
     material: "",
     defaultSize: "",
     customizable: false,
+    featured: false,
     editorConfig: "",
   });
   const [images, setImages] = useState([]); // File objects
@@ -28,6 +29,7 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
         material: initialData.material || "",
         defaultSize: initialData.defaultSize || "",
         customizable: Boolean(initialData.customizable),
+        featured: Boolean(initialData.featured),
         editorConfig: initialData.editorConfig
           ? JSON.stringify(initialData.editorConfig, null, 2)
           : "",
@@ -155,6 +157,7 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
       material: formData.material,
       ...(formData.defaultSize ? { defaultSize: formData.defaultSize } : {}),
       customizable: Boolean(formData.customizable),
+      featured: Boolean(formData.featured),
       editorConfig: formData.editorConfig || "{}", // backend expects string
     };
 
@@ -271,21 +274,33 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
           />
         </div>
 
-        <div className="flex items-center gap-3 pt-6">
-          <input
-            id="customizable"
-            type="checkbox"
-            name="customizable"
-            checked={formData.customizable}
-            onChange={handleChange}
-            className="h-4 w-4 rounded border-gray-300 text-pink-600 focus:ring-pink-500"
-          />
-          <label
-            htmlFor="customizable"
-            className="text-sm font-medium text-gray-700"
-          >
-            Customizable
-          </label>
+        <div className="flex flex-col gap-3 pt-6">
+          <div className="flex items-center gap-3">
+            <input
+              id="customizable"
+              type="checkbox"
+              name="customizable"
+              checked={formData.customizable}
+              onChange={handleChange}
+              className="h-4 w-4 rounded border-gray-300 text-pink-600 focus:ring-pink-500"
+            />
+            <label htmlFor="customizable" className="text-sm font-medium text-gray-700">
+              Customizable
+            </label>
+          </div>
+          <div className="flex items-center gap-3">
+            <input
+              id="featured"
+              type="checkbox"
+              name="featured"
+              checked={formData.featured}
+              onChange={handleChange}
+              className="h-4 w-4 rounded border-gray-300 text-yellow-500 focus:ring-yellow-400"
+            />
+            <label htmlFor="featured" className="text-sm font-medium text-gray-700">
+              ⭐ Best Seller (Featured)
+            </label>
+          </div>
         </div>
       </div>
 
