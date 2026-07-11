@@ -47,7 +47,7 @@ const Carousel = () => {
         style={{ transform: `translateX(-${current * 100}%)` }}
       >
         {images.map((img, index) => (
-          <div key={index} className="min-w-full flex-shrink-0">
+          <div key={index} className="min-w-full shrink-0">
             <img
               src={img}
               alt={`Slide ${index}`}
@@ -60,7 +60,7 @@ const Carousel = () => {
       {/* Left Arrow */}
       <button
         onClick={prevSlide}
-        className="absolute top-1/2 left-4 -translate-y-1/2 bg-white bg-opacity-70 p-2 rounded-full shadow hover:bg-opacity-100 transition"
+        className="absolute top-1/2 left-4 -translate-y-1/2 bg-white/70 p-2 rounded-full shadow hover:bg-white transition"
         aria-label="Previous Slide"
       >
         <ChevronLeft className="h-6 w-6 text-black" />
@@ -69,7 +69,7 @@ const Carousel = () => {
       {/* Right Arrow */}
       <button
         onClick={nextSlide}
-        className="absolute top-1/2 right-4 -translate-y-1/2 bg-white bg-opacity-70 p-2 rounded-full shadow hover:bg-opacity-100 transition"
+        className="absolute top-1/2 right-4 -translate-y-1/2 bg-white/70 p-2 rounded-full shadow hover:bg-white transition"
         aria-label="Next Slide"
       >
         <ChevronRight className="h-6 w-6 text-black" />

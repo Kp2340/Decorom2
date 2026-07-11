@@ -36,18 +36,18 @@ const Footer = () => (
           href={`mailto:${CONTACT_EMAIL}`}
           className="flex items-center gap-2 hover:text-yellow-600 transition-colors"
         >
-          <Mail className="w-4 h-4 flex-shrink-0" />
+          <Mail className="w-4 h-4 shrink-0" />
           <span className="break-all">{CONTACT_EMAIL}</span>
         </a>
         <a
           href={`tel:${CONTACT_PHONE.replace(/\s/g, "")}`}
           className="flex items-center gap-2 hover:text-yellow-600 transition-colors"
         >
-          <Phone className="w-4 h-4 flex-shrink-0" />
+          <Phone className="w-4 h-4 shrink-0" />
           <span>{CONTACT_PHONE}</span>
         </a>
         <p className="flex items-start gap-2">
-          <MapPin className="w-4 h-4 flex-shrink-0 mt-0.5" />
+          <MapPin className="w-4 h-4 shrink-0 mt-0.5" />
           <span>Ghatlodiya, Ahmedabad, Gujarat</span>
         </p>
       </div>

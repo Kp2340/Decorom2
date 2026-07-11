@@ -49,7 +49,7 @@ const FAQ = () => {
               >
                 <span className="font-semibold text-gray-900 text-sm md:text-base pr-4">{faq.q}</span>
                 <ChevronDown
-                  className="w-5 h-5 flex-shrink-0 text-gray-400 transition-transform duration-300"
+                  className="w-5 h-5 shrink-0 text-gray-400 transition-transform duration-300"
                   style={{ transform: open === i ? "rotate(180deg)" : "rotate(0deg)" }}
                 />
               </button>

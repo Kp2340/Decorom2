@@ -76,12 +76,12 @@ const Hero = () => (
         initial={{ opacity: 0, x: 40 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.9, delay: 0.3 }}
-        className="hidden lg:flex gap-3 items-end flex-shrink-0"
+        className="hidden lg:flex gap-3 items-end shrink-0"
       >
         {PRODUCT_VISUALS.map((v, i) => (
           <div
             key={v.id}
-            className="relative rounded-2xl overflow-hidden shadow-xl flex-shrink-0 border border-white/10"
+            className="relative rounded-2xl overflow-hidden shadow-xl shrink-0 border border-white/10"
             style={{
               width: 100,
               height: i === 2 ? 280 : i % 2 === 0 ? 220 : 250,

@@ -44,7 +44,7 @@ const Gallery = memo(
               <button
                 key={idx}
                 onClick={() => onSelectImage(img)}
-                className={`w-16 h-16 rounded-lg overflow-hidden border-2 flex-shrink-0 transition-all ${
+                className={`w-16 h-16 rounded-lg overflow-hidden border-2 shrink-0 transition-all ${
                   selectedImage === img
                     ? "border-pink-500 scale-105"
                     : "border-gray-200 hover:border-pink-300"

@@ -76,7 +76,7 @@ const FilterDropdown = ({
       </div>
 
       {isOpen && (
-        <div className="absolute z-50 w-full mt-2 origin-top-right bg-white border border-gray-200 rounded-lg shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none animate-in fade-in zoom-in duration-200">
+        <div className="absolute z-50 w-full mt-2 origin-top-right bg-white border border-gray-200 rounded-lg shadow-xl ring-1 ring-black/5 focus:outline-none animate-in fade-in zoom-in duration-200">
           <div className="py-1 max-h-60 overflow-y-auto scrollbar-hide">
             {options.map((option) => (
               <button

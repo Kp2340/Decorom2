@@ -145,7 +145,7 @@ const OrderTracking = () => {
                 ? 'bg-orange-50 border-orange-200' 
                 : 'bg-blue-50 border-blue-200'}`}>
               <div className="flex items-start gap-4">
-                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-2xl shrink-0
                   ${orderData?.advanceStatus === 'NEEDED' || !orderData?.amountConfirmed ? 'bg-orange-500' : 'bg-blue-600'}`}>
                   {orderData?.advanceStatus === 'NEEDED' ? '🎯' : !orderData?.amountConfirmed ? '⚖️' : '💰'}
                 </div>
@@ -278,7 +278,7 @@ const OrderTracking = () => {
                   const isCurrent = idx === activeIdxInTrack;
                   return (
                     <div key={stage.key} className="flex items-start gap-6 relative group">
-                      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl flex-shrink-0 z-10 transition-all duration-300
+                      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl shrink-0 z-10 transition-all duration-300
                         ${isCurrent ? "bg-pink-600 text-white shadow-xl shadow-pink-200 rotate-12 scale-110" :
                           isDone ? "bg-green-500 text-white" : "bg-gray-50 text-gray-300 border border-gray-100"}`}>
                         {isDone && !isCurrent ? "✓" : stage.icon}

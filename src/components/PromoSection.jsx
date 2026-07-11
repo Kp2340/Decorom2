@@ -56,7 +56,7 @@ const PromoCard = ({ code, appliedCode, applying, onApply, onRemove, expiredCode
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3 flex-1 min-w-0">
-          <span className="text-2xl flex-shrink-0">{promo.icon}</span>
+          <span className="text-2xl shrink-0">{promo.icon}</span>
           <div className="min-w-0">
             <div className="flex items-center gap-2 flex-wrap mb-0.5">
               <span className="font-black text-gray-800 text-sm font-mono tracking-wider">{code}</span>
@@ -79,7 +79,7 @@ const PromoCard = ({ code, appliedCode, applying, onApply, onRemove, expiredCode
           </div>
         </div>
 
-        <div className="flex-shrink-0">
+        <div className="shrink-0">
           {isApplied ? (
             <div className="flex items-center gap-2">
               <motion.span
