@@ -34,6 +34,7 @@ import ScrollToTop from "./components/ScrollToTop.jsx";
 import FloatingButtons from "./components/FloatingButtons.jsx";
 import { Analytics } from "@vercel/analytics/react";
 import { HelmetProvider } from "react-helmet-async";
+import { SpeedInsights } from "@vercel/speed-insights/react"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -103,6 +104,7 @@ const App = () => (
           <Footer />
           <FloatingButtons />
           <Analytics />
+          <SpeedInsights/>
         </BrowserRouter>
         </WishlistProvider>
       </AuthProvider>
