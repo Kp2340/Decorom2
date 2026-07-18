@@ -1,4 +1,7 @@
 import { useState, useEffect } from "react";
+// `motion` is used only as JSX tag names (<motion.div>, <motion.p>, ...) — no-unused-vars
+// can't see that without eslint-plugin-react.
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 import { PROMO_CODES } from "../config/promos";
 import { getVisiblePromos, getCountdownTarget } from "../utils/promoUtils";

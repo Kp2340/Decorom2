@@ -61,6 +61,23 @@ const ProductDetailsModal = ({ product, onClose }) => {
   }, [product]);
   const [selectedImage, setSelectedImage] = useState(allImages[0]);
 
+  // The backend always sends editorConfig as a raw JSON string (never a
+  // pre-parsed object) — must parse before reading .enabled/.textZones etc.
+  const parsedEditorConfig = useMemo(() => {
+    const raw = product?.editorConfig;
+    if (!raw) return null;
+    if (typeof raw !== "string") return raw;
+    try {
+      return JSON.parse(raw);
+    } catch {
+      return null;
+    }
+  }, [product]);
+  const editorProduct = useMemo(
+    () => (product ? { ...product, editorConfig: parsedEditorConfig } : product),
+    [product, parsedEditorConfig],
+  );
+
   // Reset selected image when product changes
   useEffect(() => {
     setSelectedImage(allImages[0]);
@@ -232,11 +249,11 @@ const ProductDetailsModal = ({ product, onClose }) => {
             <ProductInfo product={product} />
 
             {/* Nameplate Editor for customizable products */}
-            {product.editorConfig?.enabled && (
+            {parsedEditorConfig?.enabled && (
               <Suspense fallback={<div className="h-32 bg-gray-100 animate-pulse rounded-lg" />}>
                 <div className="mb-2">
                   <NameplateEditor
-                    product={product}
+                    product={editorProduct}
                     onDimensionsChange={setEditorDimensions}
                   />
                 </div>
@@ -251,7 +268,7 @@ const ProductDetailsModal = ({ product, onClose }) => {
                 productHasLight={productHasLight}
                 onPriceChange={setCalculatedConfig}
                 externalDimensions={
-                  product.editorConfig?.enabled ? editorDimensions : null
+                  parsedEditorConfig?.enabled ? editorDimensions : null
                 }
               />
             </Suspense>

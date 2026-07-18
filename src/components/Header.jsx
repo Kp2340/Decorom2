@@ -1,11 +1,17 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { Search, Heart } from "lucide-react";
+import SearchBar from "./SearchBar";
+import { useWishlist } from "../wishlist/WishlistContext";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const { count: wishlistCount } = useWishlist();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
+  const toggleSearch = () => setIsSearchOpen((v) => !v);
 
   const menuItems = [
     { name: "Home", path: "/" },
@@ -87,7 +93,33 @@ const Header = () => {
               </li>
             ))}
           </ul>
+
+          {/* Search + Wishlist — visible on all breakpoints */}
+          <div className="flex items-center gap-1 z-40">
+            <button
+              onClick={toggleSearch}
+              aria-label="Search"
+              className="p-2 rounded-full hover:bg-yellow-200/60 text-gray-800 transition-colors"
+            >
+              <Search className="w-5 h-5" />
+            </button>
+            <NavLink
+              to="/wishlist"
+              onClick={closeMenu}
+              aria-label="Wishlist"
+              className="relative p-2 rounded-full hover:bg-yellow-200/60 text-gray-800 transition-colors"
+            >
+              <Heart className="w-5 h-5" />
+              {wishlistCount > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 px-1 flex items-center justify-center rounded-full bg-pink-600 text-white text-[10px] font-bold leading-none">
+                  {wishlistCount}
+                </span>
+              )}
+            </NavLink>
+          </div>
         </nav>
+
+        {isSearchOpen && <SearchBar onClose={() => setIsSearchOpen(false)} />}
       </header>
 
       {/* Mobile Overlay */}

@@ -1,3 +1,6 @@
+// `motion` is used only as JSX tag names (<motion.h1>, <motion.div>, ...) — no-unused-vars
+// can't see that without eslint-plugin-react.
+// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 

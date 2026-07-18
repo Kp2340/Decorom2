@@ -25,7 +25,7 @@ const parseSize = (sizeStr) => {
   };
 };
 
-const ProductPriceCalculator = ({ product, onChange }) => {
+const ProductPriceCalculator = ({ product, onChange, externalDimensions = null }) => {
   const { basePrice = 0, defaultSize, material = "" } = product || {};
 
   const defaultDims = useMemo(() => parseSize(defaultSize), [defaultSize]);
@@ -45,6 +45,15 @@ const ProductPriceCalculator = ({ product, onChange }) => {
     setWithFitting(false);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product?.id]);
+
+  // When a live nameplate editor drives dimensions (e.g. resizing the preview),
+  // keep the calculator's width/height in sync so price stays authoritative.
+  useEffect(() => {
+    if (externalDimensions?.width && externalDimensions?.height) {
+      setWidth(externalDimensions.width);
+      setHeight(externalDimensions.height);
+    }
+  }, [externalDimensions]);
 
   useEffect(() => {
     const w = Number(width) || 0;

@@ -4,18 +4,18 @@ import { useState, useMemo, useCallback } from "react";
  * Custom hook for managing nameplate editor state.
  * Supports direct dimension input (width/height) with aspect ratio lock.
  */
-export const useNameplateEditor = (editorConfig) => {
+export const useNameplateEditor = (editorConfig, initialValues, initialDimensions) => {
   const { defaultWidth = 24, defaultHeight = 60 } = editorConfig || {};
 
   const [values, setValues] = useState({
-    familyName: "",
-    flatNumber: "",
+    familyName: initialValues?.familyName || "",
+    flatNumber: initialValues?.flatNumber || "",
   });
 
-  // Dimensions in actual units (cm/inches)
+  // Dimensions in actual units (cm/inches) — optionally seeded (e.g. from a shared link)
   const [dimensions, setDimensions] = useState({
-    width: defaultWidth,
-    height: defaultHeight,
+    width: initialDimensions?.width || defaultWidth,
+    height: initialDimensions?.height || defaultHeight,
   });
 
   const updateValue = useCallback((field, value) => {

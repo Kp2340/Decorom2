@@ -80,8 +80,8 @@ const ALL_REVIEWS = [
 const REVIEWS = [...ALL_REVIEWS].sort((a, b) => b.rating - a.rating || a.name.localeCompare(b.name));
 
 // These reflect the actual Google listing — update when your review count changes
-const GOOGLE_RATING = 5;
-const GOOGLE_REVIEW_COUNT = 27;
+const GOOGLE_RATING = 4.8;
+const GOOGLE_REVIEW_COUNT = 3;
 
 const AVATAR_COLORS = [
   "bg-pink-500", "bg-blue-500", "bg-emerald-500",
@@ -139,7 +139,7 @@ const CustomerReviews = () => (
               Reviews on {GOOGLE_LOGO}
             </h2>
             <div className="flex items-center gap-2 mt-2">
-              <span className="text-2xl font-bold text-gray-900">{GOOGLE_RATING}.0</span>
+              <span className="text-2xl font-bold text-gray-900">{GOOGLE_RATING}</span>
               <StarRating rating={GOOGLE_RATING} size="w-5 h-5" />
               <span className="text-gray-500 text-sm">· {GOOGLE_REVIEW_COUNT} reviews</span>
             </div>

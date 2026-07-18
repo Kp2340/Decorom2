@@ -7,9 +7,9 @@ export default defineConfig({
   base: "/",
   server: {
     proxy: {
-      "/api": "http://localhost:8080",
-      "/checkout": "http://localhost:8080",
-      "/payment-notification": "http://localhost:8080",
+      "/api": "https://api.decorom.in",
+      "/checkout": "https://api.decorom.in",
+      "/payment-notification": "https://api.decorom.in",
     },
   },
   plugins: [
