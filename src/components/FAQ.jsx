@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { ChevronDown, Search } from "lucide-react";
 
-const faqs = [
+const DEFAULT_FAQS = [
   {
     q: "What types of nameplates does Decorom make?",
     a: "We craft custom nameplates in acrylic, wood, stainless steel, mild steel, and laser-cut designs — with LED or non-LED options, in multiple sizes.",
@@ -28,14 +28,59 @@ const faqs = [
   },
 ];
 
+const EXTENDED_FAQS = [
+  {
+    q: "Can I add LED lighting to my nameplate?",
+    a: "Yes — most materials support front or back LED lighting as an add-on, priced based on your chosen material and size.",
+  },
+  {
+    q: "Do you offer professional installation?",
+    a: "Yes, professional installation is available as an add-on for a flat ₹500, so your nameplate is mounted correctly and securely.",
+  },
+  {
+    q: "What sizes can I order?",
+    a: "Custom sizes from 1×1 inch up to 96×96 inches — just enter your preferred dimensions in the price calculator on any product page.",
+  },
+  {
+    q: "How is the price calculated for custom sizes?",
+    a: "Price is based on total area (width × height), your chosen material, and any add-ons like LED lighting or installation — the price updates live as you adjust dimensions.",
+  },
+  {
+    q: "Can I track my order after placing it?",
+    a: "Yes — once your order is confirmed you'll get an Order ID you can use anytime to check its status.",
+  },
+  {
+    q: "Do you make nameplates in Gujarati or other regional scripts?",
+    a: "Yes — we've crafted nameplates in Gujarati, Hindi, and other regional scripts. Share your text via WhatsApp or our Custom Design page.",
+  },
+  {
+    q: "Are your nameplates suitable for outdoor use?",
+    a: "Acrylic, ACP, and steel nameplates are commonly used on exposed outdoor entrances; wooden nameplates suit covered or semi-covered spots best. Message us your entrance details and we'll recommend the right material.",
+  },
+  {
+    q: "Do you make nameplates for offices or businesses, not just homes?",
+    a: "Yes — alongside home nameplates, we design for offices, clinics, and businesses too.",
+  },
+  {
+    q: "What if I want a design that isn't shown on the website?",
+    a: "Share your vision on our Custom Design page or via WhatsApp — our artisans can create a completely bespoke nameplate for you.",
+  },
+  {
+    q: "Can I speak to someone before placing an order?",
+    a: "Absolutely — tap the WhatsApp icon on any page, or call us directly, and we'll help you choose the right design.",
+  },
+];
+
+const ALL_FAQS = [...DEFAULT_FAQS, ...EXTENDED_FAQS];
+
 const FAQ = () => {
   const [open, setOpen] = useState(null);
   const [query, setQuery] = useState("");
 
   const filteredFaqs = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return faqs;
-    return faqs.filter(
+    if (!q) return DEFAULT_FAQS;
+    return ALL_FAQS.filter(
       (faq) => faq.q.toLowerCase().includes(q) || faq.a.toLowerCase().includes(q),
     );
   }, [query]);

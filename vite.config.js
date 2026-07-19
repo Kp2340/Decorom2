@@ -5,13 +5,6 @@ import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
 
 export default defineConfig({
   base: "/",
-  server: {
-    proxy: {
-      "/api": "https://api.decorom.in",
-      "/checkout": "https://api.decorom.in",
-      "/payment-notification": "https://api.decorom.in",
-    },
-  },
   plugins: [
     react(),
     tailwindcss(),

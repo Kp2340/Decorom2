@@ -5,6 +5,7 @@ import {
   CONTACT_EMAIL,
   CONTACT_PHONE,
   CONTACT_WHATSAPP_URL,
+  GOOGLE_MAPS_REVIEWS_URL,
 } from "../constants/contact";
 
 const WhatsappIcon = () => (
@@ -46,10 +47,15 @@ const Footer = () => (
           <Phone className="w-4 h-4 shrink-0" />
           <span>{CONTACT_PHONE}</span>
         </a>
-        <p className="flex items-start gap-2">
+        <a
+          href={GOOGLE_MAPS_REVIEWS_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-start gap-2 hover:text-yellow-600 transition-colors"
+        >
           <MapPin className="w-4 h-4 shrink-0 mt-0.5" />
           <span>Ghatlodiya, Ahmedabad, Gujarat</span>
-        </p>
+        </a>
       </div>
 
       {/* Column 2 — Quick Links */}
