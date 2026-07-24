@@ -1,7 +1,4 @@
 /* All @import statements must come first, before any actual CSS rules */
-/* Google Fonts */
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600&family=Noto+Sans+Devanagari:wght@400;700&family=Tiro+Devanagari+Hindi:ital@0;1&display=swap");
-
 /* Lazy Load Image Effects */
 @import "react-lazy-load-image-component/src/effects/blur.css";
 

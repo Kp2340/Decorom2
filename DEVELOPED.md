@@ -185,3 +185,61 @@ only, per explicit agreement not to submit real orders against production).
 - **What it does:** Adds a search input above the FAQ accordion that filters the existing hardcoded FAQ list client-side by question/answer substring match. Also fixed the open/closed accordion state to key off the question text instead of array index — with filtering, an item's index shifts as the list narrows, so index-based state would have expanded the wrong answer after a search.
 - **Verification:** Not yet build/lint/dev-server tested. Needs: type a partial match, confirm only matching FAQs show and an open answer still corresponds to the right question; clear the search and confirm all 6 return.
 
+## Map/contact fixes (2026-07-24)
+- **Files:** `src/components/Footer.jsx`, `src/pages/Contact.jsx`, `src/constants/contact.js` (all edited)
+- **What it does:** The footer address and the Contact page's address card were plain `<p>` text — not links at all, so nothing could open when clicked. Both now link to `GOOGLE_MAPS_REVIEWS_URL`. Also replaced that constant's value: it was a "share link" copied from a specific Google Maps view state (ending in a single-result flag) that rendered inconsistently; replaced with the canonical `https://www.google.com/maps?cid=<id>` format, using the same place CID already used by the Contact page's embedded map iframe (confirmed matching, so this isn't a different business/location — just a more reliable link format). This single shared constant also feeds `CustomerReviews.jsx`'s "View on Google" link, every review card's "Read more" link, and `ProductDetails.jsx`'s rating badge.
+- **Verification:** Build/lint clean. Not yet click-tested live — click the footer/Contact addresses and a "View on Google" link to confirm they open the correct business listing.
+
+## FAQ content expansion (2026-07-24)
+- **Files:** `src/components/FAQ.jsx` (edited)
+- **What it does:** Split the FAQ list into `DEFAULT_FAQS` (the original 6, shown normally) and a new `EXTENDED_FAQS` (10 more) that only surface when a search query matches them — the default view stays short, search has a longer tail to find. All 10 new questions are grounded in facts verified elsewhere in this codebase this session (the ₹500 install fee, the 1"–96" size range, real Gujarati-script and office-nameplate products seen in the live catalog, the order-tracking page, WhatsApp contact) rather than invented policy specifics (return windows, GST, bulk pricing) that only the client would know accurately.
+- **Verification:** Build/lint clean.
+
+## Performance & SEO audit (2026-07-24)
+
+Ran a real Lighthouse audit against the live production homepage (`https://www.decorom.in`, via
+`npx lighthouse`) rather than guessing — read-only, no code deployed from this changes yet.
+Baseline scores: **Performance 67, Accessibility 100, Best Practices 79, SEO 92**. LCP 5.5s,
+TTI 15.5s — both well above target. Found and fixed the concrete, safe issues:
+
+1. **`robots.txt` and `sitemap.xml` didn't exist** (`public/robots.txt`, `public/sitemap.xml`
+   — new). Both requests were silently falling through `vercel.json`'s SPA catch-all rewrite
+   and returning the `index.html` shell instead of real directives — confirmed via curl
+   (`robots.txt` returned the React app's HTML). This is exactly why Lighthouse flagged
+   "robots.txt is not valid." Added a real `robots.txt` (disallows `/admin`, `/*/checkout`,
+   `/track/`, `/payment-success`; points at the sitemap) and a `sitemap.xml` covering all
+   static routes. **Known limitation:** individual product pages aren't in the sitemap —
+   those are DB-driven and would need a build-time or server-generated sitemap to include;
+   out of scope for this pass, flagged as a real follow-up if organic product-page discovery
+   matters.
+2. **Render-blocking Google Fonts `@import`** (`src/index.css`, `index.html`). The `@import`
+   in `index.css` pulled Playfair Display (unused anywhere in the app), a redundant Poppins
+   (already self-hosted separately via `@fontsource/poppins`), and the Devanagari/Gujarati
+   fonts the nameplate editor's `fontFamily` config can use. A CSS `@import` is always
+   render-blocking with no workaround — moved the Devanagari fonts only (dropped the dead
+   Playfair Display and redundant Poppins) into `index.html` as a non-blocking
+   `media="print" onload="this.media='all'"` stylesheet link, with a `<noscript>` fallback.
+3. **LCP element (Hero background image) always requested at 1600px wide**, even on mobile
+   viewports needing ~412px — confirmed by Lighthouse as 29%/60KB wasted on that exact
+   request. Added a real `srcSet`/`sizes` to `Hero.jsx`'s background `<img>` (800/1200/1600/2400w)
+   so the browser picks the right size.
+4. **No preconnect hints** for the origins actually used for images (`images.unsplash.com`,
+   `res.cloudinary.com`) or fonts (`fonts.googleapis.com`, `fonts.gstatic.com`) — added all four
+   to `index.html`.
+
+**Deliberately not touched:**
+- The `decorom.in` → `www.decorom.in` redirect (960ms) — this is a Vercel domain/DNS
+  configuration choice, not a code issue; not touching domain config blind.
+- Third-party cookies + back/forward-cache blocking, both traced to the Instagram embed
+  iframes on the homepage (`InstagramGrid.jsx`) — Instagram's own embed widget registers an
+  unload handler and sets cookies; removing that would mean removing the Instagram feed
+  feature entirely, a product decision, not a bug fix.
+- "Reduce unused JavaScript" (~74KB) — lower-value, would need a deeper bundle-splitting
+  pass; not attempted this round.
+
+**Verification:** `npm run build` + `npm run lint` clean after all four fixes (confirmed
+`robots.txt`/`sitemap.xml` land correctly in `dist/`). **Not yet re-measured** — these fixes
+are only in the local working tree, not deployed, so a fresh Lighthouse run against production
+won't show improvement until this is committed and deployed. Re-run Lighthouse after deploying
+to confirm the actual score change.
+

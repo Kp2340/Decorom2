@@ -9,6 +9,27 @@
     <meta name="author" content="Decorom" />
     <!-- Poppins is now self-hosted via @fontsource/poppins (no external CDN request) -->
     <title>Decorom | Premium Designer Nameplates in Ahmedabad</title>
+
+    <!-- Preconnect to origins used for the LCP hero image and product photos -->
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <link rel="preconnect" href="https://res.cloudinary.com" />
+
+    <!-- Devanagari/Gujarati fonts for the nameplate editor's custom text preview,
+         loaded non-blocking (print-media swap trick) so it never delays render -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&family=Tiro+Devanagari+Hindi:ital@0;1&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&family=Tiro+Devanagari+Hindi:ital@0;1&display=swap"
+      />
+    </noscript>
   </head>
 
   <body>

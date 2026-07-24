@@ -22,6 +22,13 @@ const Hero = () => (
     {/* Background */}
     <img
       src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=1600"
+      srcSet="
+        https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=800 800w,
+        https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=1200 1200w,
+        https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=1600 1600w,
+        https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=2400 2400w
+      "
+      sizes="100vw"
       alt="Modern Home Interior"
       className="absolute inset-0 w-full h-full object-cover opacity-40"
       fetchPriority="high"
