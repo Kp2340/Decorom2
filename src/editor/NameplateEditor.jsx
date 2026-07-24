@@ -14,6 +14,8 @@ const NameplateEditor = ({
   onValuesChange,
   onOrderReady,
   onDimensionsChange,
+  initialValues,
+  initialDimensions,
   className = "",
 }) => {
   const editorConfig = product?.editorConfig;
@@ -27,7 +29,7 @@ const NameplateEditor = ({
     scale,
     isValid,
     orderPayload,
-  } = useNameplateEditor(editorConfig);
+  } = useNameplateEditor(editorConfig, initialValues, initialDimensions);
 
   // Get zone configurations for inputs
   const nameZone = useMemo(

@@ -8,7 +8,7 @@ const WhatsAppIcon = () => (
 );
 
 const FloatingButtons = () => (
-  <div className="fixed bottom-6 right-5 z-50 flex flex-col gap-3 items-end">
+  <div className="fixed bottom-24 md:bottom-6 right-5 z-50 flex flex-col gap-3 items-end">
     {/* Call button */}
     <a
       href={`tel:${CONTACT_PHONE.replace(/\s/g, "")}`}

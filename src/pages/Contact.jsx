@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
-import { CONTACT_EMAIL, CONTACT_PHONE, CONTACT_ADDRESS, CONTACT_WHATSAPP_URL } from "../constants/contact";
+import { CONTACT_EMAIL, CONTACT_PHONE, CONTACT_ADDRESS, CONTACT_WHATSAPP_URL, GOOGLE_MAPS_REVIEWS_URL } from "../constants/contact";
 
 const ContactUs = () => {
   const form = useRef();
@@ -68,7 +68,14 @@ const ContactUs = () => {
               📍
             </div>
             <h3 className="text-lg font-semibold text-gray-800">Address</h3>
-            <p className="mt-2 text-gray-600 text-sm leading-relaxed">{CONTACT_ADDRESS}</p>
+            <a
+              href={GOOGLE_MAPS_REVIEWS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-2 text-gray-600 hover:text-pink-600 text-sm leading-relaxed block"
+            >
+              {CONTACT_ADDRESS}
+            </a>
           </div>
 
           {/* Email */}

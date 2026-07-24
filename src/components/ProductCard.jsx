@@ -1,11 +1,14 @@
 import React, { memo, useMemo } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import { Heart } from "lucide-react";
 import {
   BLUR_PLACEHOLDER,
   PLACEHOLDER_IMAGE,
   responsiveImageProps,
   toImageUrls,
 } from "../utils/imageUtils";
+import { useWishlist } from "../wishlist/WishlistContext";
+import { BEST_SELLER_IDS } from "../config/bestSellers";
 
 /**
  * ProductCard - Displays a single product in the gallery grid.
@@ -27,6 +30,10 @@ const parseSize = (sizeStr) => {
 };
 
 const ProductCard = memo(({ product, onClick }) => {
+  const { isWishlisted, toggleWishlist } = useWishlist();
+  const wishlisted = isWishlisted(product.id);
+  const isBestSeller = BEST_SELLER_IDS.includes(product.id);
+  const isLed = Boolean(product.hasLight);
   const { w, h } = useMemo(() => parseSize(product.defaultSize || product.size), [product]);
   const calculatedPrice = useMemo(() => {
     return calculateFinalPrice(product.material, w, h);
@@ -70,6 +77,35 @@ const ProductCard = memo(({ product, onClick }) => {
           className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+        {(isBestSeller || isLed) && (
+          <div className="absolute top-2 left-2 z-10 flex flex-col gap-1">
+            {isBestSeller && (
+              <span className="px-2 py-0.5 rounded-full bg-amber-400 text-amber-950 text-[10px] font-bold uppercase tracking-wide shadow-sm">
+                Best Seller
+              </span>
+            )}
+            {isLed && (
+              <span className="px-2 py-0.5 rounded-full bg-gray-900 text-white text-[10px] font-bold uppercase tracking-wide shadow-sm">
+                LED
+              </span>
+            )}
+          </div>
+        )}
+
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            toggleWishlist(product);
+          }}
+          aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
+          aria-pressed={wishlisted}
+          className="absolute top-2 right-2 z-10 p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-sm hover:bg-white transition-colors"
+        >
+          <Heart
+            className={`w-4 h-4 transition-colors ${wishlisted ? "fill-pink-600 text-pink-600" : "text-gray-500"}`}
+          />
+        </button>
       </div>
 
       {/* Product Info */}

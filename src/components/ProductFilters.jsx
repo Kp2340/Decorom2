@@ -106,16 +106,19 @@ const ProductFilters = ({
   setSelectedMaterial,
   selectedShape,
   setSelectedShape,
+  hideMaterial = false,
 }) => {
   return (
     <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
-      <FilterDropdown
-        label="Select Material"
-        options={materials}
-        selectedValue={selectedMaterial}
-        onSelect={setSelectedMaterial}
-        onClear={() => setSelectedMaterial("")}
-      />
+      {!hideMaterial && (
+        <FilterDropdown
+          label="Select Material"
+          options={materials}
+          selectedValue={selectedMaterial}
+          onSelect={setSelectedMaterial}
+          onClear={() => setSelectedMaterial("")}
+        />
+      )}
       <FilterDropdown
         label="Select Shape"
         options={shapes}

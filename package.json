@@ -7,7 +7,7 @@
   "scripts": {
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
+    "preview": "vite preview --host",
     "dev": "vite --host"
   },
   "dependencies": {
@@ -15,6 +15,7 @@
     "@fontsource/poppins": "5.2.7",
     "@tanstack/react-query": "5.101.2",
     "@vercel/analytics": "2.0.1",
+    "@vercel/speed-insights": "^2.0.0",
     "axios": "1.18.1",
     "framer-motion": "12.42.2",
     "lucide-react": "1.24.0",

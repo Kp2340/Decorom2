@@ -5,13 +5,6 @@ import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
 
 export default defineConfig({
   base: "/",
-  server: {
-    proxy: {
-      "/api": "http://localhost:8080",
-      "/checkout": "http://localhost:8080",
-      "/payment-notification": "http://localhost:8080",
-    },
-  },
   plugins: [
     react(),
     tailwindcss(),

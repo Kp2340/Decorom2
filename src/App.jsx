@@ -2,6 +2,7 @@ import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./auth/AuthContext";
 import ProtectedRoute from "./auth/ProtectedRoute";
+import { WishlistProvider } from "./wishlist/WishlistContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const Home = lazy(() => import("./pages/Home"));
@@ -24,6 +25,8 @@ const OrderTracking = lazy(() => import("./pages/OrderTracking"));
 const CustomDesign = lazy(() => import("./pages/CustomDesign"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const BestSellers = lazy(() => import("./pages/BestSellers"));
+const SearchResults = lazy(() => import("./pages/SearchResults"));
+const Wishlist = lazy(() => import("./pages/Wishlist"));
 
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
@@ -31,6 +34,7 @@ import ScrollToTop from "./components/ScrollToTop.jsx";
 import FloatingButtons from "./components/FloatingButtons.jsx";
 import { Analytics } from "@vercel/analytics/react";
 import { HelmetProvider } from "react-helmet-async";
+import { SpeedInsights } from "@vercel/speed-insights/react"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -51,6 +55,7 @@ const App = () => (
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
+        <WishlistProvider>
         <BrowserRouter>
           <ScrollToTop />
           <Header />
@@ -72,6 +77,8 @@ const App = () => (
                 <Route path="/shipping-policy" element={<ShippingPolicy />} />
                 <Route path="/track/:orderId" element={<OrderTracking />} />
                 <Route path="/best-sellers" element={<BestSellers />} />
+                <Route path="/search" element={<SearchResults />} />
+                <Route path="/wishlist" element={<Wishlist />} />
                 <Route path="/custom-design" element={<CustomDesign />} />
                 <Route path="/admin/login" element={<AdminLogin />} />
                 <Route
@@ -97,7 +104,9 @@ const App = () => (
           <Footer />
           <FloatingButtons />
           <Analytics />
+          <SpeedInsights/>
         </BrowserRouter>
+        </WishlistProvider>
       </AuthProvider>
     </QueryClientProvider>
   </HelmetProvider>

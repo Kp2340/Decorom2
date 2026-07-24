@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Hero from "../components/Hero";
 import TrustBadges from "../components/TrustBadges";
 import HorizontalRail from "../components/HorizontalRail";
+import RecentlyViewedRail from "../components/RecentlyViewedRail";
 import CategoryBrowse from "../components/CategoryBrowse";
 import VideoShowcase from "../components/VideoShowcase";
 import FAQ from "../components/FAQ";
@@ -52,6 +53,9 @@ const Home = () => (
 
     {/* 2. Trust badges strip */}
     <TrustBadges />
+
+    {/* 2b. Recently viewed (renders nothing if the visitor has no history yet) */}
+    <RecentlyViewedRail />
 
     {/* 3. Best Selling Nameplates */}
     <HorizontalRail />
