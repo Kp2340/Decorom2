@@ -9,7 +9,9 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
     shape: "",
     material: "",
     defaultSize: "",
-    customizable: false,
+    // Must default to TRUE: `customizable` now decides the pricing model, so a false default
+    // would silently make every newly created product a fixed-price SKU.
+    customizable: true,
     featured: false,
     editorConfig: "",
   });
@@ -284,9 +286,16 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
               onChange={handleChange}
               className="h-4 w-4 rounded border-gray-300 text-pink-600 focus:ring-pink-500"
             />
-            <label htmlFor="customizable" className="text-sm font-medium text-gray-700">
-              Customizable
-            </label>
+            <div className="flex flex-col">
+              <label htmlFor="customizable" className="text-sm font-medium text-gray-700">
+                Customisable size &amp; price
+              </label>
+              <span className="text-xs text-gray-500">
+                Leave checked for normal products (price calculated from size). <b>Uncheck</b> for
+                a fixed-price product: it then sells for exactly the Price above at exactly the
+                Default Size, the customer cannot change the size, and ₹150 delivery applies.
+              </span>
+            </div>
           </div>
           <div className="flex items-center gap-3">
             <input

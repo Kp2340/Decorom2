@@ -22,6 +22,7 @@ import { BEST_SELLER_IDS } from "../config/bestSellers";
  * TODO: Replace src with CDN URL helper when available for responsive images.
  */
 import { calculateFinalPrice } from "../utils/pricingUtils";
+import { isFixedPrice, getDisplayPrice } from "../utils/productUtils";
 
 const parseSize = (sizeStr) => {
   if (!sizeStr || typeof sizeStr !== "string") return { w: 0, h: 0 };
@@ -34,12 +35,16 @@ const ProductCard = memo(({ product, onClick }) => {
   const wishlisted = isWishlisted(product.id);
   const isBestSeller = BEST_SELLER_IDS.includes(product.id);
   const isLed = Boolean(product.hasLight);
+  const fixedPrice = isFixedPrice(product);
   const { w, h } = useMemo(() => parseSize(product.defaultSize || product.size), [product]);
   const calculatedPrice = useMemo(() => {
+    // A fixed SKU is never priced by area — computing it here is what made this card disagree
+    // with the product page for the same product.
+    if (fixedPrice) return 0;
     return calculateFinalPrice(product.material, w, h);
-  }, [product.material, w, h]);
+  }, [fixedPrice, product.material, w, h]);
 
-  const displayPrice = calculatedPrice > 0 ? calculatedPrice : (product.basePrice || product.price || 0);
+  const displayPrice = getDisplayPrice(product, calculatedPrice);
 
   
   const primaryImage = useMemo(() => {

@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { getFeaturedProducts } from "../api/products.api";
 import { BEST_SELLER_IDS } from "../config/bestSellers";
 import SEO from "../components/SEO";
+import FreeDeliveryBanner from "../components/FreeDeliveryBanner";
+import { isFixedPrice } from "../utils/productUtils";
 
 const SkeletonCard = () => (
   <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 animate-pulse">
@@ -64,6 +66,8 @@ const BestSellers = () => {
         </p>
       </div>
 
+      <FreeDeliveryBanner />
+
       <div className="container mx-auto px-4 py-10 max-w-6xl">
         {error && (
           <div className="text-center py-12 text-red-500 font-semibold">{error}</div>
@@ -112,7 +116,11 @@ const BestSellers = () => {
                     )}
                     {product.basePrice > 0 && (
                       <p className="text-pink-600 font-black text-sm mb-3">
-                        Starting ₹{product.basePrice.toLocaleString()}
+                        {/* Fixed SKUs sell for exactly this amount, so "Starting" would be a
+                            misleading claim — it used to sit next to a product page showing a
+                            completely different, area-derived price. */}
+                        {isFixedPrice(product) ? "" : "Starting "}₹
+                        {product.basePrice.toLocaleString()}
                       </p>
                     )}
                     <button className="w-full bg-gradient-to-r from-pink-600 to-rose-600 text-white text-xs font-black py-2.5 rounded-xl hover:from-pink-700 hover:to-rose-700 transition-all active:scale-95 shadow-sm shadow-pink-100">

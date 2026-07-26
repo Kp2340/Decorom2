@@ -5,6 +5,10 @@ import { getProductById } from "../api/products.api";
 import { toImageUrls } from "../utils/imageUtils";
 import { initFirstVisit, getEligiblePromo, calculateDiscount } from "../utils/promoUtils";
 import PromoSection from "../components/PromoSection";
+import FreeDeliveryBanner from "../components/FreeDeliveryBanner";
+import useFreeDeliveryOffer from "../hooks/useFreeDeliveryOffer";
+import { isFixedPrice, parseDefaultSize } from "../utils/productUtils";
+import { getDeliveryLines, FREE_DELIVERY_CODE } from "../utils/deliveryUtils";
 
 const Checkout = () => {
   const location = useLocation();
@@ -39,6 +43,12 @@ const Checkout = () => {
   const [appliedPromoCode, setAppliedPromoCode] = useState(null);
   const [promoInfo, setPromoInfo] = useState(null); // Full response from /api/promo/validate
 
+  // A fixed-price best seller: no size editing, no user-selectable promos, ₹150 delivery that
+  // FREEDELIVERY waives automatically. Mirrors CheckoutController's fixedPrice branch.
+  const fixedPrice = isFixedPrice(product);
+  const offer = useFreeDeliveryOffer();
+  const delivery = getDeliveryLines(product, config?.price ?? 0, offer.active);
+
   useEffect(() => {
     initFirstVisit();
     if (passedProduct) return; // Already have product from navigation state — skip fetch
@@ -56,6 +66,13 @@ const Checkout = () => {
   // Re-evaluate eligible promo when base price changes (e.g. user resizes)
   useEffect(() => {
     if (!config?.price) return;
+    // Fixed-price best sellers carry no user-selectable promos. Without this guard the
+    // client-side auto-apply below would silently attach NEW500 (−₹500 over a ₹2,500 order)
+    // WITHOUT calling the backend, so the displayed total would not match what is charged.
+    if (fixedPrice) {
+      if (appliedPromoCode) handlePromoRemove();
+      return;
+    }
     const eligible = getEligiblePromo(config.price);
     // Only auto-apply if nothing is currently applied
     if (!appliedPromoCode && eligible) {
@@ -73,7 +90,7 @@ const Checkout = () => {
       const { discountAmount: d } = calculateDiscount(appliedPromoCode, config.price);
       if (d === 0) handlePromoRemove();
     }
-  }, [config?.price]);
+  }, [config?.price, fixedPrice]);
 
   const handlePromoApply = useCallback((code, data) => {
     setAppliedPromoCode(code);
@@ -120,8 +137,13 @@ const Checkout = () => {
     setLoading(true);
     setError("");
 
+    // A fixed SKU always ships at its configured size, whatever is in local state.
+    const fixedDims = fixedPrice ? parseDefaultSize(product.defaultSize) : null;
+    const orderHeight = fixedDims?.height || customDetails.height;
+    const orderWidth = fixedDims?.width || customDetails.width;
+
     // Basic Validation
-    if (customDetails.height < 1 || customDetails.height > 96 || customDetails.width < 1 || customDetails.width > 96) {
+    if (orderHeight < 1 || orderHeight > 96 || orderWidth < 1 || orderWidth > 96) {
       setError("Size must be between 1x1 and 96x96 inches.");
       setLoading(false);
       return;
@@ -142,7 +164,14 @@ const Checkout = () => {
     // Re-validate promo on submit to catch expired codes
     let finalPromoCode = appliedPromoCode || null;
     let discountedPrice = promoInfo?.discountedTotal ?? config.price ?? 0;
-    if (appliedPromoCode) {
+
+    if (fixedPrice) {
+      // The server owns this decision: it recomputes the waiver from its own IST clock and
+      // ignores any promoCode we send. We only need frontendPrice to match the total the
+      // customer was shown, so the server's ±₹1 tolerance check passes.
+      finalPromoCode = null;
+      discountedPrice = delivery.total;
+    } else if (appliedPromoCode) {
       try {
         const { validatePromoCode } = await import("../api/promos.api");
         const recheck = await validatePromoCode(appliedPromoCode, config.price);
@@ -164,15 +193,15 @@ const Checkout = () => {
     const payload = {
       productId: product.id,
       dimensions: {
-        height: customDetails.height,
-        width: customDetails.width,
-        area: customDetails.height * customDetails.width,
+        height: orderHeight,
+        width: orderWidth,
+        area: orderHeight * orderWidth,
       },
       namePlateDetails: customDetails.namePlateDetails,
-      size: `${customDetails.width}x${customDetails.height}`,
+      size: `${orderWidth}x${orderHeight}`,
       material: config.material,
-      lightingIncluded: config.withLighting,
-      fittingIncluded: config.withFitting,
+      lightingIncluded: fixedPrice ? false : config.withLighting,
+      fittingIncluded: fixedPrice ? false : config.withFitting,
       frontendPrice: discountedPrice,
       promoCode: finalPromoCode,
       shipping: {
@@ -273,16 +302,71 @@ const Checkout = () => {
               <span>Material</span>
               <span>{config.material}</span>
             </div>
-            <div className="flex justify-between">
-              <span>Lighting</span>
-              <span>{config.withLighting ? "Yes" : "No"}</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Fitting</span>
-              <span>{config.withFitting ? "Yes" : "No"}</span>
-            </div>
+            {/* Add-ons are not offered on a fixed SKU, so showing "No" twice is just noise. */}
+            {!fixedPrice && (
+              <>
+                <div className="flex justify-between">
+                  <span>Lighting</span>
+                  <span>{config.withLighting ? "Yes" : "No"}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Fitting</span>
+                  <span>{config.withFitting ? "Yes" : "No"}</span>
+                </div>
+              </>
+            )}
           </div>
 
+          {fixedPrice ? (
+            <div className="mt-4 rounded-lg bg-pink-50 p-3">
+              <div className="space-y-1.5 text-sm">
+                <div className="flex justify-between text-gray-700">
+                  <span>Product</span>
+                  <span className="font-semibold">
+                    ₹{delivery.goodsPrice.toLocaleString()}
+                  </span>
+                </div>
+
+                <div className="flex justify-between text-gray-700">
+                  <span>Delivery</span>
+                  {delivery.waived ? (
+                    <span className="font-semibold">
+                      <span className="mr-1.5 text-gray-400 line-through">
+                        ₹{delivery.charge.toLocaleString()}
+                      </span>
+                      <span className="text-green-600">FREE</span>
+                    </span>
+                  ) : (
+                    <span className="font-semibold">
+                      ₹{delivery.charge.toLocaleString()}
+                    </span>
+                  )}
+                </div>
+
+                {delivery.waived && (
+                  <div className="flex justify-between text-xs font-bold text-green-600">
+                    <span>{FREE_DELIVERY_CODE}</span>
+                    <span>− ₹{delivery.discount.toLocaleString()}</span>
+                  </div>
+                )}
+
+                <div className="flex items-center justify-between border-t border-pink-200 pt-2">
+                  <span className="text-xs font-semibold uppercase text-pink-600">
+                    Total
+                  </span>
+                  <span className="text-2xl font-bold text-pink-700">
+                    ₹{delivery.total.toLocaleString()}
+                  </span>
+                </div>
+              </div>
+
+              <FreeDeliveryBanner variant="inline" className="mt-3" />
+
+              <p className="mt-2 text-[10px] text-gray-500">
+                * Fixed price — final amount confirmed by server.
+              </p>
+            </div>
+          ) : (
           <div className="mt-4 p-3 bg-pink-50 rounded text-center">
             {promoInfo?.deductionAmount > 0 ? (
               <>
@@ -310,17 +394,21 @@ const Checkout = () => {
               * Final price confirmed by server.
             </p>
           </div>
+          )}
 
-          {/* Promo Section */}
-          <div className="mt-4">
-            <PromoSection
-              basePrice={config.price || 0}
-              appliedCode={appliedPromoCode}
-              discountInfo={promoInfo}
-              onApply={handlePromoApply}
-              onRemove={handlePromoRemove}
-            />
-          </div>
+          {/* Promo Section — hidden entirely for fixed-price best sellers: no other code is
+              applicable to them, so offering or even displaying one would be misleading. */}
+          {!fixedPrice && (
+            <div className="mt-4">
+              <PromoSection
+                basePrice={config.price || 0}
+                appliedCode={appliedPromoCode}
+                discountInfo={promoInfo}
+                onApply={handlePromoApply}
+                onRemove={handlePromoRemove}
+              />
+            </div>
+          )}
         </div>
 
         {/* Checkout Form */}
@@ -360,31 +448,51 @@ const Checkout = () => {
                 <span className="w-8 h-8 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center text-sm">2</span>
                 Size (Inches)
               </h3>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Height</label>
-                  <input
-                    required
-                    type="number"
-                    name="height"
-                    value={customDetails.height}
-                    onChange={handleCustomChange}
-                    className="w-full border-2 border-gray-100 rounded-xl p-4 focus:border-pink-500 outline-none transition-all font-bold no-spinner"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Width</label>
-                  <input
-                    required
-                    type="number"
-                    name="width"
-                    value={customDetails.width}
-                    onChange={handleCustomChange}
-                    className="w-full border-2 border-gray-100 rounded-xl p-4 focus:border-pink-500 outline-none transition-all font-bold no-spinner"
-                  />
-                </div>
-              </div>
-              <p className="text-[10px] text-gray-400 font-medium">* Acceptable range: 1x1 to 96x96 inches</p>
+              {/* Read-only for a fixed SKU. These inputs never recomputed the price anyway, so
+                  editing them used to ship new dimensions with the old frontendPrice. */}
+              {fixedPrice ? (
+                <>
+                  <div className="flex items-center justify-between rounded-xl border-2 border-gray-100 bg-gray-50 p-4">
+                    <span className="font-bold text-gray-900">
+                      {config.height}" × {config.width}"
+                    </span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                      Standard size
+                    </span>
+                  </div>
+                  <p className="text-[10px] font-medium text-gray-400">
+                    * This best seller ships in one standard size.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Height</label>
+                      <input
+                        required
+                        type="number"
+                        name="height"
+                        value={customDetails.height}
+                        onChange={handleCustomChange}
+                        className="w-full border-2 border-gray-100 rounded-xl p-4 focus:border-pink-500 outline-none transition-all font-bold no-spinner"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Width</label>
+                      <input
+                        required
+                        type="number"
+                        name="width"
+                        value={customDetails.width}
+                        onChange={handleCustomChange}
+                        className="w-full border-2 border-gray-100 rounded-xl p-4 focus:border-pink-500 outline-none transition-all font-bold no-spinner"
+                      />
+                    </div>
+                  </div>
+                  <p className="text-[10px] text-gray-400 font-medium">* Acceptable range: 1x1 to 96x96 inches</p>
+                </>
+              )}
             </div>
 
             {/* Section 3: Delivery Information */}

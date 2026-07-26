@@ -3,6 +3,7 @@ import NameInput from "./controls/NameInput";
 import FlatInput from "./controls/FlatInput";
 import NameplatePreview from "./components/NameplatePreview";
 import useNameplateEditor from "./hooks/useNameplateEditor";
+import { isFixedPrice } from "../utils/productUtils";
 
 /**
  * Main Nameplate Editor component.
@@ -20,6 +21,9 @@ const NameplateEditor = ({
 }) => {
   const editorConfig = product?.editorConfig;
   const productId = product?.id;
+
+  // Fixed-price best sellers ship in one standard size, so dimensions are not editable here.
+  const sizeLocked = isFixedPrice(product);
 
   const {
     values,
@@ -105,50 +109,63 @@ const NameplateEditor = ({
               zone={flatZone}
             />
 
-            {/* Dimension Inputs */}
+            {/* Dimension Inputs — read-only for fixed-price best sellers, which ship in one
+                standard size. Text and colour editing stays available. */}
             <div className="mt-4 pt-4 border-t border-gray-200">
               <label className="block text-sm font-medium text-gray-700 mb-3">
                 Size (inch)
               </label>
-              <div className="grid grid-cols-2 gap-4">
-                {/* Height Input */}
-                <div>
-                  <label className="block text-xs text-gray-500 mb-1">
-                    Height
-                  </label>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="number"
-                      min="10"
-                      max="200"
-                      value={dimensions.height}
-                      onChange={(e) =>
-                        updateDimension("height", e.target.value)
-                      }
-                      className="w-20 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 text-gray-800 text-center"
-                    />
-                    <span className="text-gray-500 text-sm">inch</span>
-                  </div>
-                </div>
 
-                {/* Width Input */}
-                <div>
-                  <label className="block text-xs text-gray-500 mb-1">
-                    Width
-                  </label>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="number"
-                      min="10"
-                      max="100"
-                      value={dimensions.width}
-                      onChange={(e) => updateDimension("width", e.target.value)}
-                      className="w-20 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 text-gray-800 text-center"
-                    />
-                    <span className="text-gray-500 text-sm">inch</span>
+              {sizeLocked ? (
+                <div className="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-3 py-2">
+                  <span className="text-sm font-bold text-gray-900">
+                    {dimensions.height}" × {dimensions.width}"
+                  </span>
+                  <span className="text-[11px] font-semibold uppercase tracking-wide text-gray-500">
+                    Standard size
+                  </span>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-4">
+                  {/* Height Input */}
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1">
+                      Height
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="number"
+                        min="10"
+                        max="200"
+                        value={dimensions.height}
+                        onChange={(e) =>
+                          updateDimension("height", e.target.value)
+                        }
+                        className="w-20 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 text-gray-800 text-center"
+                      />
+                      <span className="text-gray-500 text-sm">inch</span>
+                    </div>
+                  </div>
+
+                  {/* Width Input */}
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1">
+                      Width
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="number"
+                        min="10"
+                        max="100"
+                        value={dimensions.width}
+                        onChange={(e) => updateDimension("width", e.target.value)}
+                        className="w-20 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 text-gray-800 text-center"
+                      />
+                      <span className="text-gray-500 text-sm">inch</span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
 
             {/* Validation message */}

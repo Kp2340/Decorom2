@@ -8,6 +8,8 @@ import SEO from "../components/SEO";
 import { CONTACT_WHATSAPP_URL, GOOGLE_MAPS_REVIEWS_URL } from "../constants/contact";
 import { CATEGORIES } from "../constants/categories";
 import { recordProductView } from "../utils/recentlyViewedUtils";
+import { isFixedPrice, getDisplayPrice } from "../utils/productUtils";
+import FreeDeliveryBanner from "../components/FreeDeliveryBanner";
 
 const NameplateEditor = lazy(() => import("../editor/NameplateEditor"));
 
@@ -37,7 +39,10 @@ const ProductDetails = () => {
   const initialEditorValues = sharedName || sharedFlat
     ? { familyName: sharedName || "", flatNumber: sharedFlat || "" }
     : undefined;
-  const initialEditorDimensions = sharedWidth > 0 && sharedHeight > 0
+  // Shared ?w=&h= is ignored for fixed-price best sellers — their size is not negotiable, so a
+  // link carrying dimensions must not be able to reseed the editor.
+  const fixedPriceProduct = isFixedPrice(product);
+  const initialEditorDimensions = !fixedPriceProduct && sharedWidth > 0 && sharedHeight > 0
     ? { width: sharedWidth, height: sharedHeight }
     : undefined;
 
@@ -157,7 +162,7 @@ const ProductDetails = () => {
   if (!product)
     return <div className="text-center py-20">Product not found</div>;
 
-  const displayPrice = config && config.isValid ? config.price : (product.basePrice || 0);
+  const displayPrice = getDisplayPrice(product, config && config.isValid ? config.price : 0);
 
   return (
     <div className="container mx-auto px-4 py-8 pb-28 md:pb-8">
@@ -222,16 +227,25 @@ const ProductDetails = () => {
               <span className="font-semibold">Shape:</span> {product.shape}
             </p>
             <p>
-              <span className="font-semibold">Default Size:</span>{" "}
+              <span className="font-semibold">
+                {fixedPriceProduct ? "Size:" : "Default Size:"}
+              </span>{" "}
               {product.defaultSize || "Not specified"}
             </p>
             <div className="flex flex-col mt-4">
-              <span className="text-gray-500 text-xs">Estimated Price</span>
+              <span className="text-gray-500 text-xs">
+                {fixedPriceProduct ? "Price" : "Estimated Price"}
+              </span>
               <p className="text-3xl font-bold text-pink-600">
-                ₹{config && config.isValid ? config.price.toLocaleString() : (product.basePrice || 0).toLocaleString()}
+                ₹{getDisplayPrice(
+                  product,
+                  config && config.isValid ? config.price : 0,
+                ).toLocaleString()}
               </p>
             </div>
           </div>
+
+          {fixedPriceProduct && <FreeDeliveryBanner variant="inline" className="mb-6" />}
 
 
           {parsedEditorConfig?.enabled && (
