@@ -5,6 +5,9 @@ import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
 
 export default defineConfig({
   base: "/",
+  build: {
+    sourcemap: false,
+  },
   plugins: [
     react(),
     tailwindcss(),
