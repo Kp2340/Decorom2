@@ -42,7 +42,7 @@ const FreeDeliveryBanner = ({ variant = "strip", className = "" }) => {
           Free delivery on all best sellers
         </p>
         <p className="text-xs font-semibold text-gray-700">
-          Order before midnight ·{" "}
+          Limited time offer ·{" "}
           <span className="font-mono tabular-nums font-black text-rose-600">{label}</span> left
         </p>
       </div>
