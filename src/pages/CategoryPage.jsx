@@ -176,7 +176,7 @@ const CategoryPage = () => {
           <div className="text-center py-20">No products match these filters.</div>
         ) : (
           <>
-            <div className="grid auto-cols-[44vw] grid-flow-col gap-3 overflow-x-auto pb-2 scrollbar-hide sm:grid-flow-row sm:grid-cols-2 lg:grid-cols-4 sm:gap-8 sm:overflow-visible sm:pb-0">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 lg:grid-cols-4 sm:gap-8">
               {visibleProducts.map((product) => (
                 <ProductCard
                   key={product.id}

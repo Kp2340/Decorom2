@@ -64,7 +64,7 @@ const Header = () => {
           </button>
 
           {/* Logo (Center on mobile, left on desktop) */}
-          <div className="flex-1 flex justify-center md:justify-start z-40">
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:relative md:left-auto md:top-auto md:translate-x-0 md:translate-y-0 md:flex-1 md:flex md:justify-start z-40">
             <NavLink to="/" onClick={closeMenu}>
               <img
                 src="/logo/logo.png"

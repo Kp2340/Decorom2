@@ -80,7 +80,7 @@ const Products = () => {
                 Desktop : normal 2-col → 4-col grid
                 No wrapper divs needed — auto-cols sets each grid item's width directly.
               */}
-              <div className="grid auto-cols-[44vw] grid-flow-col gap-3 overflow-x-auto pb-2 scrollbar-hide sm:grid-flow-row sm:grid-cols-2 lg:grid-cols-4 sm:gap-8 sm:overflow-visible sm:pb-0">
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 lg:grid-cols-4 sm:gap-8">
                 {sections[cat.id]?.map((product) => (
                   <ProductCard
                     key={product.id}
