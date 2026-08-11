@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams, Link } from "react-router-dom";
 import { getProducts } from "../api/products.api";
 import ProductCard from "../components/ProductCard";
 import ProductFilters from "../components/ProductFilters";
@@ -13,31 +13,99 @@ const PAGE_SIZE = 12;
 const CategoryPage = () => {
   const { materialName } = useParams();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Read initial filter & page values from URL search parameters
+  const getPageFromUrl = () => {
+    const p = parseInt(searchParams.get("page") || "1", 10);
+    return isNaN(p) ? 0 : Math.max(0, p - 1);
+  };
+
   const [products, setProducts] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
-  const [page, setPage] = useState(0);
+  const [page, setPageState] = useState(getPageFromUrl);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Refinements — shape is a server-supported filter param; price/LED are
-  // applied client-side over the loaded page (no backend endpoint changes).
-  const [selectedShape, setSelectedShape] = useState("");
-  const [minPrice, setMinPrice] = useState("");
-  const [maxPrice, setMaxPrice] = useState("");
-  const [ledOnly, setLedOnly] = useState(false);
+  const [selectedShape, setSelectedShapeState] = useState(
+    searchParams.get("shape") || ""
+  );
+  const [minPrice, setMinPriceState] = useState(
+    searchParams.get("minPrice") || ""
+  );
+  const [maxPrice, setMaxPriceState] = useState(
+    searchParams.get("maxPrice") || ""
+  );
+  const [ledOnly, setLedOnlyState] = useState(
+    searchParams.get("ledOnly") === "true"
+  );
 
-  const currentCategory = CATEGORIES.find(c => slugify(c.name) === materialName) || CATEGORIES[0];
+  const currentCategory =
+    CATEGORIES.find((c) => slugify(c.name) === materialName) || CATEGORIES[0];
 
-  // Reset to page 0 whenever the category or shape filter changes
+  // Helper to sync state changes into URL searchParams
+  const updateUrl = (overrides = {}) => {
+    const nextParams = new URLSearchParams(searchParams);
+    const newPage = overrides.page !== undefined ? overrides.page : page;
+    const newShape = overrides.shape !== undefined ? overrides.shape : selectedShape;
+    const newMin = overrides.minPrice !== undefined ? overrides.minPrice : minPrice;
+    const newMax = overrides.maxPrice !== undefined ? overrides.maxPrice : maxPrice;
+    const newLed = overrides.ledOnly !== undefined ? overrides.ledOnly : ledOnly;
+
+    if (newPage > 0) nextParams.set("page", String(newPage + 1));
+    else nextParams.delete("page");
+
+    if (newShape) nextParams.set("shape", newShape);
+    else nextParams.delete("shape");
+
+    if (newMin !== "") nextParams.set("minPrice", String(newMin));
+    else nextParams.delete("minPrice");
+
+    if (newMax !== "") nextParams.set("maxPrice", String(newMax));
+    else nextParams.delete("maxPrice");
+
+    if (newLed) nextParams.set("ledOnly", "true");
+    else nextParams.delete("ledOnly");
+
+    setSearchParams(nextParams, { replace: true });
+  };
+
+  const handlePageChange = (newPage) => {
+    setPageState(newPage);
+    updateUrl({ page: newPage });
+  };
+
+  const handleShapeChange = (newShape) => {
+    setSelectedShapeState(newShape);
+    setPageState(0);
+    updateUrl({ shape: newShape, page: 0 });
+  };
+
+  const handleMinPriceChange = (val) => {
+    setMinPriceState(val);
+    updateUrl({ minPrice: val });
+  };
+
+  const handleMaxPriceChange = (val) => {
+    setMaxPriceState(val);
+    updateUrl({ maxPrice: val });
+  };
+
+  const handleLedOnlyChange = (val) => {
+    setLedOnlyState(val);
+    updateUrl({ ledOnly: val });
+  };
+
+  // Sync state when URL searchParams change (e.g. back/forward navigation)
   useEffect(() => {
-    setPage(0);
-  }, [materialName, selectedShape]);
+    setPageState(getPageFromUrl());
+    setSelectedShapeState(searchParams.get("shape") || "");
+    setMinPriceState(searchParams.get("minPrice") || "");
+    setMaxPriceState(searchParams.get("maxPrice") || "");
+    setLedOnlyState(searchParams.get("ledOnly") === "true");
+  }, [searchParams]);
 
   useEffect(() => {
-    // A separate effect resets `page` to 0 whenever materialName/selectedShape
-    // change, which fires this effect once with the stale page and again once
-    // the reset lands — guard against the stale (now out-of-range) response
-    // overwriting the correct one if it happens to resolve second.
     let cancelled = false;
 
     const fetchCategoryProducts = async () => {
@@ -48,8 +116,6 @@ const CategoryPage = () => {
         if (cancelled) return;
         if (data && data.content) {
           setProducts(data.content);
-          // Spring Boot 3's default Page JSON nests pagination metadata under "page"
-          // (not a flat totalPages) — support both in case that ever changes.
           setTotalPages(data.page?.totalPages ?? data.totalPages ?? 1);
         } else if (Array.isArray(data)) {
           setProducts(data);
@@ -70,7 +136,6 @@ const CategoryPage = () => {
     };
 
     fetchCategoryProducts();
-    window.scrollTo(0, 0);
 
     return () => {
       cancelled = true;
@@ -131,7 +196,7 @@ const CategoryPage = () => {
           <ProductFilters
             hideMaterial
             selectedShape={selectedShape}
-            setSelectedShape={setSelectedShape}
+            setSelectedShape={handleShapeChange}
           />
           <div className="flex flex-wrap items-center justify-center gap-4">
             <div className="flex items-center gap-2">
@@ -140,7 +205,7 @@ const CategoryPage = () => {
                 type="number"
                 min="0"
                 value={minPrice}
-                onChange={(e) => setMinPrice(e.target.value)}
+                onChange={(e) => handleMinPriceChange(e.target.value)}
                 placeholder="0"
                 className="w-24 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-pink-400"
               />
@@ -151,7 +216,7 @@ const CategoryPage = () => {
                 type="number"
                 min="0"
                 value={maxPrice}
-                onChange={(e) => setMaxPrice(e.target.value)}
+                onChange={(e) => handleMaxPriceChange(e.target.value)}
                 placeholder="Any"
                 className="w-24 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-pink-400"
               />
@@ -160,7 +225,7 @@ const CategoryPage = () => {
               <input
                 type="checkbox"
                 checked={ledOnly}
-                onChange={(e) => setLedOnly(e.target.checked)}
+                onChange={(e) => handleLedOnlyChange(e.target.checked)}
                 className="w-4 h-4 rounded text-pink-600 focus:ring-pink-500"
               />
               <span className="text-sm text-gray-700 font-medium">LED available only</span>
@@ -188,7 +253,7 @@ const CategoryPage = () => {
             <Pagination
               currentPage={page}
               totalPages={totalPages}
-              onPageChange={setPage}
+              onPageChange={handlePageChange}
             />
           </>
         )}

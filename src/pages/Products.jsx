@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getProducts } from "../api/products.api";
 import ProductCard from "../components/ProductCard";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import SEO from "../components/SEO";
 
 import { CATEGORIES, slugify } from "../constants/categories";
@@ -10,6 +10,7 @@ const Products = () => {
   const [sections, setSections] = useState({});
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const fetchAllCategories = async () => {
@@ -30,6 +31,19 @@ const Products = () => {
     };
     fetchAllCategories();
   }, []);
+
+  // Scroll to previous section if returning from product detail page
+  useEffect(() => {
+    if (!loading && location.state?.fromSection) {
+      const sectionId = `section-${location.state.fromSection}`;
+      const el = document.getElementById(sectionId);
+      if (el) {
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 100);
+      }
+    }
+  }, [loading, location.state]);
 
   return (
     <div className="min-h-screen bg-white pb-16">
@@ -55,7 +69,7 @@ const Products = () => {
       ) : (
         <div className="container mx-auto px-4 space-y-12 md:space-y-20">
           {CATEGORIES.map((cat) => (
-            <section key={cat.id}>
+            <section key={cat.id} id={`section-${slugify(cat.name)}`}>
 
               {/* Section header */}
               <div className="flex items-center justify-between mb-4 md:mb-8 border-b border-gray-100 pb-3 md:pb-4">
@@ -75,17 +89,16 @@ const Products = () => {
                 </button>
               </div>
 
-              {/*
-                Mobile  : horizontal grid-flow-col, each card = 44vw → 2 visible + scroll for rest
-                Desktop : normal 2-col → 4-col grid
-                No wrapper divs needed — auto-cols sets each grid item's width directly.
-              */}
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 lg:grid-cols-4 sm:gap-8">
                 {sections[cat.id]?.map((product) => (
                   <ProductCard
                     key={product.id}
                     product={product}
-                    onClick={() => navigate(`/products/${product.id}`)}
+                    onClick={() =>
+                      navigate(`/products/${product.id}`, {
+                        state: { fromSection: slugify(cat.name) },
+                      })
+                    }
                   />
                 ))}
                 {(!sections[cat.id] || sections[cat.id].length === 0) && (
