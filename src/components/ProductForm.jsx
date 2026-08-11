@@ -327,16 +327,40 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Editor Config (JSON)
-        </label>
+        <div className="flex items-center justify-between mb-1">
+          <label className="block text-sm font-medium text-gray-700">
+            Editor Config (JSON)
+          </label>
+          <button
+            type="button"
+            onClick={() => {
+              const samplePreset = {
+                enabled: true,
+                defaultWidth: 12,
+                defaultHeight: 8,
+                fonts: ["Cinzel", "Great Vibes", "Montserrat", "Playfair Display"],
+                textZones: [
+                  { id: "family_name", label: "Family Name / Main Text", placeholder: "The Patels", default: "The Patels" },
+                  { id: "house_number", label: "House Number / Flat No.", placeholder: "A-302", default: "A-302" }
+                ]
+              };
+              setFormData((prev) => ({
+                ...prev,
+                editorConfig: JSON.stringify(samplePreset, null, 2),
+              }));
+            }}
+            className="text-xs text-pink-600 hover:text-pink-700 font-semibold bg-pink-50 hover:bg-pink-100 px-2 py-1 rounded transition-colors"
+          >
+            ✨ Load Sample Customizer Preset
+          </button>
+        </div>
         <textarea
           name="editorConfig"
-          rows={5}
+          rows={6}
           value={formData.editorConfig}
           onChange={handleChange}
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 border p-2 font-mono text-sm"
-          placeholder='{"font": "Arial", ...}'
+          placeholder='{"enabled": true, "textZones": [...] }'
         />
       </div>
 
