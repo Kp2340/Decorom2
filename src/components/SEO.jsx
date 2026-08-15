@@ -18,6 +18,7 @@ const SEO = ({ title, description, keywords, image, url }) => {
       <title>{fullTitle}</title>
       <meta name="description" content={description || defaultDescription} />
       <meta name="keywords" content={keywords || defaultKeywords} />
+      <link rel="canonical" href={pageUrl} />
 
       {/* Local SEO — Ahmedabad / Gujarat */}
       <meta name="geo.region" content="IN-GJ" />
