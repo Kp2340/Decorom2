@@ -67,6 +67,22 @@ const App = () => (
                 <Route path="/customers" element={<Customers />} />
                 <Route path="/category/:materialName" element={<CategoryPage />} />
                 <Route path="/products/:productId" element={<ProductDetails />} />
+                <Route
+                  path="/products/:productId/edit"
+                  element={
+                    <ProtectedRoute>
+                      <AdminDashboard mode="edit" />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/products/:productId/delete"
+                  element={
+                    <ProtectedRoute>
+                      <AdminDashboard mode="delete" />
+                    </ProtectedRoute>
+                  }
+                />
                 <Route path="/products/:productId/checkout" element={<Checkout />} />
                 <Route path="/contact" element={<ContactUs />} />
                 <Route path="/about" element={<AboutUs />} />
@@ -86,6 +102,14 @@ const App = () => (
                   element={
                     <ProtectedRoute>
                       <AdminDashboard />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/products/:productId"
+                  element={
+                    <ProtectedRoute>
+                      <AdminDashboard mode="edit" />
                     </ProtectedRoute>
                   }
                 />

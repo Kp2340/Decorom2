@@ -4,9 +4,9 @@ import { createProduct, updateProduct, deleteProduct } from "../api/admin.api";
 import ProductForm from "../components/ProductForm";
 import ConfirmModal from "../components/ConfirmModal";
 import { useAuth } from "../auth/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-const AdminDashboard = () => {
+const AdminDashboard = ({ mode }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState("list"); // 'list', 'add', 'edit'
@@ -18,8 +18,9 @@ const AdminDashboard = () => {
 
   const { logout } = useAuth();
   const navigate = useNavigate();
+  const { productId } = useParams();
 
-  // Load products
+  // Load products or single product for direct edit/delete route
   const fetchProducts = async () => {
     setLoading(true);
     try {
@@ -35,8 +36,30 @@ const AdminDashboard = () => {
   };
 
   useEffect(() => {
-    fetchProducts();
-  }, []);
+    if (productId) {
+      const loadProductAction = async () => {
+        setLoading(true);
+        try {
+          const fullProduct = await getProductById(productId);
+          if (mode === "delete") {
+            setProductToDelete(fullProduct);
+            setIsDeleteModalOpen(true);
+          } else {
+            setSelectedProduct(fullProduct);
+            setView("edit");
+          }
+        } catch (err) {
+          alert(`Failed to fetch product details: ${err.message}`);
+          navigate("/admin");
+        } finally {
+          setLoading(false);
+        }
+      };
+      loadProductAction();
+    } else {
+      fetchProducts();
+    }
+  }, [productId, mode, navigate]);
 
   const handleCreate = async (formData) => {
     setActionLoading(true);
@@ -56,9 +79,13 @@ const AdminDashboard = () => {
     setActionLoading(true);
     try {
       await updateProduct(selectedProduct.id, formData);
-      setView("list");
-      setSelectedProduct(null);
-      await fetchProducts();
+      if (productId) {
+        navigate(`/products/${selectedProduct.id}`);
+      } else {
+        setView("list");
+        setSelectedProduct(null);
+        await fetchProducts();
+      }
     } catch (err) {
       alert(`Failed to update product: ${err.message}`);
     } finally {
@@ -78,7 +105,11 @@ const AdminDashboard = () => {
       await deleteProduct(productToDelete.id);
       setIsDeleteModalOpen(false);
       setProductToDelete(null);
-      await fetchProducts();
+      if (productId) {
+        navigate("/admin");
+      } else {
+        await fetchProducts();
+      }
     } catch (err) {
       alert(`Failed to delete product: ${err.message}`);
     } finally {
@@ -105,7 +136,7 @@ const AdminDashboard = () => {
     navigate("/admin/login");
   };
 
-  if (loading && view === "list" && products.length === 0) {
+  if (loading && view === "list" && products.length === 0 && !selectedProduct && !productToDelete) {
     return (
       <div className="p-8 text-center text-gray-500">Loading Dashboard...</div>
     );
@@ -211,7 +242,13 @@ const AdminDashboard = () => {
                 {view === "add" ? "Add New Product" : "Edit Product"}
               </h2>
               <button
-                onClick={() => setView("list")}
+                onClick={() => {
+                  if (productId) {
+                    navigate(`/products/${productId}`);
+                  } else {
+                    setView("list");
+                  }
+                }}
                 className="text-gray-600 hover:text-black"
               >
                 Cancel
@@ -221,7 +258,13 @@ const AdminDashboard = () => {
             <ProductForm
               initialData={selectedProduct}
               onSubmit={view === "add" ? handleCreate : handleUpdate}
-              onCancel={() => setView("list")}
+              onCancel={() => {
+                if (productId) {
+                  navigate(`/products/${productId}`);
+                } else {
+                  setView("list");
+                }
+              }}
               loading={actionLoading}
             />
           </div>
@@ -233,7 +276,13 @@ const AdminDashboard = () => {
         title="Delete Product"
         message={`Are you sure you want to delete "${productToDelete?.name}"? This action cannot be undone.`}
         onConfirm={confirmDelete}
-        onCancel={() => setIsDeleteModalOpen(false)}
+        onCancel={() => {
+          setIsDeleteModalOpen(false);
+          setProductToDelete(null);
+          if (productId) {
+            navigate(`/products/${productId}`);
+          }
+        }}
         loading={actionLoading}
       />
     </div>
@@ -241,3 +290,4 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
+

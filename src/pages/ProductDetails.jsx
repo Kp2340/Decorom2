@@ -10,6 +10,7 @@ import { CATEGORIES } from "../constants/categories";
 import { recordProductView } from "../utils/recentlyViewedUtils";
 import { isFixedPrice, getDisplayPrice } from "../utils/productUtils";
 import FreeDeliveryBanner from "../components/FreeDeliveryBanner";
+import { useAuth } from "../auth/AuthContext";
 
 const NameplateEditor = lazy(() => import("../editor/NameplateEditor"));
 
@@ -17,6 +18,7 @@ const ProductDetails = () => {
   const { productId } = useParams();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const { isAuthenticated } = useAuth();
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -171,6 +173,30 @@ const ProductDetails = () => {
         description={product?.description || "High-quality designer nameplate from Decorom."}
         image={product?.images?.[0] || ""}
       />
+
+      {/* Admin Quick Action Bar */}
+      {isAuthenticated && (
+        <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg flex items-center justify-between flex-wrap gap-2 text-sm">
+          <div className="flex items-center gap-2 font-medium text-amber-900">
+            <span>👑</span>
+            <span>Admin Mode</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Link
+              to={`/products/${product.id}/edit`}
+              className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded font-medium transition text-xs flex items-center gap-1 shadow-sm"
+            >
+              ✏️ Edit Product
+            </Link>
+            <Link
+              to={`/products/${product.id}/delete`}
+              className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded font-medium transition text-xs flex items-center gap-1 shadow-sm"
+            >
+              🗑️ Delete Product
+            </Link>
+          </div>
+        </div>
+      )}
 
       {/* Breadcrumb */}
       <nav className="mb-5 flex items-center gap-1.5 text-sm text-gray-500" aria-label="Breadcrumb">
