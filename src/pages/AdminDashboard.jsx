@@ -23,7 +23,7 @@ const AdminDashboard = () => {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const data = await getProducts(0, 50); // Fetch more for admin list
+      const data = await getProducts(0, 500); // Fetch more for admin list
       if (Array.isArray(data)) setProducts(data);
       else if (data && data.content) setProducts(data.content);
       else setProducts([]);
