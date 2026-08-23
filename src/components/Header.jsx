@@ -25,7 +25,7 @@ const Header = () => {
 
   const desktopLinkClass = ({ isActive }) =>
     `relative group py-2 px-1 transition-colors ${
-      isActive ? "text-pink-600" : "hover:text-pink-600 text-gray-800"
+      isActive ? "text-pink-600 font-semibold" : "hover:text-pink-600 text-gray-800"
     }`;
 
   const mobileLinkClass = ({ isActive }) =>
@@ -39,10 +39,10 @@ const Header = () => {
     <>
       {/* Header */}
       <header className="fixed w-full top-0 z-50 bg-yellow-100 border-b border-yellow-200">
-        <nav className="flex items-center justify-between h-16 px-4 md:px-8 lg:px-12 max-w-7xl mx-auto">
-          {/* Mobile Toggle Button (Left) */}
+        <nav className="flex items-center justify-between h-16 px-4 md:px-6 lg:px-12 max-w-7xl mx-auto">
+          {/* Mobile/Tablet Toggle Button (Left on screens < lg) */}
           <button
-            className="md:hidden flex flex-col justify-center items-center z-50 p-2 rounded-md hover:bg-gray-100 transition"
+            className="lg:hidden flex flex-col justify-center items-center z-50 p-2 rounded-md hover:bg-yellow-200/50 transition cursor-pointer"
             onClick={toggleMenu}
             aria-label="Toggle menu"
           >
@@ -63,19 +63,19 @@ const Header = () => {
             />
           </button>
 
-          {/* Logo (Center on mobile, left on desktop) */}
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:relative md:left-auto md:top-auto md:translate-x-0 md:translate-y-0 md:flex-1 md:flex md:justify-start z-40">
-            <NavLink to="/" onClick={closeMenu}>
+          {/* Logo (Center on mobile/tablet, left on desktop lg+) */}
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 lg:relative lg:left-auto lg:top-auto lg:translate-x-0 lg:translate-y-0 lg:flex-1 lg:flex lg:justify-start z-40">
+            <NavLink to="/" onClick={closeMenu} className="flex items-center">
               <img
                 src="/logo/logo.png"
                 alt="Decorom"
-                className="h-12 w-auto drop-shadow-sm"
+                className="h-10 sm:h-12 w-auto drop-shadow-sm shrink-0"
               />
             </NavLink>
           </div>
 
-          {/* Desktop Menu */}
-          <ul className="hidden md:flex items-center space-x-8 text-sm font-medium">
+          {/* Desktop Menu (Visible on lg+) */}
+          <ul className="hidden lg:flex items-center space-x-6 xl:space-x-8 text-sm font-medium">
             {menuItems.map((item) => (
               <li key={item.name}>
                 <NavLink to={item.path} className={desktopLinkClass} end={item.path === "/"}>
@@ -99,7 +99,7 @@ const Header = () => {
             <button
               onClick={toggleSearch}
               aria-label="Search"
-              className="p-2 rounded-full hover:bg-yellow-200/60 text-gray-800 transition-colors"
+              className="p-2 rounded-full hover:bg-yellow-200/60 text-gray-800 transition-colors cursor-pointer"
             >
               <Search className="w-5 h-5" />
             </button>
@@ -122,26 +122,26 @@ const Header = () => {
         {isSearchOpen && <SearchBar onClose={() => setIsSearchOpen(false)} />}
       </header>
 
-      {/* Mobile Overlay */}
+      {/* Mobile/Tablet Overlay */}
       <div
-        className={`fixed inset-0 bg-black/40 z-40 md:hidden transition-opacity duration-300 ${
+        className={`fixed inset-0 bg-black/40 z-40 lg:hidden transition-opacity duration-300 ${
           isMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
         onClick={closeMenu}
       />
 
-      {/* Mobile Menu Panel (Left Slide) */}
+      {/* Mobile/Tablet Menu Panel (Left Slide) */}
       <div
-        className={`fixed top-0 left-0 h-full w-4/5 max-w-xs bg-yellow-100 z-50 transform transition-transform duration-300 ease-out shadow-xl ${
+        className={`fixed top-0 left-0 h-full w-4/5 max-w-xs bg-yellow-100 z-50 transform transition-transform duration-300 ease-out shadow-xl lg:hidden ${
           isMenuOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         {/* Mobile Logo + Close */}
         <div className="flex items-center justify-between p-4 border-b border-yellow-200">
-          <img src="/logo/logo.png" alt="Decorom" className="h-12 w-auto" />
+          <img src="/logo/logo.png" alt="Decorom" className="h-10 sm:h-12 w-auto" />
           <button
             onClick={closeMenu}
-            className="p-2 md:hidden"
+            className="p-2 lg:hidden cursor-pointer"
             aria-label="Close menu"
           >
             <svg className="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
