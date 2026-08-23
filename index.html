@@ -2,22 +2,25 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/logo/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Decorom - Best designer nameplates in Ahmedabad, Gujarat. Custom handcrafted nameplates for homes and offices. Premium quality and modern designs." />
-    <meta name="keywords" content="Designer Nameplates Ahmedabad, Custom Nameplates Gujarat, Home Decor, LED Nameplates, Ahmedabad Nameplate Factory" />
+    
+    <!-- Favicon Suite & Web App Manifest -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/logo/logo.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/logo/logo.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/logo/logo.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#db2777" />
+
     <meta name="author" content="Decorom" />
-    <!-- Poppins is now self-hosted via @fontsource/poppins (no external CDN request) -->
     <title>Decorom | Premium Designer Nameplates in Ahmedabad</title>
 
-    <!-- Preconnect to origins used for the LCP hero image and product photos -->
+    <!-- Preconnect to image & font assets -->
     <link rel="preconnect" href="https://images.unsplash.com" />
     <link rel="preconnect" href="https://res.cloudinary.com" />
-
-    <!-- Devanagari/Gujarati fonts for the nameplate editor's custom text preview,
-         loaded non-blocking (print-media swap trick) so it never delays render -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Devanagari/Gujarati fonts for custom text preview -->
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&family=Tiro+Devanagari+Hindi:ital@0;1&display=swap"
@@ -34,6 +37,6 @@
 
   <body>
     <div id="root"></div>
+    <script type="module" src="./src/main.jsx"></script>
   </body>
-  <script type="module" src="./src/main.jsx"></script>
 </html>
