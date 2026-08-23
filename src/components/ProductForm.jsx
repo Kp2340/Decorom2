@@ -18,8 +18,120 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
   const [images, setImages] = useState([]); // File objects
   const [imagePreviews, setImagePreviews] = useState([]); // Preview URLs for new images
   const [existingImages, setExistingImages] = useState([]); // {id, url} objects
+  const [videoFile, setVideoFile] = useState(null); // File object for video
+  const [videoPreview, setVideoPreview] = useState(null); // Preview URL for new video
+  const [existingVideo, setExistingVideo] = useState(initialData?.videoUrl || null);
   const [error, setError] = useState("");
   const [uploadProgress, setUploadProgress] = useState(0);
+
+  const [draggedItem, setDraggedItem] = useState(null); // { index, type: 'existing' | 'new' }
+
+  // Drag and Drop Handlers
+  const handleDragStart = (e, index, type) => {
+    setDraggedItem({ index, type });
+    e.dataTransfer.effectAllowed = "move";
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+  };
+
+  const handleDrop = (e, targetIndex, type) => {
+    e.preventDefault();
+    if (!draggedItem || draggedItem.type !== type || draggedItem.index === targetIndex) return;
+
+    if (type === "existing") {
+      setExistingImages((prev) => {
+        const copy = [...prev];
+        const [moved] = copy.splice(draggedItem.index, 1);
+        copy.splice(targetIndex, 0, moved);
+        return copy;
+      });
+    } else if (type === "new") {
+      setImages((prev) => {
+        const copy = [...prev];
+        const [moved] = copy.splice(draggedItem.index, 1);
+        copy.splice(targetIndex, 0, moved);
+        return copy;
+      });
+      setImagePreviews((prev) => {
+        const copy = [...prev];
+        const [moved] = copy.splice(draggedItem.index, 1);
+        copy.splice(targetIndex, 0, moved);
+        return copy;
+      });
+    }
+    setDraggedItem(null);
+  };
+
+  // Move existing images left/right
+  const moveExistingImage = (index, direction) => {
+    const targetIndex = index + direction;
+    if (targetIndex < 0 || targetIndex >= existingImages.length) return;
+    setExistingImages((prev) => {
+      const copy = [...prev];
+      const temp = copy[index];
+      copy[index] = copy[targetIndex];
+      copy[targetIndex] = temp;
+      return copy;
+    });
+  };
+
+  // Move newly uploaded images left/right
+  const moveNewImage = (index, direction) => {
+    const targetIndex = index + direction;
+    if (targetIndex < 0 || targetIndex >= images.length) return;
+    setImages((prev) => {
+      const copy = [...prev];
+      const temp = copy[index];
+      copy[index] = copy[targetIndex];
+      copy[targetIndex] = temp;
+      return copy;
+    });
+    setImagePreviews((prev) => {
+      const copy = [...prev];
+      const temp = copy[index];
+      copy[index] = copy[targetIndex];
+      copy[targetIndex] = temp;
+      return copy;
+    });
+  };
+
+  // Handle single video selection (max 1 video validation)
+  const handleVideoChange = (e) => {
+    if (e.target.files) {
+      const files = Array.from(e.target.files);
+      if (files.length > 1) {
+        setError("Only 1 showcase video file is allowed per product.");
+        return;
+      }
+      const file = files[0];
+      if (!file) return;
+
+      if (!file.type.startsWith("video/")) {
+        setError("Please select a valid video file (.mp4, .webm, .mov).");
+        return;
+      }
+
+      if (file.size > 20 * 1024 * 1024) {
+        setError("Video size must be less than 20MB.");
+        return;
+      }
+
+      setError("");
+      setVideoFile(file);
+      if (videoPreview) URL.revokeObjectURL(videoPreview);
+      setVideoPreview(URL.createObjectURL(file));
+    }
+  };
+
+  const removeVideo = () => {
+    setVideoFile(null);
+    if (videoPreview) URL.revokeObjectURL(videoPreview);
+    setVideoPreview(null);
+    setExistingVideo(null);
+  };
 
   useEffect(() => {
     if (initialData) {
@@ -60,9 +172,10 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
   // Cleanup preview URLs on unmount
   useEffect(() => {
     return () => {
-      imagePreviews.forEach(url => URL.revokeObjectURL(url));
+      imagePreviews.forEach((url) => URL.revokeObjectURL(url));
+      if (videoPreview) URL.revokeObjectURL(videoPreview);
     };
-  }, [imagePreviews]);
+  }, [imagePreviews, videoPreview]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -77,17 +190,23 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
       const files = Array.from(e.target.files);
       const totalImages = existingImages.length + images.length + files.length;
 
-      if (totalImages > 10) {
-        setError(`Maximum 10 images allowed. You currently have ${existingImages.length + images.length} images.`);
+      if (totalImages > 5) {
+        setError(`Maximum 5 images allowed. You currently have ${existingImages.length + images.length} images.`);
+        return;
+      }
+
+      const totalBytes = [...images, ...files].reduce((sum, f) => sum + f.size, 0);
+      if (totalBytes > 20 * 1024 * 1024) {
+        setError("Total image upload size exceeds 20MB limit.");
         return;
       }
 
       setError("");
-      setImages(prev => [...prev, ...files]);
+      setImages((prev) => [...prev, ...files]);
 
       // Create preview URLs
-      const newPreviews = files.map(file => URL.createObjectURL(file));
-      setImagePreviews(prev => [...prev, ...newPreviews]);
+      const newPreviews = files.map((file) => URL.createObjectURL(file));
+      setImagePreviews((prev) => [...prev, ...newPreviews]);
     }
   };
 
@@ -161,6 +280,9 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
       customizable: Boolean(formData.customizable),
       featured: Boolean(formData.featured),
       editorConfig: formData.editorConfig || "{}", // backend expects string
+      imageOrder: existingImages
+        .map((img) => img.id)
+        .filter((id) => id && !String(id).startsWith("temp-") && !String(id).startsWith("link-")),
     };
 
     const data = new FormData();
@@ -170,6 +292,11 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
     images.forEach((file) => {
       data.append("images", file); // backend expects "images"
     });
+
+    // Append video if selected (max 1 video)
+    if (videoFile) {
+      data.append("video", videoFile);
+    }
 
     try {
       setUploadProgress(10);
@@ -237,6 +364,7 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
             <option value="Wooden">Wooden</option>
             <option value="MS">MS</option>
             <option value="SS">SS</option>
+            <option value="Resin">Resin</option>
           </select>
         </div>
 
@@ -366,64 +494,140 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Images ({existingImages.length + images.length}/10)
+          Images ({existingImages.length + images.length}/5)
         </label>
 
-        {/* Existing Images */}
+        {/* Existing Images with Drag & Drop + Reordering */}
         {existingImages.length > 0 && (
-          <div className="mb-3">
-            <p className="text-xs text-gray-600 mb-2">Existing Images</p>
-            <div className="grid grid-cols-4 gap-2">
-              {existingImages.map((img) => (
-                <div key={img.id} className="relative group">
-                  <img
-                    src={img.url}
-                    alt="Existing"
-                    className="h-24 w-full object-cover rounded border"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeExistingImage(img.id)}
-                    className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                    title="Delete image"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
+          <div className="mb-4">
+            <p className="text-xs font-semibold text-gray-600 mb-2">
+              Existing Images (🖐️ Drag &amp; Drop or use ◀ ▶ to reorder. #1 = Main Thumbnail)
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {existingImages.map((img, idx) => (
+                <div
+                  key={img.id}
+                  draggable
+                  onDragStart={(e) => handleDragStart(e, idx, "existing")}
+                  onDragOver={handleDragOver}
+                  onDrop={(e) => handleDrop(e, idx, "existing")}
+                  className={`relative group border rounded-lg overflow-hidden bg-gray-50 shadow-sm p-1 cursor-grab active:cursor-grabbing transition-transform ${
+                    draggedItem?.type === "existing" && draggedItem?.index === idx ? "opacity-40 scale-95 border-dashed border-pink-500" : ""
+                  }`}
+                >
+                  <div className="relative h-24 w-full">
+                    <img
+                      src={img.url}
+                      alt={`Image ${idx + 1}`}
+                      className="h-full w-full object-cover rounded pointer-events-none"
+                    />
+                    <span className="absolute top-1 left-1 bg-black/75 text-white text-[10px] font-bold px-1.5 py-0.5 rounded">
+                      {idx === 0 ? "★ #1 Main" : `#${idx + 1}`}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => removeExistingImage(img.id)}
+                      className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-90 hover:opacity-100 transition-opacity"
+                      title="Delete image"
+                    >
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+                  {/* Reorder Buttons */}
+                  <div className="flex items-center justify-between mt-1 px-1 text-xs">
+                    <button
+                      type="button"
+                      disabled={idx === 0}
+                      onClick={() => moveExistingImage(idx, -1)}
+                      className="px-2 py-0.5 bg-gray-200 hover:bg-gray-300 disabled:opacity-30 rounded text-gray-800 font-bold"
+                      title="Move Left"
+                    >
+                      ◀
+                    </button>
+                    <span className="text-[10px] text-gray-500 font-medium">Pos {idx + 1}</span>
+                    <button
+                      type="button"
+                      disabled={idx === existingImages.length - 1}
+                      onClick={() => moveExistingImage(idx, 1)}
+                      className="px-2 py-0.5 bg-gray-200 hover:bg-gray-300 disabled:opacity-30 rounded text-gray-800 font-bold"
+                      title="Move Right"
+                    >
+                      ▶
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         )}
 
-        {/* New Image Previews */}
+        {/* New Image Previews with Drag & Drop + Reordering */}
         {images.length > 0 && (
-          <div className="mb-3">
-            <p className="text-xs text-gray-600 mb-2">New Images (to be uploaded)</p>
-            <div className="grid grid-cols-4 gap-2">
-              {imagePreviews.map((preview, index) => (
-                <div key={index} className="relative group">
-                  <img
-                    src={preview}
-                    alt={`Preview ${index + 1}`}
-                    className="h-24 w-full object-cover rounded border border-green-500"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeNewImage(index)}
-                    className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                    title="Remove image"
+          <div className="mb-4">
+            <p className="text-xs font-semibold text-green-700 mb-2">
+              New Images to Upload (🖐️ Drag &amp; Drop or use ◀ ▶ to adjust order)
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {imagePreviews.map((preview, index) => {
+                const globalIndex = existingImages.length + index;
+                return (
+                  <div
+                    key={index}
+                    draggable
+                    onDragStart={(e) => handleDragStart(e, index, "new")}
+                    onDragOver={handleDragOver}
+                    onDrop={(e) => handleDrop(e, index, "new")}
+                    className={`relative group border border-green-400 rounded-lg overflow-hidden bg-green-50 shadow-sm p-1 cursor-grab active:cursor-grabbing transition-transform ${
+                      draggedItem?.type === "new" && draggedItem?.index === index ? "opacity-40 scale-95 border-dashed border-green-600" : ""
+                    }`}
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
-                  <div className="absolute bottom-1 left-1 bg-green-600 text-white text-xs px-1 rounded">
-                    New
+                    <div className="relative h-24 w-full">
+                      <img
+                        src={preview}
+                        alt={`New Preview ${index + 1}`}
+                        className="h-full w-full object-cover rounded pointer-events-none"
+                      />
+                      <span className="absolute top-1 left-1 bg-green-700 text-white text-[10px] font-bold px-1.5 py-0.5 rounded">
+                        {globalIndex === 0 ? "★ #1 Main" : `#${globalIndex + 1}`}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => removeNewImage(index)}
+                        className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-90 hover:opacity-100 transition-opacity"
+                        title="Remove image"
+                      >
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    </div>
+                    {/* Reorder Buttons */}
+                    <div className="flex items-center justify-between mt-1 px-1 text-xs">
+                      <button
+                        type="button"
+                        disabled={index === 0}
+                        onClick={() => moveNewImage(index, -1)}
+                        className="px-2 py-0.5 bg-green-200 hover:bg-green-300 disabled:opacity-30 rounded text-green-900 font-bold"
+                        title="Move Left"
+                      >
+                        ◀
+                      </button>
+                      <span className="text-[10px] text-green-700 font-medium">New #{index + 1}</span>
+                      <button
+                        type="button"
+                        disabled={index === images.length - 1}
+                        onClick={() => moveNewImage(index, 1)}
+                        className="px-2 py-0.5 bg-green-200 hover:bg-green-300 disabled:opacity-30 rounded text-green-900 font-bold"
+                        title="Move Right"
+                      >
+                        ▶
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}
@@ -434,12 +638,53 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
           multiple
           accept="image/*"
           onChange={handleImageChange}
-          disabled={existingImages.length + images.length >= 10}
+          disabled={existingImages.length + images.length >= 5}
           className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-pink-50 file:text-pink-700 hover:file:bg-pink-100 disabled:opacity-50"
         />
         <p className="text-xs text-gray-500 mt-1">
-          Select up to 10 images. You can add more images or remove existing ones.
+          Select up to 5 images (max 20MB total combined). Position #1 will automatically serve as the primary thumbnail.
         </p>
+      </div>
+
+      {/* Video Upload Section (Max 1 Video, Max 20MB) */}
+      <div className="pt-4 border-t border-gray-200">
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Product Showcase Video (Max 1 Video, max 20MB)
+        </label>
+        
+        {videoPreview || existingVideo ? (
+          <div className="relative max-w-sm rounded-lg overflow-hidden border border-gray-300 bg-black p-2">
+            <video
+              src={videoPreview || existingVideo}
+              controls
+              className="w-full h-48 object-contain rounded"
+            />
+            <div className="flex items-center justify-between mt-2 text-xs text-white px-1">
+              <span className="text-green-400 font-medium">
+                {videoPreview ? "📹 New Video Selected" : "📹 Active Video"}
+              </span>
+              <button
+                type="button"
+                onClick={removeVideo}
+                className="px-2 py-1 bg-red-600 hover:bg-red-700 text-white rounded font-medium transition"
+              >
+                Remove Video
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div>
+            <input
+              type="file"
+              accept="video/mp4,video/webm,video/quicktime"
+              onChange={handleVideoChange}
+              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100"
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              Upload 1 video file (.mp4 or .webm, max 20MB) to display in the Product Showcase on the product page.
+            </p>
+          </div>
+        )}
 
         {/* Upload Progress */}
         {uploadProgress > 0 && uploadProgress < 100 && (

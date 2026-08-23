@@ -46,3 +46,11 @@ export const deleteProductImage = async (productId, imageId) => {
   );
   return response;
 };
+
+export const reorderProductImages = async (productId, imageIdsInOrder) => {
+  const response = await apiClient.put(
+    `/api/admin/products/${productId}/images/reorder`,
+    imageIdsInOrder,
+  );
+  return response;
+};

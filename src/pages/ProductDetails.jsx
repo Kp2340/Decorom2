@@ -336,6 +336,26 @@ const ProductDetails = () => {
         </div>
       </div>
 
+      {/* Product Showcase Video (if product has videoUrl) */}
+      {(product.videoUrl || product.video) && (
+        <div className="mt-10 p-6 bg-gradient-to-br from-gray-900 via-black to-purple-950 rounded-2xl text-white shadow-xl">
+          <div className="flex items-center gap-2 mb-4">
+            <span className="text-xl">📹</span>
+            <h2 className="text-xl md:text-2xl font-bold tracking-wide">Product Showcase Video</h2>
+          </div>
+          <div className="relative aspect-video max-w-3xl mx-auto rounded-xl overflow-hidden shadow-2xl bg-black border border-white/10">
+            <video
+              src={product.videoUrl || product.video}
+              controls
+              loop
+              playsInline
+              preload="metadata"
+              className="w-full h-full object-contain"
+            />
+          </div>
+        </div>
+      )}
+
       {/* You may also like — same material, excludes this product */}
       {relatedProducts.length > 0 && (
         <div className="mt-12 md:mt-16">

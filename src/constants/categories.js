@@ -56,4 +56,15 @@ export const CATEGORIES = [
       CLD("v1773567450/decorom/products/m0ufm3tqwmijg3ja6l51.png"), // Omkar Mantra backlit
     ],
   },
+  {
+    name: "Resin",
+    id: "6",
+    images: [
+      CLD("v1771703476/decorom/products/dtv6nu8f3rfanmkfzcin.png"), // Ocean Blue Resin Art
+      CLD("v1771698479/decorom/products/zeqwbzoc9xjumzm5ftua.png"), // Golden Flake Resin Nameplate
+      CLD("v1773569229/decorom/products/pct1r7ntizduqwjvfx5g.png"), // Floral Pressed Resin Plate
+      CLD("v1771703054/decorom/products/n7fselgisyplrzpktr8z.png"), // Marble Resin Divine Custom
+      CLD("v1771698199/decorom/products/iaybtun9ujsswnendqao.png"), // Agate Geode Resin Craft
+    ],
+  },
 ];

@@ -7,7 +7,7 @@ const materials = [
   { id: "3", label: "Wooden" },
   { id: "4", label: "Stainless Steel" },
   { id: "5", label: "Mild Steel" },
-  { id: "6", label: "Resine" },
+  { id: "6", label: "Resin" },
 ];
 
 const shapes = [
