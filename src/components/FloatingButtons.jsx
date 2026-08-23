@@ -31,15 +31,9 @@ const FloatingButtons = () => (
       rel="noopener noreferrer"
       title="Chat on WhatsApp"
       aria-label="Chat with Decorom on WhatsApp"
-      className="group relative flex items-center justify-center rounded-full bg-green-500 hover:bg-green-600 text-white shadow-lg transition-transform duration-200 hover:scale-110 active:scale-95 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2"
+      className="group relative flex items-center justify-center rounded-full bg-green-500 hover:bg-green-600 text-white shadow-xl shadow-green-600/30 transition-transform duration-200 hover:scale-110 active:scale-95 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2"
       style={{ width: 52, height: 52 }}
     >
-      {/* Subtle pulse ring */}
-      <span
-        className="absolute inset-0 rounded-full bg-green-400 opacity-40 animate-ping"
-        style={{ animationDuration: "2.5s" }}
-        aria-hidden="true"
-      />
       <WhatsAppIcon />
       {/* Tooltip */}
       <span className="absolute right-full mr-3 whitespace-nowrap bg-gray-900 text-white text-xs font-medium px-2.5 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">

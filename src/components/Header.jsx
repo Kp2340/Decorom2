@@ -39,10 +39,10 @@ const Header = () => {
     <>
       {/* Header */}
       <header className="fixed w-full top-0 z-50 bg-yellow-100 border-b border-yellow-200">
-        <nav className="flex items-center justify-between h-16 px-4 md:px-6 lg:px-12 max-w-7xl mx-auto">
-          {/* Mobile/Tablet Toggle Button (Left on screens < lg) */}
+        <nav className="flex items-center justify-between h-16 px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
+          {/* Mobile/Tablet Toggle Button (Left on screens < xl) */}
           <button
-            className="lg:hidden flex flex-col justify-center items-center z-50 p-2 rounded-md hover:bg-yellow-200/50 transition cursor-pointer"
+            className="xl:hidden flex flex-col justify-center items-center z-50 p-2 rounded-md hover:bg-yellow-200/50 transition cursor-pointer"
             onClick={toggleMenu}
             aria-label="Toggle menu"
           >
@@ -63,8 +63,8 @@ const Header = () => {
             />
           </button>
 
-          {/* Logo (Center on mobile/tablet, left on desktop lg+) */}
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 lg:relative lg:left-auto lg:top-auto lg:translate-x-0 lg:translate-y-0 lg:flex-1 lg:flex lg:justify-start z-40">
+          {/* Logo (Center on mobile/tablet < xl, left on desktop xl+) */}
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 xl:relative xl:left-auto xl:top-auto xl:translate-x-0 xl:translate-y-0 xl:flex-1 xl:flex xl:justify-start z-40">
             <NavLink to="/" onClick={closeMenu} className="flex items-center">
               <img
                 src="/logo/logo.png"
@@ -74,8 +74,8 @@ const Header = () => {
             </NavLink>
           </div>
 
-          {/* Desktop Menu (Visible on lg+) */}
-          <ul className="hidden lg:flex items-center space-x-6 xl:space-x-8 text-sm font-medium">
+          {/* Desktop Menu (Visible on xl+ 1280px+) */}
+          <ul className="hidden xl:flex items-center space-x-6 xl:space-x-8 text-sm font-medium">
             {menuItems.map((item) => (
               <li key={item.name}>
                 <NavLink to={item.path} className={desktopLinkClass} end={item.path === "/"}>
@@ -124,7 +124,7 @@ const Header = () => {
 
       {/* Mobile/Tablet Overlay */}
       <div
-        className={`fixed inset-0 bg-black/40 z-40 lg:hidden transition-opacity duration-300 ${
+        className={`fixed inset-0 bg-black/40 z-40 xl:hidden transition-opacity duration-300 ${
           isMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
         onClick={closeMenu}
@@ -132,7 +132,7 @@ const Header = () => {
 
       {/* Mobile/Tablet Menu Panel (Left Slide) */}
       <div
-        className={`fixed top-0 left-0 h-full w-4/5 max-w-xs bg-yellow-100 z-50 transform transition-transform duration-300 ease-out shadow-xl lg:hidden ${
+        className={`fixed top-0 left-0 h-full w-4/5 max-w-xs bg-yellow-100 z-50 transform transition-transform duration-300 ease-out shadow-xl xl:hidden ${
           isMenuOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -141,7 +141,7 @@ const Header = () => {
           <img src="/logo/logo.png" alt="Decorom" className="h-10 sm:h-12 w-auto" />
           <button
             onClick={closeMenu}
-            className="p-2 lg:hidden cursor-pointer"
+            className="p-2 xl:hidden cursor-pointer"
             aria-label="Close menu"
           >
             <svg className="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
