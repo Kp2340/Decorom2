@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { ChevronDown, Search } from "lucide-react";
+import { Helmet } from "react-helmet-async";
 
 const DEFAULT_FAQS = [
   {
@@ -85,8 +86,26 @@ const FAQ = () => {
     );
   }, [query]);
 
+  // Generate valid schema.org/FAQPage JSON-LD Structured Data
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: ALL_FAQS.map((faq) => ({
+      "@type": "Question",
+      name: faq.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.a,
+      },
+    })),
+  };
+
   return (
     <section className="py-12 bg-white">
+      <Helmet>
+        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
+      </Helmet>
+
       <div className="max-w-3xl mx-auto px-4">
         <div className="text-center mb-8">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Frequently Asked Questions</h2>
@@ -111,7 +130,7 @@ const FAQ = () => {
             {filteredFaqs.map((faq) => (
               <div key={faq.q} className="border border-gray-200 rounded-xl overflow-hidden">
                 <button
-                  className="w-full flex items-center justify-between px-5 py-4 text-left bg-white hover:bg-gray-50 transition-colors"
+                  className="w-full flex items-center justify-between px-5 py-4 text-left bg-white hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-pink-500 cursor-pointer"
                   onClick={() => setOpen(open === faq.q ? null : faq.q)}
                   aria-expanded={open === faq.q}
                 >
@@ -122,12 +141,11 @@ const FAQ = () => {
                   />
                 </button>
 
-                {/* Smooth animated answer */}
                 <div
                   className="overflow-hidden transition-all duration-300 ease-in-out"
                   style={{ maxHeight: open === faq.q ? "200px" : "0px" }}
                 >
-                  <p className="px-5 pb-4 pt-1 text-gray-500 text-sm leading-relaxed border-t border-gray-100">
+                  <p className="px-5 pb-4 pt-1 text-gray-600 text-sm leading-relaxed border-t border-gray-100">
                     {faq.a}
                   </p>
                 </div>

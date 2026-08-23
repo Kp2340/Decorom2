@@ -1,9 +1,20 @@
+# Decorom Production Crawler Rules
 User-agent: *
 Allow: /
+Allow: /products
+Allow: /category/
+Allow: /custom-design
+Allow: /about
+Allow: /contact
+
+# Private routes & admin API paths
 Disallow: /admin
 Disallow: /admin/
+Disallow: /api/
 Disallow: /*/checkout
 Disallow: /track/
 Disallow: /payment-success
+Disallow: /search?*
 
+# Explicit Sitemap Location
 Sitemap: https://www.decorom.in/sitemap.xml
