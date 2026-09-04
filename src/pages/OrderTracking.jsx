@@ -110,7 +110,7 @@ const OrderTracking = () => {
                   <div className="flex items-center gap-2 mb-1">
                       <h1 className="text-3xl font-black text-gray-900">Track Order</h1>
                       <span className="text-[9px] bg-gray-900 text-white px-2 py-0.5 rounded font-black tracking-widest uppercase">
-                          {orderData?.orderType === 'OFFLINE' ? 'OFFLINE' : 'ONLINE'} TRACK
+                          {orderData?.orderType === 'OFFLINE' ? 'CUSTOM ORDER' : 'ONLINE ORDER'}
                       </span>
                   </div>
                   <p className="text-xs text-gray-400 font-mono tracking-tighter">ID: {orderData?.orderId}</p>

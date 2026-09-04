@@ -2,7 +2,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
 
-const INSTAGRAM_URL = "https://instagram.com/decorom.in";
+const INSTAGRAM_URL = "https://www.instagram.com/decorom.in/?utm_source=decorom_website&utm_medium=referral&utm_campaign=instagram_reels_grid";
 
 // Client's latest Instagram reels — displayed via official embed
 const REELS = [

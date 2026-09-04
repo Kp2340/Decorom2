@@ -14,6 +14,10 @@ const QuadImageTile = ({ categoryName, images = [] }) => {
               src={src}
               alt={`${categoryName} nameplate ${index + 1}`}
               loading="lazy"
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = PLACEHOLDER_IMAGE;
+              }}
               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
             />
           </div>

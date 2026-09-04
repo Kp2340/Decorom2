@@ -5,7 +5,7 @@ import ProductCard from "../components/ProductCard";
 import ProductFilters from "../components/ProductFilters";
 import Pagination from "../components/Pagination";
 import SEO from "../components/SEO";
-import { FAQStructuredData, BreadcrumbStructuredData } from "../components/StructuredData";
+import { FAQStructuredData, BreadcrumbStructuredData, CollectionPageStructuredData } from "../components/StructuredData";
 import { CATEGORIES, CATEGORY_SEO_DATA, slugify } from "../constants/categories";
 
 const PAGE_SIZE = 12;
@@ -180,6 +180,12 @@ const CategoryPage = () => {
       />
       <FAQStructuredData faqs={seoConfig.faqs} />
       <BreadcrumbStructuredData items={breadcrumbItems} />
+      <CollectionPageStructuredData 
+        name={currentCategory.name} 
+        description={seoConfig.description} 
+        url={canonicalUrl} 
+        products={filteredProducts} 
+      />
 
       {/* Category Navigation Header */}
       <div className="bg-gray-50 border-b border-gray-100 overflow-x-auto scrollbar-hide">

@@ -91,3 +91,84 @@ export const BreadcrumbStructuredData = ({ items }) => {
     </Helmet>
   );
 };
+
+/**
+ * Store & LocalBusiness JSON-LD schema for Google AI Overviews & Local Search
+ */
+export const StoreStructuredData = () => {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": ["Store", "LocalBusiness"],
+    "@id": "https://www.decorom.in/#store",
+    "name": "Decorom - Premium Custom Nameplates & Home Decor",
+    "url": "https://www.decorom.in",
+    "logo": "https://www.decorom.in/logo/logo.png",
+    "image": "https://www.decorom.in/logo/hero-bg.jpg",
+    "description": "Decorom is India's leading manufacturer of handcrafted acrylic, wooden, ACP, LED, and stainless steel door nameplates in Ahmedabad, Gujarat.",
+    "telephone": "+91-9016707658",
+    "email": "decorom213@gmail.com",
+    "priceRange": "₹₹ (₹799 - ₹4999)",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Shop A/7, Second Floor, Shreekunj Shopping Centre, Near HDFC Bank, K.K. Nagar, Ghatlodiya",
+      "addressLocality": "Ahmedabad",
+      "addressRegion": "Gujarat",
+      "postalCode": "380061",
+      "addressCountry": "IN",
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": "23.0693",
+      "longitude": "72.5503",
+    },
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+        "opens": "09:00",
+        "closes": "19:00",
+      },
+    ],
+    "sameAs": [
+      "https://www.facebook.com/decoromindia/",
+      "https://www.instagram.com/decorom.in/",
+    ],
+  };
+
+  return (
+    <Helmet>
+      <script type="application/ld+json">{JSON.stringify(schema)}</script>
+    </Helmet>
+  );
+};
+
+/**
+ * CollectionPage JSON-LD schema for Google SGE / AI Overviews Category Indexing
+ */
+export const CollectionPageStructuredData = ({ name, description, url, products = [] }) => {
+  if (!name) return null;
+
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": name,
+    "description": description || `Browse custom ${name} collection by Decorom.`,
+    "url": url || (typeof window !== "undefined" ? window.location.href : "https://www.decorom.in"),
+    "mainEntity": {
+      "@type": "ItemList",
+      "numberOfItems": products.length,
+      "itemListElement": products.slice(0, 12).map((prod, index) => ({
+        "@type": "ListItem",
+        "position": index + 1,
+        "name": prod.name,
+        "url": `https://www.decorom.in/product/${prod.id}`,
+      })),
+    },
+  };
+
+  return (
+    <Helmet>
+      <script type="application/ld+json">{JSON.stringify(schema)}</script>
+    </Helmet>
+  );
+};

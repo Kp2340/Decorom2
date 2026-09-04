@@ -15,7 +15,7 @@ const CategoryBrowse = () => {
         </p>
       </div>
 
-      <div className="container mx-auto px-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-5 md:gap-8">
+      <div className="max-w-6xl mx-auto px-4 grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
         {CATEGORIES.map((cat) => (
           <div
             key={cat.name}

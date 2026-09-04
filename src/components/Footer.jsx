@@ -95,7 +95,7 @@ const Footer = () => (
             <WhatsappIcon /> {CONTACT_PHONE}
           </a>
           <a
-            href="https://instagram.com/decorom.in"
+            href="https://www.instagram.com/decorom.in/?utm_source=decorom_website&utm_medium=referral&utm_campaign=footer_social"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 hover:text-pink-600 transition-colors"
@@ -103,7 +103,7 @@ const Footer = () => (
             <InstagramIcon /> @decorom.in
           </a>
           <a
-            href="https://facebook.com/decoromindia"
+            href="https://www.facebook.com/decoromindia/?utm_source=decorom_website&utm_medium=referral&utm_campaign=footer_social"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 hover:text-blue-700 transition-colors"

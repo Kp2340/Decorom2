@@ -229,7 +229,7 @@ const Checkout = () => {
       } else {
         // Response exists but has no actionable data — surface a visible error
         setSuccess(false);
-        setError("Checkout failed: unexpected server response. Please try again.");
+        setError("Unable to complete checkout. Please check your details and try again.");
       }
     } catch (err) {
       setError(err.message || "Checkout failed. Please try again.");
@@ -253,7 +253,7 @@ const Checkout = () => {
 
           <div className="bg-white p-4 rounded border border-green-200 mb-6">
             <p className="text-sm text-gray-500 uppercase tracking-wide font-semibold">
-              Final Price (Confirmed)
+              Total Amount Paid
             </p>
             <p className="text-4xl font-bold text-gray-900 mt-2">
               ₹{backendPrice}
@@ -363,7 +363,7 @@ const Checkout = () => {
               <FreeDeliveryBanner variant="inline" className="mt-3" />
 
               <p className="mt-2 text-[10px] text-gray-500">
-                * Fixed price — final amount confirmed by server.
+                ✓ Inclusive of all taxes & free delivery
               </p>
             </div>
           ) : (
@@ -391,7 +391,7 @@ const Checkout = () => {
               </>
             )}
             <p className="text-[10px] text-gray-500 mt-1">
-              * Final price confirmed by server.
+              ✓ Guaranteed final price upon order placement
             </p>
           </div>
           )}

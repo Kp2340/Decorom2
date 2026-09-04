@@ -134,7 +134,7 @@ const ProductPriceCalculator = ({ product, onChange, externalDimensions = null }
             <span className="text-2xl font-bold text-pink-600">
               ₹{Number(basePrice).toLocaleString()}
             </span>
-            <p className="text-[10px] text-gray-400">Fixed price · confirmed by server</p>
+            <p className="text-[10px] text-gray-400">Inclusive of all taxes</p>
           </div>
         </div>
       </div>
@@ -204,16 +204,16 @@ const ProductPriceCalculator = ({ product, onChange, externalDimensions = null }
 
       <div className="space-y-1 text-[10px] text-gray-500 uppercase tracking-tight mb-3">
         <p>Min: 1x1" | Max: 96x96"</p>
-        <p>Material Strategy: {material || "Default"}</p>
+        <p>Material: {material || "Standard"}</p>
       </div>
 
       <div className="flex items-center justify-between border-t pt-3">
-        <span className="text-gray-600 font-medium">Authoritative Price:</span>
+        <span className="text-gray-600 font-medium">Total Price:</span>
         <div className="text-right">
           <span className="text-2xl font-bold text-pink-600">
             ₹{finalPrice.toLocaleString()}
           </span>
-          <p className="text-[10px] text-gray-400">Secure Backend Sync</p>
+          <p className="text-[10px] text-gray-400">✓ Inclusive of all taxes</p>
         </div>
       </div>
     </div>
