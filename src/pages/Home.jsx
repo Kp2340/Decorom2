@@ -16,10 +16,10 @@ const LOCAL_BUSINESS_JSON_LD = JSON.stringify({
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
   name: "Decorom",
-  image: "https://decorom.in/logo/logo.png",
+  image: "https://www.decorom.in/logo/logo.png",
   telephone: "+91-9016707658",
   email: "decorom213@gmail.com",
-  url: "https://decorom.in",
+  url: "https://www.decorom.in",
   address: {
     "@type": "PostalAddress",
     streetAddress:

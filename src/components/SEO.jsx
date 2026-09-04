@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet-async";
 
-const DEFAULT_OG_IMAGE = "https://decorom.in/logo/logo.png";
+const DEFAULT_OG_IMAGE = "https://www.decorom.in/logo/logo.png";
 const BASE_DOMAIN = "https://www.decorom.in";
 
 const SEO = ({ title, description, keywords, image, url, noindex = false }) => {
