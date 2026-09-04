@@ -16,8 +16,7 @@ const PRODUCT_VISUALS = [
 ];
 
 const Hero = () => (
-  <section className="relative w-full flex items-center justify-center overflow-hidden bg-gray-900"
-    style={{ height: "calc(100vh - 64px)" }}>
+  <section className="relative w-full min-h-[75vh] md:h-[calc(100vh-64px)] flex items-center justify-center overflow-hidden bg-gray-900 py-10 md:py-0">
 
     {/* Background */}
     <img
@@ -44,7 +43,7 @@ const Hero = () => (
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-5 leading-tight"
+          className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-3 md:mb-5 leading-tight"
         >
           Unique Nameplates for{" "}
           <span className="text-pink-400">Your Dream Home</span>
@@ -54,7 +53,7 @@ const Hero = () => (
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-base md:text-lg text-gray-200 mb-8 max-w-lg mx-auto lg:mx-0"
+          className="text-sm md:text-lg text-gray-200 mb-6 md:mb-8 max-w-lg mx-auto lg:mx-0"
         >
           Handcrafted with passion, designed with precision. Elevate your
           entrance with our premium designer nameplates.
@@ -64,17 +63,17 @@ const Hero = () => (
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4"
+          className="flex flex-row flex-wrap items-center justify-center lg:justify-start gap-3"
         >
           <Link
             to="/products"
-            className="px-8 py-3.5 bg-pink-600 hover:bg-pink-700 text-white font-bold rounded-full transition-all transform hover:scale-105 shadow-lg shadow-pink-600/30"
+            className="px-6 py-3 md:px-8 md:py-3.5 bg-pink-600 hover:bg-pink-700 text-white text-sm md:text-base font-bold rounded-full transition-all transform hover:scale-105 shadow-lg shadow-pink-600/30"
           >
             Explore Collection
           </Link>
           <Link
             to="/custom-design"
-            className="px-8 py-3.5 bg-white/15 hover:bg-white/25 text-white font-bold rounded-full backdrop-blur-md transition-all border border-white/30"
+            className="px-6 py-3 md:px-8 md:py-3.5 bg-white/15 hover:bg-white/25 text-white text-sm md:text-base font-bold rounded-full backdrop-blur-md transition-all border border-white/30"
           >
             Custom Design
           </Link>

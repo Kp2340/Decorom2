@@ -25,12 +25,19 @@ const LOCAL_BUSINESS_JSON_LD = JSON.stringify({
     streetAddress:
       "Shop A/7, Second Floor, Shreekunj Shopping Centre, Near HDFC Bank, K.K. Nagar, Ghatlodiya",
     addressLocality: "Ahmedabad",
+    addressRegion: "Gujarat",
     postalCode: "380061",
     addressCountry: "IN",
   },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: "23.0693",
+    longitude: "72.5503",
+  },
+  areaServed: ["Ahmedabad", "Gandhinagar", "Vadodara", "Surat", "Gujarat", "India"],
   openingHours: "Mo-Sa 09:00-19:00",
-  priceRange: "₹₹",
-  servesCuisine: undefined,
+  priceRange: "₹₹ (₹799 - ₹4999)",
+  paymentAccepted: "Cash, Credit Card, UPI, Net Banking",
   hasMap:
     "https://www.google.com/maps/place/Decorom/@23.067602,72.5427599,17z",
 });

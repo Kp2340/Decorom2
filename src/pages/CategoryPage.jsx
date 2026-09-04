@@ -5,8 +5,8 @@ import ProductCard from "../components/ProductCard";
 import ProductFilters from "../components/ProductFilters";
 import Pagination from "../components/Pagination";
 import SEO from "../components/SEO";
-
-import { CATEGORIES, slugify } from "../constants/categories";
+import { FAQStructuredData, BreadcrumbStructuredData } from "../components/StructuredData";
+import { CATEGORIES, CATEGORY_SEO_DATA, slugify } from "../constants/categories";
 
 const PAGE_SIZE = 12;
 
@@ -155,12 +155,31 @@ const CategoryPage = () => {
     });
   }, [products, minPrice, maxPrice, ledOnly]);
 
+  const categorySlug = slugify(currentCategory.name);
+  const seoConfig = CATEGORY_SEO_DATA[categorySlug] || {
+    title: `${currentCategory.name} Nameplates in Ahmedabad | Decorom`,
+    description: `Explore our handcrafted ${currentCategory.name} nameplates for home entrance. Weather-resistant designs made in Ahmedabad.`,
+    keywords: `${currentCategory.name.toLowerCase()} name plate maker near me, custom ${currentCategory.name.toLowerCase()} nameplate ahmedabad`,
+    faqs: [],
+  };
+
+  const canonicalUrl = `https://www.decorom.in/category/${categorySlug}`;
+  const breadcrumbItems = [
+    { name: "Home", url: "https://www.decorom.in" },
+    { name: "Categories", url: "https://www.decorom.in/products" },
+    { name: "Nameplates", url: canonicalUrl },
+  ];
+
   return (
     <div className="min-h-screen bg-white">
       <SEO 
-        title={`${currentCategory.name} Nameplates`} 
-        description={`Explore our best-selling ${currentCategory.name} nameplates. Custom designs handcrafted in Ahmedabad.`}
+        title={seoConfig.title} 
+        description={seoConfig.description}
+        keywords={seoConfig.keywords}
+        url={canonicalUrl}
       />
+      <FAQStructuredData faqs={seoConfig.faqs} />
+      <BreadcrumbStructuredData items={breadcrumbItems} />
 
       {/* Category Navigation Header */}
       <div className="bg-gray-50 border-b border-gray-100 overflow-x-auto scrollbar-hide">
@@ -188,7 +207,9 @@ const CategoryPage = () => {
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
             {currentCategory.name} Nameplates
           </h1>
-          <p className="text-gray-500">Browse our full range of {currentCategory.name} designs.</p>
+          <p className="text-gray-500">
+            Handcrafted {currentCategory.name.toLowerCase()} door nameplates in Ahmedabad — weatherproof & customizable.
+          </p>
         </div>
 
         {/* Refinements: shape (server-filtered) + price range / LED (client-filtered) */}
@@ -256,6 +277,23 @@ const CategoryPage = () => {
               onPageChange={handlePageChange}
             />
           </>
+        )}
+
+        {/* On-Page FAQ Section for AEO (Answer Engine Optimization) */}
+        {seoConfig.faqs && seoConfig.faqs.length > 0 && (
+          <div className="mt-16 pt-10 border-t border-gray-200">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+              Frequently Asked Questions — {currentCategory.name} Nameplates
+            </h2>
+            <div className="space-y-4 max-w-4xl">
+              {seoConfig.faqs.map((faq, index) => (
+                <div key={index} className="bg-yellow-50/60 p-5 rounded-2xl border border-yellow-100">
+                  <h3 className="font-semibold text-gray-900 text-lg mb-2">{faq.q}</h3>
+                  <p className="text-gray-700 text-sm leading-relaxed">{faq.a}</p>
+                </div>
+              ))}
+            </div>
+          </div>
         )}
       </div>
     </div>

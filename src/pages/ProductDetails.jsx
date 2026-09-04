@@ -5,6 +5,7 @@ import ProductImageCarousel from "../components/ProductImageCarousel";
 import ProductPriceCalculator from "../components/ProductPriceCalculator";
 import ProductCard from "../components/ProductCard";
 import SEO from "../components/SEO";
+import { ProductStructuredData, BreadcrumbStructuredData } from "../components/StructuredData";
 import { CONTACT_WHATSAPP_URL, GOOGLE_MAPS_REVIEWS_URL } from "../constants/contact";
 import { CATEGORIES } from "../constants/categories";
 import { recordProductView } from "../utils/recentlyViewedUtils";
@@ -166,13 +167,28 @@ const ProductDetails = () => {
 
   const displayPrice = getDisplayPrice(product, config && config.isValid ? config.price : 0);
 
+  const productUrl = `https://www.decorom.in/products/${product.id}`;
+  const highCtrTitle = `${product.name} | Custom Door Nameplate in Ahmedabad`;
+  const highCtrDesc = product.description 
+    ? `${product.description.slice(0, 140)}... Handcrafted in Ahmedabad with free doorstep delivery across India.`
+    : `Buy ${product.name} online at Decorom. Custom handcrafted designer nameplate with weather-resistant finish. Fast delivery in Ahmedabad & India.`;
+
+  const breadcrumbs = [
+    { name: "Home", url: "https://www.decorom.in" },
+    { name: "Products", url: "https://www.decorom.in/products" },
+    { name: product.name, url: productUrl },
+  ];
+
   return (
     <div className="container mx-auto px-4 py-8 pb-28 md:pb-8">
       <SEO
-        title={product?.name || "Product Details"}
-        description={product?.description || "High-quality designer nameplate from Decorom."}
+        title={highCtrTitle}
+        description={highCtrDesc}
         image={product?.images?.[0] || ""}
+        url={productUrl}
       />
+      <ProductStructuredData product={product} />
+      <BreadcrumbStructuredData items={breadcrumbs} />
 
       {/* Admin Quick Action Bar */}
       {isAuthenticated && (
