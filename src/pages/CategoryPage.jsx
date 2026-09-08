@@ -184,7 +184,7 @@ const CategoryPage = () => {
         name={currentCategory.name} 
         description={seoConfig.description} 
         url={canonicalUrl} 
-        products={filteredProducts} 
+        products={visibleProducts} 
       />
 
       {/* Category Navigation Header */}
