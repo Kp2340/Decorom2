@@ -166,6 +166,14 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
       } else if (initialData.link) {
         setExistingImages([{ id: 'link-0', url: initialData.link }]);
       }
+
+      // Handle existing video from backend
+      setExistingVideo(initialData.videoUrl || initialData.video || null);
+      setVideoFile(null);
+      if (videoPreview) {
+        URL.revokeObjectURL(videoPreview);
+        setVideoPreview(null);
+      }
     }
   }, [initialData]);
 
@@ -283,6 +291,7 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
       imageOrder: existingImages
         .map((img) => img.id)
         .filter((id) => id && !String(id).startsWith("temp-") && !String(id).startsWith("link-")),
+      removeVideo: Boolean((initialData?.videoUrl || initialData?.video) && !existingVideo && !videoFile),
     };
 
     const data = new FormData();
