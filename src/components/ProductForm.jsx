@@ -104,6 +104,7 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
       const files = Array.from(e.target.files);
       if (files.length > 1) {
         setError("Only 1 showcase video file is allowed per product.");
+        e.target.value = "";
         return;
       }
       const file = files[0];
@@ -111,11 +112,14 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
 
       if (!file.type.startsWith("video/")) {
         setError("Please select a valid video file (.mp4, .webm, .mov).");
+        e.target.value = "";
         return;
       }
 
       if (file.size > 20 * 1024 * 1024) {
-        setError("Video size must be less than 20MB.");
+        const sizeMb = (file.size / (1024 * 1024)).toFixed(1);
+        setError(`Video size must be less than 20MB. Selected file is ${sizeMb}MB.`);
+        e.target.value = "";
         return;
       }
 
@@ -123,6 +127,7 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
       setVideoFile(file);
       if (videoPreview) URL.revokeObjectURL(videoPreview);
       setVideoPreview(URL.createObjectURL(file));
+      e.target.value = "";
     }
   };
 
@@ -169,13 +174,8 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
 
       // Handle existing video from backend
       setExistingVideo(initialData.videoUrl || initialData.video || null);
-      setVideoFile(null);
-      if (videoPreview) {
-        URL.revokeObjectURL(videoPreview);
-        setVideoPreview(null);
-      }
     }
-  }, [initialData]);
+  }, [initialData?.id]);
 
   // Cleanup preview URLs on unmount
   useEffect(() => {
@@ -200,12 +200,15 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
 
       if (totalImages > 5) {
         setError(`Maximum 5 images allowed. You currently have ${existingImages.length + images.length} images.`);
+        e.target.value = "";
         return;
       }
 
       const totalBytes = [...images, ...files].reduce((sum, f) => sum + f.size, 0);
       if (totalBytes > 20 * 1024 * 1024) {
-        setError("Total image upload size exceeds 20MB limit.");
+        const totalMb = (totalBytes / (1024 * 1024)).toFixed(1);
+        setError(`Total image upload size exceeds 20MB limit. Selected total is ${totalMb}MB.`);
+        e.target.value = "";
         return;
       }
 
@@ -215,6 +218,7 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
       // Create preview URLs
       const newPreviews = files.map((file) => URL.createObjectURL(file));
       setImagePreviews((prev) => [...prev, ...newPreviews]);
+      e.target.value = "";
     }
   };
 
@@ -662,22 +666,25 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
         </label>
         
         {videoPreview || existingVideo ? (
-          <div className="relative max-w-sm rounded-lg overflow-hidden border border-gray-300 bg-black p-2">
-            <video
-              src={videoPreview || existingVideo}
-              controls
-              className="w-full h-48 object-contain rounded"
-            />
-            <div className="flex items-center justify-between mt-2 text-xs text-white px-1">
-              <span className="text-green-400 font-medium">
-                {videoPreview ? "📹 New Video Selected" : "📹 Active Video"}
+          <div className="relative max-w-sm rounded-lg overflow-hidden border border-gray-300 bg-black p-1 shadow-sm">
+            <div className="relative w-full">
+              <video
+                src={videoPreview || existingVideo}
+                controls
+                className="w-full h-48 object-contain rounded"
+              />
+              <span className="absolute top-2 left-2 bg-black/80 text-white text-[11px] font-semibold px-2 py-0.5 rounded shadow pointer-events-none">
+                {videoPreview ? "📹 New Video" : "📹 Active Video"}
               </span>
               <button
                 type="button"
                 onClick={removeVideo}
-                className="px-2 py-1 bg-red-600 hover:bg-red-700 text-white rounded font-medium transition"
+                className="absolute top-2 right-2 bg-red-600 text-white rounded-full p-1.5 opacity-90 hover:opacity-100 transition-opacity shadow z-10"
+                title="Remove video"
               >
-                Remove Video
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
               </button>
             </div>
           </div>
