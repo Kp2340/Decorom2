@@ -74,7 +74,7 @@ const HandleInquiry = () => {
     <div>
       {/* Hero Section */}
       <section id="hero" className="text-center py-16 bg-gray-50">
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+        <h1 className="text-4xl md:text-5xl font-bold text-[#2C3E50] mb-4">
           Welcome to Decorom Gallery
         </h1>
         <p className="text-gray-600 text-lg md:text-xl">
@@ -91,7 +91,7 @@ const HandleInquiry = () => {
           <select
             value={material}
             onChange={(e) => setMaterial(e.target.value)}
-            className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500 w-full md:w-auto"
+            className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#E59500] w-full md:w-auto"
           >
             <option value="">All Materials</option>
             <option value="Acrylic">Acrylic</option>
@@ -101,7 +101,7 @@ const HandleInquiry = () => {
           <select
             value={shape}
             onChange={(e) => setShape(e.target.value)}
-            className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500 w-full md:w-auto"
+            className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#E59500] w-full md:w-auto"
           >
             <option value="">All Shapes</option>
             <option value="Square">Square</option>
@@ -137,7 +137,7 @@ const HandleInquiry = () => {
             <div className="text-center mt-10">
               <button
                 onClick={handleLoadMore}
-                className="px-8 py-3 bg-pink-500 hover:bg-pink-600 text-white font-semibold rounded-lg shadow-md transition-all"
+                className="px-8 py-3 bg-[#E59500] hover:bg-[#CC8400] text-white font-semibold rounded-xl shadow-md transition-all active:scale-95"
               >
                 Load More ({filteredProducts.length - visibleCount} remaining)
               </button>

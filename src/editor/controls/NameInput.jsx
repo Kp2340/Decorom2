@@ -21,7 +21,7 @@ const NameInput = memo(({ value, onChange, zone, disabled = false }) => {
 
   return (
     <div className="mb-4">
-      <label className="block text-sm font-medium text-gray-700 mb-1">
+      <label className="block text-xs font-semibold text-[#2C3E50] mb-1">
         {zone?.label || "Family Name"} <span className="text-red-500">*</span>
       </label>
       <input
@@ -30,9 +30,9 @@ const NameInput = memo(({ value, onChange, zone, disabled = false }) => {
         onChange={handleChange}
         disabled={disabled}
         placeholder="Enter your family name"
-        className={`w-full px-3 py-2 border rounded-lg text-base transition-colors
-          ${!value?.trim() ? "border-red-300 focus:ring-red-500" : "border-gray-300 focus:ring-pink-500"}
-          focus:outline-none focus:ring-2 focus:border-transparent
+        className={`w-full px-3 py-2 border rounded-lg text-sm text-[#2C3E50] transition-all
+          ${!value?.trim() ? "border-red-300 focus:ring-red-500" : "border-slate-300 focus:ring-[#E59500] focus:border-[#E59500]"}
+          focus:outline-none focus:ring-2
           disabled:bg-gray-100 disabled:cursor-not-allowed`}
         autoComplete="off"
       />

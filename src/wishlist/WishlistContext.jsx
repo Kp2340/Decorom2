@@ -59,12 +59,30 @@ export const WishlistProvider = ({ children }) => {
   }, []);
 
   const removeFromWishlist = useCallback((id) => {
+    if (!id) return;
     setItems((prev) => prev.filter((p) => p.id !== id));
   }, []);
 
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const openDrawer = useCallback(() => setIsDrawerOpen(true), []);
+  const closeDrawer = useCallback(() => setIsDrawerOpen(false), []);
+  const toggleDrawer = useCallback(() => setIsDrawerOpen((prev) => !prev), []);
+
   return (
     <WishlistContext.Provider
-      value={{ items, isWishlisted, toggleWishlist, removeFromWishlist, count: items.length }}
+      value={{
+        items,
+        isWishlisted,
+        toggleWishlist,
+        removeFromWishlist,
+        count: items.length,
+        isDrawerOpen,
+        setIsDrawerOpen,
+        openDrawer,
+        closeDrawer,
+        toggleDrawer,
+      }}
     >
       {children}
     </WishlistContext.Provider>

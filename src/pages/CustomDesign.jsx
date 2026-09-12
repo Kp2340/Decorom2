@@ -35,17 +35,17 @@ const CustomDesign = () => {
   return (
     <div className="min-h-screen bg-white font-sans overflow-hidden">
       {/* Decorative Background */}
-      <div className="absolute top-0 right-0 w-1/2 h-full bg-pink-50 skew-x-12 translate-x-1/2 -z-10" />
+      <div className="absolute top-0 right-0 w-1/2 h-full bg-cyan-50/50 skew-x-12 translate-x-1/2 -z-10" />
 
-      <div className="container mx-auto px-4 py-20 relative">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20 relative">
         <div className="flex flex-col lg:flex-row gap-16 items-center">
           {/* Content Side */}
           <div className="lg:w-1/2 space-y-8">
-            <div className="inline-block px-4 py-2 bg-pink-100 text-pink-700 rounded-full text-xs font-black tracking-widest uppercase mb-4">
+            <div className="inline-block px-4 py-2 bg-cyan-50 text-[#E59500] rounded-full text-xs font-black tracking-widest uppercase mb-4 border border-cyan-100">
               ✨ Bespoke Service
             </div>
-            <h1 className="text-5xl lg:text-7xl font-black text-gray-900 leading-tight">
-              Dream it.<br/>We'll <span className="text-pink-600">Build it.</span>
+            <h1 className="text-5xl lg:text-7xl font-black text-[#2C3E50] leading-tight">
+              Dream it.<br/>We'll <span className="text-[#E59500]">Build it.</span>
             </h1>
             <p className="text-xl text-gray-500 leading-relaxed max-w-lg">
               Can't find a design that fits your home? Share your vision with our master artisans. 
@@ -54,17 +54,17 @@ const CustomDesign = () => {
             
             <div className="flex flex-wrap gap-8 py-8 border-t border-gray-100">
                 <div>
-                    <h4 className="font-black text-gray-900 text-2xl">48h</h4>
+                    <h4 className="font-black text-[#2C3E50] text-2xl">48h</h4>
                     <p className="text-sm text-gray-400">Design Draft</p>
                 </div>
                 <div className="w-px h-12 bg-gray-100"/>
                 <div>
-                    <h4 className="font-black text-gray-900 text-2xl">100%</h4>
+                    <h4 className="font-black text-[#2C3E50] text-2xl">100%</h4>
                     <p className="text-sm text-gray-400">Handcrafted</p>
                 </div>
                 <div className="w-px h-12 bg-gray-100"/>
                 <div>
-                    <h4 className="font-black text-gray-900 text-2xl">Life</h4>
+                    <h4 className="font-black text-[#2C3E50] text-2xl">Life</h4>
                     <p className="text-sm text-gray-400">Time Support</p>
                 </div>
             </div>
@@ -72,10 +72,10 @@ const CustomDesign = () => {
 
           {/* Form Side */}
           <div className="lg:w-1/2 w-full max-w-xl">
-            <div className="bg-white rounded-[40px] shadow-2xl shadow-pink-100/50 p-10 border border-gray-50 relative">
+            <div className="bg-white rounded-[40px] shadow-2xl shadow-gray-100 p-10 border border-gray-50 relative">
               
-              <h2 className="text-2xl font-black text-gray-800 mb-8 flex items-center gap-3">
-                <span className="w-8 h-8 bg-pink-600 text-white rounded-lg flex items-center justify-center text-sm">✦</span>
+              <h2 className="text-2xl font-black text-[#2C3E50] mb-8 flex items-center gap-3">
+                <span className="w-8 h-8 bg-[#E59500] text-white rounded-lg flex items-center justify-center text-sm">✦</span>
                 Start Your Design
               </h2>
 
@@ -87,7 +87,7 @@ const CustomDesign = () => {
                       id="fullName"
                       required
                       type="text"
-                      className="w-full px-5 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-pink-500 transition-all font-bold text-gray-700"
+                      className="w-full px-5 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-[#E59500] transition-all font-bold text-gray-700"
                       placeholder="John Doe"
                       value={formData.fullName}
                       onChange={(e) => setFormData({...formData, fullName: e.target.value})}
@@ -99,7 +99,7 @@ const CustomDesign = () => {
                       id="phone"
                       required
                       type="tel"
-                      className="w-full px-5 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-pink-500 transition-all font-bold text-gray-700"
+                      className="w-full px-5 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-[#E59500] transition-all font-bold text-gray-700"
                       placeholder="+91 00000 00000"
                       value={formData.phone}
                       onChange={(e) => setFormData({...formData, phone: e.target.value})}
@@ -113,7 +113,7 @@ const CustomDesign = () => {
                     <input
                       id="email"
                       type="email"
-                      className="w-full px-5 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-pink-500 transition-all font-bold text-gray-700"
+                      className="w-full px-5 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-[#E59500] transition-all font-bold text-gray-700"
                       placeholder="email@example.com"
                       value={formData.email}
                       onChange={(e) => setFormData({...formData, email: e.target.value})}
@@ -125,7 +125,7 @@ const CustomDesign = () => {
                       id="city"
                       required
                       type="text"
-                      className="w-full px-5 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-pink-500 transition-all font-bold text-gray-700"
+                      className="w-full px-5 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-[#E59500] transition-all font-bold text-gray-700"
                       placeholder="Your City"
                       value={formData.city}
                       onChange={(e) => setFormData({...formData, city: e.target.value})}
@@ -139,7 +139,7 @@ const CustomDesign = () => {
                     id="description"
                     required
                     rows="4"
-                    className="w-full px-5 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-pink-500 transition-all font-bold text-gray-700 resize-none"
+                    className="w-full px-5 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-[#E59500] transition-all font-bold text-gray-700 resize-none"
                     placeholder="Tell us what you have in mind... (Material, Color, Script, etc.)"
                     value={formData.description}
                     onChange={(e) => setFormData({...formData, description: e.target.value})}
@@ -151,7 +151,7 @@ const CustomDesign = () => {
                 <button
                   disabled={submitting}
                   type="submit"
-                  className="w-full bg-gray-900 hover:bg-black text-white font-black py-5 rounded-2xl transition-all shadow-xl shadow-gray-200 active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-3 group"
+                  className="w-full bg-white hover:bg-[#E59500] text-[#E59500] hover:text-white border border-[#E59500] font-black py-5 rounded-2xl transition-all duration-200 shadow-md active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-3 group cursor-pointer"
                 >
                   {submitting ? "SUBMITTING..." : "INITIATE CUSTOM DESIGN"}
                   <span className="group-hover:translate-x-1 transition-transform">→</span>

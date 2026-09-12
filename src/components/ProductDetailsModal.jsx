@@ -160,7 +160,7 @@ const ProductDetailsModal = ({ product, onClose }) => {
     };
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_APP_URL}/checkout`, {
+      const response = await fetch(`${import.meta.env.VITE_APP_URL || "https://api.decorom.in";}/checkout`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

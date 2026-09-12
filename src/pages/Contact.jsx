@@ -57,32 +57,32 @@ const ContactUs = () => {
         description="Get in touch with Decorom for custom nameplate consultations, inquiries, and orders in Ahmedabad, Gujarat."
         url="https://www.decorom.in/contact"
       />
-      <section className="bg-pink-100 py-12">
-        <div className="max-w-7xl mx-auto px-4">
+      <section className="bg-cyan-50/60 border-b border-cyan-100/80 py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
-            <h1 className="text-3xl font-semibold text-gray-800">Contact Us</h1>
-            <p className="text-gray-500 mt-2 text-sm">We're happy to help — reach out anytime for custom nameplate inquiries.</p>
+            <h1 className="text-3xl font-bold text-[#2C3E50]">Contact Us</h1>
+            <p className="text-[#334155] mt-2 text-sm">We're happy to help — reach out anytime for custom nameplate inquiries.</p>
           </div>
 
           {/* Contact Info Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-12">
             {/* Phone */}
-            <div className="bg-white shadow-md rounded-lg p-6 text-center">
-              <div className="w-16 h-16 bg-yellow-200 flex items-center justify-center rounded-lg mx-auto mb-4 text-2xl">
+            <div className="bg-white shadow-xs rounded-xl border border-slate-200 p-6 text-center product-card-lift group">
+              <div className="w-16 h-16 bg-emerald-50 border border-emerald-200/60 flex items-center justify-center rounded-xl mx-auto mb-4 text-2xl text-[#10B981] group-hover:text-[#E59500] transition-colors">
                 📞
               </div>
-              <h3 className="text-lg font-semibold text-gray-800">Phone</h3>
-              <a href={`tel:${CONTACT_PHONE.replace(/\s/g, "")}`} className="mt-2 text-gray-600 hover:text-pink-600 block">
+              <h3 className="text-base font-bold text-[#2C3E50]">Phone</h3>
+              <a href={`tel:${CONTACT_PHONE.replace(/\s/g, "")}`} className="mt-2 text-slate-600 hover:text-[#E59500] block text-sm font-medium">
                 {CONTACT_PHONE}
               </a>
-              <p className="mt-1 text-gray-500 text-sm">Shubh Bhavsar</p>
+              <p className="mt-1 text-slate-400 text-xs">Shubh Bhavsar</p>
               <a
                 href={CONTACT_WHATSAPP_URL("Hi, I have a query about a nameplate.")}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-3 inline-flex items-center gap-1 text-sm text-green-600 hover:underline focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-[#25D366] hover:text-[#E59500] transition-colors focus:outline-none focus:ring-2 focus:ring-[#25D366]"
               >
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <svg className="w-4 h-4 text-[#25D366] group-hover:text-[#E59500] transition-colors" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                 </svg>
                 Chat on WhatsApp
@@ -90,31 +90,31 @@ const ContactUs = () => {
             </div>
 
             {/* Address */}
-            <div className="bg-white shadow-md rounded-lg p-6 text-center">
-              <div className="w-16 h-16 bg-yellow-200 flex items-center justify-center rounded-lg mx-auto mb-4 text-2xl">
+            <div className="bg-white shadow-xs rounded-xl border border-slate-200 p-6 text-center product-card-lift group">
+              <div className="w-16 h-16 bg-red-50 border border-red-200/60 flex items-center justify-center rounded-xl mx-auto mb-4 text-2xl text-[#EA4335] group-hover:text-[#E59500] transition-colors">
                 📍
               </div>
-              <h3 className="text-lg font-semibold text-gray-800">Address</h3>
+              <h3 className="text-base font-bold text-[#2C3E50]">Address</h3>
               <a
                 href={GOOGLE_MAPS_REVIEWS_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-2 text-gray-600 hover:text-pink-600 text-sm leading-relaxed block focus:outline-none focus:ring-2 focus:ring-pink-500"
+                className="mt-2 text-slate-600 hover:text-[#E59500] text-sm leading-relaxed block focus:outline-none focus:ring-2 focus:ring-[#E59500]"
               >
                 {CONTACT_ADDRESS}
               </a>
             </div>
 
             {/* Email */}
-            <div className="bg-white shadow-md rounded-lg p-6 text-center sm:col-span-2 md:col-span-1">
-              <div className="w-16 h-16 bg-yellow-200 flex items-center justify-center rounded-lg mx-auto mb-4 text-2xl">
+            <div className="bg-white shadow-xs rounded-xl border border-slate-200 p-6 text-center sm:col-span-2 md:col-span-1 product-card-lift group">
+              <div className="w-16 h-16 bg-red-50 border border-red-200/60 flex items-center justify-center rounded-xl mx-auto mb-4 text-2xl text-[#EA4335] group-hover:text-[#E59500] transition-colors">
                 ✉️
               </div>
-              <h3 className="text-lg font-semibold text-gray-800">Email</h3>
-              <a href={`mailto:${CONTACT_EMAIL}`} className="mt-2 text-gray-600 hover:text-pink-600 block break-all focus:outline-none focus:ring-2 focus:ring-pink-500">
+              <h3 className="text-base font-bold text-[#2C3E50]">Email</h3>
+              <a href={`mailto:${CONTACT_EMAIL}`} className="mt-2 text-slate-600 hover:text-[#E59500] block break-all text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#E59500]">
                 {CONTACT_EMAIL}
               </a>
-              <p className="mt-2 text-gray-400 text-xs">We reply within 24 hours</p>
+              <p className="mt-2 text-slate-400 text-xs">We reply within 24 hours</p>
             </div>
           </div>
 
@@ -153,46 +153,70 @@ const ContactUs = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
+                    <label htmlFor="user_name" className="block text-xs font-bold text-[#2C3E50] uppercase tracking-wider mb-1.5">
+                      Name <span className="text-[#E59500]">*</span>
+                    </label>
                     <input
+                      id="user_name"
                       type="text"
                       name="user_name"
-                      placeholder="Name *"
-                      className="w-full border rounded-md p-3 text-sm focus:ring-2 focus:ring-pink-400 outline-none"
+                      className="w-full border border-slate-300 rounded-lg p-3 text-sm focus:ring-2 focus:ring-[#E59500] focus:border-[#E59500] outline-none text-[#2C3E50] transition-colors"
                       required
                     />
                   </div>
                   <div>
+                    <label htmlFor="user_phone" className="block text-xs font-bold text-[#2C3E50] uppercase tracking-wider mb-1.5">
+                      Phone <span className="text-[#E59500]">*</span>
+                    </label>
                     <input
+                      id="user_phone"
                       type="tel"
                       name="user_phone"
-                      placeholder="Phone *"
                       onChange={handlePhoneChange}
-                      className="w-full border rounded-md p-3 text-sm focus:ring-2 focus:ring-pink-400 outline-none"
+                      className="w-full border border-slate-300 rounded-lg p-3 text-sm focus:ring-2 focus:ring-[#E59500] focus:border-[#E59500] outline-none text-[#2C3E50] transition-colors"
                       required
                     />
                     {phoneError && <p className="text-red-500 text-xs mt-1">{phoneError}</p>}
                   </div>
                 </div>
-                <input
-                  type="email"
-                  name="user_email"
-                  placeholder="Email *"
-                  className="w-full border rounded-md p-3 text-sm focus:ring-2 focus:ring-pink-400 outline-none"
-                  required
-                />
-                <input
-                  type="text"
-                  name="subject"
-                  placeholder="Subject"
-                  className="w-full border rounded-md p-3 text-sm focus:ring-2 focus:ring-pink-400 outline-none"
-                />
-                <textarea
-                  name="message"
-                  placeholder="Message / Details *"
-                  rows="4"
-                  className="w-full border rounded-md p-3 text-sm focus:ring-2 focus:ring-pink-400 outline-none resize-none flex-1"
-                  required
-                />
+
+                <div>
+                  <label htmlFor="user_email" className="block text-xs font-bold text-[#2C3E50] uppercase tracking-wider mb-1.5">
+                    Email <span className="text-[#E59500]">*</span>
+                  </label>
+                  <input
+                    id="user_email"
+                    type="email"
+                    name="user_email"
+                    className="w-full border border-slate-300 rounded-lg p-3 text-sm focus:ring-2 focus:ring-[#E59500] focus:border-[#E59500] outline-none text-[#2C3E50] transition-colors"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="subject" className="block text-xs font-bold text-[#2C3E50] uppercase tracking-wider mb-1.5">
+                    Subject
+                  </label>
+                  <input
+                    id="subject"
+                    type="text"
+                    name="subject"
+                    className="w-full border border-slate-300 rounded-lg p-3 text-sm focus:ring-2 focus:ring-[#E59500] focus:border-[#E59500] outline-none text-[#2C3E50] transition-colors"
+                  />
+                </div>
+
+                <div className="flex-1 flex flex-col">
+                  <label htmlFor="message" className="block text-xs font-bold text-[#2C3E50] uppercase tracking-wider mb-1.5">
+                    Message / Details <span className="text-[#E59500]">*</span>
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    rows="4"
+                    className="w-full border border-slate-300 rounded-lg p-3 text-sm focus:ring-2 focus:ring-[#E59500] focus:border-[#E59500] outline-none text-[#2C3E50] resize-none flex-1 transition-colors"
+                    required
+                  />
+                </div>
 
                 {/* Inline feedback */}
                 {status === "success" && (
@@ -215,7 +239,7 @@ const ContactUs = () => {
                 <button
                   type="submit"
                   disabled={status === "sending"}
-                  className="w-full bg-black text-white font-bold py-4 rounded-xl hover:bg-gray-800 transform hover:-translate-y-1 transition-all duration-300 shadow-lg hover:shadow-xl active:scale-95 mt-2 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-pink-500"
+                  className="w-full bg-white hover:bg-[#E59500] text-[#E59500] hover:text-white border border-[#E59500] font-bold py-3.5 rounded-xl transition-all duration-200 shadow-md active:scale-95 mt-2 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#E59500]"
                 >
                   {status === "sending" ? "Sending…" : "Send Message"}
                 </button>

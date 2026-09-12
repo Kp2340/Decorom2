@@ -15,7 +15,7 @@ const Wishlist = () => {
       />
 
       <div className="container mx-auto px-4 py-10">
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Your Wishlist</h1>
+        <h1 className="text-2xl md:text-3xl font-bold text-[#2C3E50] mb-2">Your Wishlist</h1>
         <p className="text-gray-500 mb-8">
           Saved on this device — tap the heart on any product to remove it.
         </p>
@@ -25,7 +25,7 @@ const Wishlist = () => {
             <p className="text-gray-500 mb-4">Your wishlist is empty.</p>
             <Link
               to="/products"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-pink-600 hover:bg-pink-700 text-white font-bold transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#E59500] hover:bg-[#CC8400] text-white font-bold transition-all shadow-md active:scale-95"
             >
               Browse Nameplates
             </Link>

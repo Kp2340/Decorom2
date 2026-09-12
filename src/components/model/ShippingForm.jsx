@@ -71,11 +71,11 @@ const ShippingForm = memo(({ address, onAddressChange }) => {
   );
 
   const inputClass =
-    "border border-gray-300 rounded px-3 py-2 text-sm w-full focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-colors";
+    "border border-gray-300 rounded-lg px-3 py-2 text-sm w-full focus:ring-2 focus:ring-[#E59500] focus:border-[#E59500] outline-none transition-colors";
 
   return (
     <div className="mt-6">
-      <h4 className="text-lg font-semibold mb-3 text-gray-800">
+      <h4 className="text-lg font-semibold mb-3 text-[#2C3E50]">
         Shipping Details
       </h4>
 

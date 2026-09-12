@@ -24,7 +24,7 @@ const QuadImageTile = ({ categoryName, images = [] }) => {
         ))}
         <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-300" />
       </div>
-      <h3 className="mt-3 text-sm sm:text-base font-bold text-gray-800 group-hover:text-pink-600 transition-colors capitalize text-center">
+      <h3 className="mt-3 text-sm sm:text-base font-bold text-[#2C3E50] group-hover:text-[#E59500] transition-colors capitalize text-center">
         {categoryName}
       </h3>
     </div>

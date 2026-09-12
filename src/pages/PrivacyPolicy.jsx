@@ -58,7 +58,7 @@ const PrivacyPolicy = () => {
               For data privacy inquiries or grievances, contact our Privacy Officer:
             </p>
             <p className="mt-2 text-gray-800 font-medium">
-              Email: <a href="mailto:decorom213@gmail.com" className="text-pink-600 hover:underline">decorom213@gmail.com</a><br />
+              Email: <a href="mailto:decorom213@gmail.com" className="text-[#E59500] font-medium hover:underline">decorom213@gmail.com</a><br />
               Address: Shop A/7, Second Floor, Shreekunj Shopping Centre, Near HDFC Bank, K.K. Nagar, Ghatlodiya, Ahmedabad - 380061, Gujarat, India.
             </p>
           </section>

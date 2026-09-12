@@ -20,9 +20,9 @@ const FlatInput = memo(({ value, onChange, zone, disabled = false }) => {
 
   return (
     <div className="mb-4">
-      <label className="block text-sm font-medium text-gray-700 mb-1">
+      <label className="block text-xs font-semibold text-[#2C3E50] mb-1">
         {zone?.label || "Flat / House No."}
-        <span className="text-gray-400 font-normal ml-1">(Optional)</span>
+        <span className="text-slate-400 font-normal ml-1">(Optional)</span>
       </label>
       <input
         type="text"
@@ -30,9 +30,9 @@ const FlatInput = memo(({ value, onChange, zone, disabled = false }) => {
         onChange={handleChange}
         disabled={disabled}
         placeholder="e.g., A-501"
-        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-base
-          focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent
-          disabled:bg-gray-100 disabled:cursor-not-allowed transition-colors"
+        className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm text-[#2C3E50]
+          focus:outline-none focus:ring-2 focus:ring-[#E59500] focus:border-[#E59500]
+          disabled:bg-gray-100 disabled:cursor-not-allowed transition-all"
         autoComplete="off"
       />
       <div className="text-xs mt-1 text-right text-gray-400">

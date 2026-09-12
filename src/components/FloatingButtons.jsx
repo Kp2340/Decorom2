@@ -8,16 +8,15 @@ const WhatsAppIcon = () => (
 );
 
 const FloatingButtons = () => (
-  <div className="fixed bottom-6 right-4 sm:right-6 z-50 flex flex-col gap-3 items-end">
+  <div className="fixed bottom-4 right-3 sm:bottom-6 sm:right-6 z-50 flex flex-col gap-2 sm:gap-3 items-end">
     {/* Call button */}
     <a
       href={`tel:${CONTACT_PHONE.replace(/\s/g, "")}`}
       title={`Call us: ${CONTACT_PHONE}`}
       aria-label="Call Decorom"
-      className="group relative flex items-center justify-center rounded-full bg-pink-600 hover:bg-pink-700 text-white shadow-lg transition-transform duration-200 hover:scale-110 active:scale-95 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-offset-2"
-      style={{ width: 48, height: 48 }}
+      className="group relative flex items-center justify-center rounded-full bg-[#10B981] hover:bg-[#E59500] text-white shadow-lg transition-all duration-200 hover:scale-110 active:scale-95 focus:outline-none focus:ring-2 focus:ring-[#E59500] focus:ring-offset-2 w-10 h-10 sm:w-12 sm:h-12"
     >
-      <Phone className="w-5 h-5" />
+      <Phone className="w-4 h-4 sm:w-5 sm:h-5" />
       {/* Tooltip */}
       <span className="absolute right-full mr-3 whitespace-nowrap bg-gray-900 text-white text-xs font-medium px-2.5 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
         {CONTACT_PHONE}
@@ -31,8 +30,7 @@ const FloatingButtons = () => (
       rel="noopener noreferrer"
       title="Chat on WhatsApp"
       aria-label="Chat with Decorom on WhatsApp"
-      className="group relative flex items-center justify-center rounded-full bg-green-500 hover:bg-green-600 text-white shadow-xl shadow-green-600/30 transition-transform duration-200 hover:scale-110 active:scale-95 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2"
-      style={{ width: 52, height: 52 }}
+      className="group relative flex items-center justify-center rounded-full bg-[#25D366] hover:bg-[#E59500] text-white shadow-xl shadow-green-600/30 hover:shadow-[#E59500]/30 transition-all duration-200 hover:scale-110 active:scale-95 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 w-11 h-11 sm:w-13 sm:h-13"
     >
       <WhatsAppIcon />
       {/* Tooltip */}

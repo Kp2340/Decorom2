@@ -48,8 +48,8 @@ const queryClient = new QueryClient({
 });
 
 const PageLoader = () => (
-  <div className="min-h-screen flex items-center justify-center">
-    <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-pink-500" />
+  <div className="min-h-screen flex items-center justify-center bg-white">
+    <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-[#E59500]" />
   </div>
 );
 
@@ -62,7 +62,7 @@ const App = () => (
             <ScrollToTop />
             <GTMAnalytics />
             <Header />
-            <main className="pt-16 min-h-screen">
+            <main className="pt-12 min-h-screen">
               <Suspense fallback={<PageLoader />}>
                 <Routes>
                   <Route path="/" element={<Home />} />

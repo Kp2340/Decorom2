@@ -24,6 +24,7 @@ const NameplateEditor = ({
 
   // Fixed-price best sellers ship in one standard size, so dimensions are not editable here.
   const sizeLocked = isFixedPrice(product);
+  const [materialFinish, setMaterialFinish] = React.useState("acrylic");
 
   const {
     values,
@@ -74,28 +75,50 @@ const NameplateEditor = ({
             values={values}
             dimensions={dimensions}
             scale={scale}
+            materialFinish={materialFinish}
           />
         </div>
 
         {/* Editor Controls */}
         <div className="lg:order-1 lg:flex-1">
-          <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-            <h4 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-              <svg
-                className="w-5 h-5 mr-2 text-pink-500"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-                />
-              </svg>
+          <div className="bg-slate-50 rounded-xl p-4 sm:p-5 border border-slate-200">
+            <h4 className="text-base font-bold text-[#2C3E50] mb-4 flex items-center">
+              <span className="p-1.5 rounded-md bg-[#FFFDD0] text-[#E59500] mr-2.5">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                </svg>
+              </span>
               Customize Your Nameplate
             </h4>
+
+            {/* Material Texture Preview Selector */}
+            <div className="mb-4">
+              <label className="block text-xs font-semibold text-[#2C3E50] mb-1.5">
+                Preview Material Finish
+              </label>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                {[
+                  { id: "acrylic", label: "Acrylic Gloss", icon: "💎" },
+                  { id: "brass", label: "Brass Gold", icon: "✨" },
+                  { id: "wood", label: "Warm Wood", icon: "🪵" },
+                  { id: "steel", label: "Brushed Steel", icon: "⚙️" },
+                ].map((m) => (
+                  <button
+                    key={m.id}
+                    type="button"
+                    onClick={() => setMaterialFinish(m.id)}
+                    className={`py-1.5 px-2 rounded-lg text-xs font-medium border text-center transition-all cursor-pointer flex items-center justify-center gap-1 ${
+                      materialFinish === m.id
+                        ? "bg-[#2C3E50] text-white border-[#2C3E50] shadow-xs"
+                        : "bg-white text-[#334155] border-slate-200 hover:border-[#E59500]"
+                    }`}
+                  >
+                    <span>{m.icon}</span>
+                    <span>{m.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
 
             <NameInput
               value={values.familyName}
@@ -109,27 +132,26 @@ const NameplateEditor = ({
               zone={flatZone}
             />
 
-            {/* Dimension Inputs — read-only for fixed-price best sellers, which ship in one
-                standard size. Text and colour editing stays available. */}
-            <div className="mt-4 pt-4 border-t border-gray-200">
-              <label className="block text-sm font-medium text-gray-700 mb-3">
-                Size (inch)
+            {/* Dimension Inputs — read-only for fixed-price best sellers */}
+            <div className="mt-4 pt-4 border-t border-slate-200">
+              <label className="block text-xs font-semibold text-[#2C3E50] mb-2">
+                Dimensions (inch)
               </label>
 
               {sizeLocked ? (
-                <div className="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-3 py-2">
-                  <span className="text-sm font-bold text-gray-900">
+                <div className="flex items-center justify-between rounded-lg border border-slate-200 bg-white px-3 py-2">
+                  <span className="text-sm font-bold text-[#2C3E50]">
                     {dimensions.height}" × {dimensions.width}"
                   </span>
-                  <span className="text-[11px] font-semibold uppercase tracking-wide text-gray-500">
-                    Standard size
+                  <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">
+                    Standard fixed size
                   </span>
                 </div>
               ) : (
                 <div className="grid grid-cols-2 gap-4">
                   {/* Height Input */}
                   <div>
-                    <label className="block text-xs text-gray-500 mb-1">
+                    <label className="block text-xs text-slate-500 mb-1">
                       Height
                     </label>
                     <div className="flex items-center gap-2">
@@ -141,15 +163,15 @@ const NameplateEditor = ({
                         onChange={(e) =>
                           updateDimension("height", e.target.value)
                         }
-                        className="w-20 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 text-gray-800 text-center"
+                        className="w-full px-3 py-1.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#E59500] focus:border-[#E59500] text-[#2C3E50] text-sm bg-white"
                       />
-                      <span className="text-gray-500 text-sm">inch</span>
+                      <span className="text-slate-400 text-xs">inch</span>
                     </div>
                   </div>
 
                   {/* Width Input */}
                   <div>
-                    <label className="block text-xs text-gray-500 mb-1">
+                    <label className="block text-xs text-slate-500 mb-1">
                       Width
                     </label>
                     <div className="flex items-center gap-2">
@@ -159,9 +181,9 @@ const NameplateEditor = ({
                         max="100"
                         value={dimensions.width}
                         onChange={(e) => updateDimension("width", e.target.value)}
-                        className="w-20 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 text-gray-800 text-center"
+                        className="w-full px-3 py-1.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#E59500] focus:border-[#E59500] text-[#2C3E50] text-sm bg-white"
                       />
-                      <span className="text-gray-500 text-sm">inch</span>
+                      <span className="text-slate-400 text-xs">inch</span>
                     </div>
                   </div>
                 </div>
@@ -170,8 +192,8 @@ const NameplateEditor = ({
 
             {/* Validation message */}
             {!isValid && (
-              <p className="text-sm text-red-500 mt-3">
-                Please enter your family name to continue.
+              <p className="text-xs text-amber-600 font-medium mt-3">
+                * Please enter your family name to preview live customization.
               </p>
             )}
           </div>

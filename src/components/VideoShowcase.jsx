@@ -14,13 +14,13 @@ const VIDEOS = [
 ];
 
 const VideoShowcase = () => (
-  <section className="py-10 md:py-16 bg-yellow-50 overflow-hidden">
-    <div className="container mx-auto px-4 mb-6 md:mb-10">
-      <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Our Nameplates in Action</h2>
-      <p className="text-gray-500 text-sm md:text-base">Watch the craftsmanship — real videos before delivery.</p>
+  <section className="py-10 md:py-16 bg-gradient-to-b from-slate-50/50 via-white to-white overflow-hidden relative before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-slate-200 before:to-transparent">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 md:mb-10">
+      <h2 className="text-2xl md:text-3xl font-bold text-[#2C3E50] mb-2">Our Nameplates in Action</h2>
+      <p className="text-[#334155] text-sm md:text-base">Watch the craftsmanship — real videos before delivery.</p>
     </div>
 
-    <div className="px-4">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <Swiper
         modules={[Autoplay]}
         spaceBetween={12}

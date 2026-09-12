@@ -104,7 +104,7 @@ const PromoCard = ({ code, appliedCode, applying, onApply, onRemove, expiredCode
             <button
               onClick={() => onApply(code)}
               disabled={isApplying}
-              className="bg-pink-600 hover:bg-pink-700 text-white text-xs font-black px-3 py-2 rounded-xl transition-all active:scale-95 disabled:opacity-60 flex items-center gap-1.5 shadow-sm"
+              className="bg-[#E59500] hover:bg-[#CC8400] text-white text-xs font-black px-3 py-2 rounded-xl transition-all active:scale-95 disabled:opacity-60 flex items-center gap-1.5 shadow-sm"
             >
               {isApplying ? (
                 <span className="flex items-center gap-1">
@@ -192,7 +192,7 @@ const PromoSection = ({ basePrice, appliedCode, discountInfo, onApply, onRemove 
   return (
     <div className="space-y-3">
       <h3 className="text-sm font-black text-gray-700 uppercase tracking-widest flex items-center gap-2">
-        <span className="w-5 h-5 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center text-xs">%</span>
+        <span className="w-5 h-5 bg-[#FFFDD0] text-[#E59500] font-bold rounded-full flex items-center justify-center text-xs">%</span>
         Available Offers
       </h3>
 
@@ -236,13 +236,13 @@ const PromoSection = ({ basePrice, appliedCode, discountInfo, onApply, onRemove 
               onChange={(e) => { setManualCode(e.target.value.toUpperCase()); setManualError(""); }}
               onKeyDown={(e) => e.key === "Enter" && handleManualApply()}
               placeholder="Enter promo code"
-              className="flex-1 border-2 border-gray-100 rounded-xl px-3 py-2.5 text-sm font-mono font-bold uppercase focus:border-pink-500 outline-none transition-all tracking-widest"
+              className="flex-1 border-2 border-gray-100 rounded-xl px-3 py-2.5 text-sm font-mono font-bold uppercase focus:border-[#E59500] focus:ring-1 focus:ring-[#E59500] outline-none transition-all tracking-widest"
               maxLength={20}
             />
             <button
               onClick={handleManualApply}
               disabled={!manualCode.trim() || applying === "manual"}
-              className="bg-gray-800 hover:bg-gray-900 text-white text-xs font-black px-4 py-2 rounded-xl transition-all active:scale-95 disabled:opacity-40"
+              className="bg-[#2C3E50] hover:bg-[#1E2B37] text-white text-xs font-black px-4 py-2 rounded-xl transition-all active:scale-95 disabled:opacity-40"
             >
               {applying === "manual" ? "..." : "Apply"}
             </button>

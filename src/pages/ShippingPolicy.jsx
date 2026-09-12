@@ -28,8 +28,7 @@ const ShippingPolicy = () => {
           </p>
           <p className="mt-2">
             <strong>
-              Delivery timeline depends on the location in India (Standard 5-7
-              days).
+              Delivery timeline: Standard 5-7 days across Gujarat.
             </strong>
           </p>
         </section>

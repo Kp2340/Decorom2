@@ -25,13 +25,13 @@ const SearchResults = () => {
       />
 
       <div className="container mx-auto px-4 py-10">
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-2xl md:text-3xl font-bold text-[#2C3E50] mb-2">
           {query ? `Results for "${query}"` : "Search"}
         </h1>
 
         {isLoading ? (
           <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-600" />
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#E59500]" />
           </div>
         ) : results.length === 0 ? (
           <div className="text-center py-20">

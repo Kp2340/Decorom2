@@ -80,12 +80,12 @@ const HorizontalRail = () => {
   if (items.length === 0) return null;
 
   return (
-    <section className="py-10 md:py-14 bg-white overflow-hidden">
-      <div className="container mx-auto px-4 mb-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1">Our Best Selling Nameplates</h2>
-        <p className="text-gray-500 text-sm md:text-base">Handpicked by our customers — swipe to explore.</p>
+    <section className="py-10 md:py-14 bg-gradient-to-b from-slate-50/50 via-white to-white overflow-hidden relative before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-slate-200 before:to-transparent">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
+        <h2 className="text-2xl md:text-3xl font-bold text-[#2C3E50] mb-1">Our Best Selling Nameplates</h2>
+        <p className="text-[#334155] text-sm md:text-base">Handpicked by our customers — swipe to explore.</p>
       </div>
-      <div className="px-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <Swiper
           modules={[Autoplay]}
           spaceBetween={16}
@@ -97,16 +97,18 @@ const HorizontalRail = () => {
           {/* Duplicate for seamless loop */}
           {[...items, ...items].map((item, i) => (
             <SwiperSlide key={`${item.id}-${i}`}>
-              <div className="group relative bg-gray-50 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer" onClick={() => navigate(`/products/${item.id}`)}>
+              <div className="group relative bg-gray-50 rounded-2xl overflow-hidden shadow-xs hover:shadow-xl transition-all duration-300 cursor-pointer product-card-lift" onClick={() => navigate(`/products/${item.id}`)}>
                 <div className="aspect-[4/5] overflow-hidden">
                   <img src={item.image} alt={item.name} loading="lazy" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                 </div>
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 text-white">
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/50 to-transparent p-4 text-white">
                   <h3 className="font-bold text-sm leading-snug line-clamp-2">{item.name}</h3>
                   {item.price > 0 && (
-                    <p className="text-pink-400 font-semibold text-sm mt-1">₹{item.price.toLocaleString()}</p>
+                    <p className="text-[#E59500] font-bold text-base mt-1">₹{item.price.toLocaleString("en-IN")}</p>
                   )}
-                  <span className="inline-block mt-2 bg-white text-black px-3 py-1 rounded-lg text-xs font-bold group-hover:bg-pink-500 group-hover:text-white transition-colors">View Details →</span>
+                  <span className="inline-block mt-2 bg-white hover:bg-[#E59500] text-[#E59500] hover:text-white border border-[#E59500] px-3 py-1.5 rounded-lg text-xs font-bold transition-all shadow-xs">
+                    Order Now →
+                  </span>
                 </div>
               </div>
             </SwiperSlide>

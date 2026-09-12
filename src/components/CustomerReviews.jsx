@@ -15,7 +15,7 @@ const GOOGLE_LOGO = (
 const StarRating = ({ rating, size = "w-4 h-4" }) => (
   <div className="flex gap-0.5">
     {[1, 2, 3, 4, 5].map((star) => (
-      <svg key={star} className={`${size} ${star <= rating ? "text-yellow-400" : "text-gray-300"}`} fill="currentColor" viewBox="0 0 20 20">
+      <svg key={star} className={`${size} ${star <= rating ? "text-[#E59500] fill-current" : "text-slate-200"}`} fill="currentColor" viewBox="0 0 20 20">
         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
       </svg>
     ))}
@@ -84,7 +84,7 @@ const GOOGLE_RATING = 4.8;
 const GOOGLE_REVIEW_COUNT = 3;
 
 const AVATAR_COLORS = [
-  "bg-pink-500", "bg-blue-500", "bg-emerald-500",
+  "bg-[#E59500]", "bg-blue-500", "bg-emerald-500",
   "bg-amber-500", "bg-violet-500", "bg-rose-500", "bg-cyan-500",
 ];
 
@@ -130,25 +130,25 @@ const ReviewCard = ({ review, colorClass }) => {
 };
 
 const CustomerReviews = () => (
-    <section className="py-16 bg-gray-50">
-      <div className="container mx-auto px-4">
+    <section className="py-16 bg-gradient-to-b from-slate-50/50 via-white to-white relative before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-slate-200 before:to-transparent">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-8">
           <div>
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 flex items-center flex-wrap gap-2">
+            <h2 className="text-2xl md:text-3xl font-bold text-[#2C3E50] flex items-center flex-wrap gap-2">
               Reviews on {GOOGLE_LOGO}
             </h2>
             <div className="flex items-center gap-2 mt-2">
-              <span className="text-2xl font-bold text-gray-900">{GOOGLE_RATING}</span>
+              <span className="text-2xl font-bold text-[#2C3E50]">{GOOGLE_RATING}</span>
               <StarRating rating={GOOGLE_RATING} size="w-5 h-5" />
-              <span className="text-gray-500 text-sm">· {GOOGLE_REVIEW_COUNT} reviews</span>
+              <span className="text-[#334155] text-sm">· {GOOGLE_REVIEW_COUNT} verified reviews</span>
             </div>
           </div>
           <a
             href={GOOGLE_MAPS_REVIEWS_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="self-start sm:self-auto px-5 py-2 rounded-full border border-gray-300 bg-white text-sm font-semibold text-gray-700 hover:bg-gray-100 transition-colors shadow-sm whitespace-nowrap"
+            className="self-start sm:self-auto px-5 py-2.5 rounded-full bg-[#0F172A] hover:bg-white text-white hover:text-[#0F172A] border border-[#0F172A] text-sm font-semibold transition-all shadow-xs hover:shadow-md whitespace-nowrap cursor-pointer"
           >
             View on Google
           </a>

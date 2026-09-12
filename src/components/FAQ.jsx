@@ -101,42 +101,42 @@ const FAQ = () => {
   };
 
   return (
-    <section className="py-12 bg-white">
+    <section className="py-14 bg-gradient-to-b from-cyan-50/40 via-cyan-50/60 to-cyan-50/60 relative before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-cyan-200/70 before:to-transparent">
       <Helmet>
         <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
       </Helmet>
 
-      <div className="max-w-3xl mx-auto px-4">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Frequently Asked Questions</h2>
-          <p className="text-gray-500 mt-1.5 text-sm">Everything you need to know before ordering.</p>
+          <h2 className="text-2xl md:text-3xl font-bold text-[#2C3E50]">Frequently Asked Questions</h2>
+          <p className="text-[#334155] mt-1.5 text-sm">Everything you need to know before ordering.</p>
         </div>
 
         <div className="relative mb-6">
-          <Search className="w-4 h-4 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search questions…"
-            className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-pink-400"
+            className="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-full text-sm text-[#2C3E50] focus:outline-none focus:ring-2 focus:ring-[#E59500] focus:border-[#E59500] transition-all"
           />
         </div>
 
         {filteredFaqs.length === 0 ? (
-          <p className="text-center text-sm text-gray-400 py-6">No questions match "{query}".</p>
+          <p className="text-center text-sm text-slate-400 py-6">No questions match "{query}".</p>
         ) : (
           <div className="space-y-2">
             {filteredFaqs.map((faq) => (
-              <div key={faq.q} className="border border-gray-200 rounded-xl overflow-hidden">
+              <div key={faq.q} className="border border-slate-200 rounded-xl overflow-hidden">
                 <button
-                  className="w-full flex items-center justify-between px-5 py-4 text-left bg-white hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-pink-500 cursor-pointer"
+                  className="w-full flex items-center justify-between px-5 py-4 text-left bg-white hover:bg-slate-50 transition-colors focus:outline-none focus:ring-2 focus:ring-[#E59500] cursor-pointer"
                   onClick={() => setOpen(open === faq.q ? null : faq.q)}
                   aria-expanded={open === faq.q}
                 >
-                  <span className="font-semibold text-gray-900 text-sm md:text-base pr-4">{faq.q}</span>
+                  <span className="font-semibold text-[#2C3E50] text-sm md:text-base pr-4">{faq.q}</span>
                   <ChevronDown
-                    className="w-5 h-5 shrink-0 text-gray-400 transition-transform duration-300"
+                    className="w-5 h-5 shrink-0 text-slate-400 transition-transform duration-300"
                     style={{ transform: open === faq.q ? "rotate(180deg)" : "rotate(0deg)" }}
                   />
                 </button>
@@ -145,7 +145,7 @@ const FAQ = () => {
                   className="overflow-hidden transition-all duration-300 ease-in-out"
                   style={{ maxHeight: open === faq.q ? "200px" : "0px" }}
                 >
-                  <p className="px-5 pb-4 pt-1 text-gray-600 text-sm leading-relaxed border-t border-gray-100">
+                  <p className="px-5 pb-4 pt-1 text-[#334155] text-sm leading-relaxed border-t border-slate-100">
                     {faq.a}
                   </p>
                 </div>
@@ -154,9 +154,9 @@ const FAQ = () => {
           </div>
         )}
 
-        <p className="text-center mt-7 text-sm text-gray-500">
+        <p className="text-center mt-7 text-sm text-[#334155]">
           Still have questions?{" "}
-          <a href="/contact" className="text-pink-600 hover:underline font-medium">
+          <a href="/contact" className="text-[#E59500] hover:text-[#CC8400] font-semibold hover:underline">
             Get in touch →
           </a>
         </p>
