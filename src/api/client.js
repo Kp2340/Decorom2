@@ -1,7 +1,6 @@
 import axios from "axios";
 
-const BASE_URL =
-  import.meta.env.VITE_APP_URL || (import.meta.env.DEV ? "" : "https://api.decorom.in");
+const BASE_URL = import.meta.env.VITE_APP_URL || "";
 
 const apiClient = axios.create({
   baseURL: BASE_URL,

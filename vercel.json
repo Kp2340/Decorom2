@@ -1,6 +1,37 @@
 {
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+    {
+      "source": "/api",
+      "destination": "https://api.decorom.in/api"
+    },
+    {
+      "source": "/api/:path*",
+      "destination": "https://api.decorom.in/api/:path*"
+    },
+    {
+      "source": "/checkout",
+      "destination": "https://api.decorom.in/checkout"
+    },
+    {
+      "source": "/checkout/:path*",
+      "destination": "https://api.decorom.in/checkout/:path*"
+    },
+    {
+      "source": "/orders",
+      "destination": "https://api.decorom.in/orders"
+    },
+    {
+      "source": "/orders/:path*",
+      "destination": "https://api.decorom.in/orders/:path*"
+    },
+    {
+      "source": "/health",
+      "destination": "https://api.decorom.in/health"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
   ],
   "headers": [
     {

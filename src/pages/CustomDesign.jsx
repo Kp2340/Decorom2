@@ -88,7 +88,6 @@ const CustomDesign = () => {
                       required
                       type="text"
                       className="w-full px-5 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-[#E59500] transition-all font-bold text-gray-700"
-                      placeholder="John Doe"
                       value={formData.fullName}
                       onChange={(e) => setFormData({...formData, fullName: e.target.value})}
                     />
@@ -100,7 +99,6 @@ const CustomDesign = () => {
                       required
                       type="tel"
                       className="w-full px-5 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-[#E59500] transition-all font-bold text-gray-700"
-                      placeholder="+91 00000 00000"
                       value={formData.phone}
                       onChange={(e) => setFormData({...formData, phone: e.target.value})}
                     />
@@ -114,7 +112,6 @@ const CustomDesign = () => {
                       id="email"
                       type="email"
                       className="w-full px-5 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-[#E59500] transition-all font-bold text-gray-700"
-                      placeholder="email@example.com"
                       value={formData.email}
                       onChange={(e) => setFormData({...formData, email: e.target.value})}
                     />
@@ -126,7 +123,6 @@ const CustomDesign = () => {
                       required
                       type="text"
                       className="w-full px-5 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-[#E59500] transition-all font-bold text-gray-700"
-                      placeholder="Your City"
                       value={formData.city}
                       onChange={(e) => setFormData({...formData, city: e.target.value})}
                     />
@@ -140,7 +136,6 @@ const CustomDesign = () => {
                     required
                     rows="4"
                     className="w-full px-5 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-[#E59500] transition-all font-bold text-gray-700 resize-none"
-                    placeholder="Tell us what you have in mind... (Material, Color, Script, etc.)"
                     value={formData.description}
                     onChange={(e) => setFormData({...formData, description: e.target.value})}
                   />
