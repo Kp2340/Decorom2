@@ -70,6 +70,7 @@ const PriceCalculator = ({
       mat.includes("steel") ||
       mat.includes("ms") ||
       mat.includes("metal");
+    const isResin = mat.includes("resin");
 
     // Determine Base Rate
     if (isAcrylicOrWood) {
@@ -85,6 +86,10 @@ const PriceCalculator = ({
       if (area <= 100) baseRate = 30;
       else if (area <= 225) baseRate = 25;
       else baseRate = 20;
+    } else if (isResin) {
+      if (area <= 100) baseRate = 20;
+      else if (area <= 225) baseRate = 18;
+      else baseRate = 16;
     } else {
       // Default fallback (treat as Acrylic)
       if (area <= 100) baseRate = 13;

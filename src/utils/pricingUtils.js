@@ -30,6 +30,10 @@ export const calculateFinalPrice = (material = "", width = 0, height = 0, lighti
         if (area <= 100) rate = 30.0;
         else if (area <= 225) rate = 25.0;
         else rate = 20.0;
+    } else if (mat.includes("resin")) {
+        if (area <= 100) rate = 20.0;
+        else if (area <= 225) rate = 18.0;
+        else rate = 16.0;
     } else {
         // Fallback for unknown materials
         rate = 13.0; 
