@@ -42,10 +42,9 @@ const Footer = () => (
         <p className="text-xs text-slate-400 leading-relaxed max-w-xs">
           Handcrafted luxury designer nameplates made with precision in Ahmedabad, delivered pan-India.
         </p>
-        <div className="inline-flex items-center gap-1.5 text-xs text-slate-400">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+        <p className="text-xs text-slate-400">
           7-Day Guaranteed Delivery in Gujarat
-        </div>
+        </p>
       </div>
 
       {/* Column 2 — Quick Links */}

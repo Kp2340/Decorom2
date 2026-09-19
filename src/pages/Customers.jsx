@@ -30,6 +30,7 @@ const Customers = () => {
         </div>
       </div>
 
+      {/* Video Testimonials Section (Temporarily hidden)
       <section className="py-16 md:py-20 bg-cyan-50/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-[#2C3E50] mb-4">Video Testimonials</h2>
@@ -37,6 +38,7 @@ const Customers = () => {
         </div>
         <VideoShowcase />
       </section>
+      */}
 
       <section className="py-16 md:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-12">
