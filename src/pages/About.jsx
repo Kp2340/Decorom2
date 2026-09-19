@@ -11,12 +11,12 @@ const AboutUs = () => {
         description="Decorom — 5 years of crafting premium custom nameplates in Ahmedabad. Handcrafted with acrylic, wood, steel, and laser-cut finishes. Your home's first impression, perfected."
         keywords="About Decorom, Custom Nameplates Ahmedabad, Nameplate Maker Gujarat, Handcrafted Nameplates"
       />
-      <section className="bg-pink-50 min-h-screen py-12">
-        <div className="max-w-7xl mx-auto px-4">
+      <section className="bg-cyan-50/60 min-h-screen py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           {/* Page Title */}
           <div className="text-center mb-12">
-            <h1 className="text-3xl font-semibold text-gray-800">About Us</h1>
+            <h1 className="text-3xl font-semibold text-[#2C3E50]">About Us</h1>
             <p className="text-gray-500 mt-2 max-w-xl mx-auto text-sm">
               Ahmedabad's trusted nameplate specialists — crafting bespoke pieces since 2019.
             </p>
@@ -54,7 +54,7 @@ const AboutUs = () => {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="bg-white p-6 rounded-lg shadow-md text-center hover:shadow-lg transition">
-                <div className="w-14 h-14 mx-auto bg-yellow-200 flex items-center justify-center rounded-full mb-4 text-2xl">
+                <div className="w-14 h-14 mx-auto bg-cyan-50 border border-cyan-100 flex items-center justify-center rounded-full mb-4 text-2xl">
                   🪧
                 </div>
                 <h3 className="text-lg font-semibold text-gray-800 mb-2">Custom Name Plates</h3>
@@ -63,7 +63,7 @@ const AboutUs = () => {
                 </p>
               </div>
               <div className="bg-white p-6 rounded-lg shadow-md text-center hover:shadow-lg transition">
-                <div className="w-14 h-14 mx-auto bg-yellow-200 flex items-center justify-center rounded-full mb-4 text-2xl">
+                <div className="w-14 h-14 mx-auto bg-cyan-50 border border-cyan-100 flex items-center justify-center rounded-full mb-4 text-2xl">
                   ✏️
                 </div>
                 <h3 className="text-lg font-semibold text-gray-800 mb-2">Personalised Name &amp; Number Plates</h3>
@@ -72,7 +72,7 @@ const AboutUs = () => {
                 </p>
               </div>
               <div className="bg-white p-6 rounded-lg shadow-md text-center hover:shadow-lg transition">
-                <div className="w-14 h-14 mx-auto bg-yellow-200 flex items-center justify-center rounded-full mb-4 text-2xl">
+                <div className="w-14 h-14 mx-auto bg-cyan-50 border border-cyan-100 flex items-center justify-center rounded-full mb-4 text-2xl">
                   🏡
                 </div>
                 <h3 className="text-lg font-semibold text-gray-800 mb-2">Home Décor Products</h3>
@@ -90,7 +90,7 @@ const AboutUs = () => {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="bg-white p-6 rounded-lg shadow-md text-center hover:shadow-lg transition">
-                <div className="w-14 h-14 mx-auto bg-yellow-200 flex items-center justify-center rounded-full mb-4 text-2xl">
+                <div className="w-14 h-14 mx-auto bg-cyan-50 border border-cyan-100 flex items-center justify-center rounded-full mb-4 text-2xl">
                   🎨
                 </div>
                 <h3 className="text-lg font-semibold text-gray-800 mb-2">Bespoke Designs</h3>
@@ -99,7 +99,7 @@ const AboutUs = () => {
                 </p>
               </div>
               <div className="bg-white p-6 rounded-lg shadow-md text-center hover:shadow-lg transition">
-                <div className="w-14 h-14 mx-auto bg-yellow-200 flex items-center justify-center rounded-full mb-4 text-2xl">
+                <div className="w-14 h-14 mx-auto bg-cyan-50 border border-cyan-100 flex items-center justify-center rounded-full mb-4 text-2xl">
                   ⭐
                 </div>
                 <h3 className="text-lg font-semibold text-gray-800 mb-2">Premium Quality</h3>
@@ -108,7 +108,7 @@ const AboutUs = () => {
                 </p>
               </div>
               <div className="bg-white p-6 rounded-lg shadow-md text-center hover:shadow-lg transition">
-                <div className="w-14 h-14 mx-auto bg-yellow-200 flex items-center justify-center rounded-full mb-4 text-2xl">
+                <div className="w-14 h-14 mx-auto bg-cyan-50 border border-cyan-100 flex items-center justify-center rounded-full mb-4 text-2xl">
                   ♻️
                 </div>
                 <h3 className="text-lg font-semibold text-gray-800 mb-2">Eco-Friendly &amp; Reliable</h3>
@@ -131,7 +131,7 @@ const AboutUs = () => {
           <div className="text-center text-gray-500 text-sm">
             <p className="font-medium text-gray-700 mb-1">Visit our studio</p>
             <p>{CONTACT_ADDRESS}</p>
-            <Link to="/contact" className="mt-4 inline-block px-6 py-2 bg-black text-white rounded-full text-sm font-semibold hover:bg-gray-800 transition">
+            <Link to="/contact" className="mt-4 inline-block px-7 py-3 bg-[#0F172A] hover:bg-white text-white hover:text-[#0F172A] border border-[#0F172A] rounded-full text-sm font-semibold transition-all duration-200 shadow-xs cursor-pointer">
               Get Directions
             </Link>
           </div>

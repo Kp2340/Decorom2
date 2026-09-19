@@ -8,6 +8,30 @@ export default defineConfig({
   build: {
     sourcemap: false,
   },
+  server: {
+    proxy: {
+      "/api": {
+        target: "https://api.decorom.in",
+        changeOrigin: true,
+        secure: false,
+      },
+      "/checkout": {
+        target: "https://api.decorom.in",
+        changeOrigin: true,
+        secure: false,
+      },
+      "/orders": {
+        target: "https://api.decorom.in",
+        changeOrigin: true,
+        secure: false,
+      },
+      "/health": {
+        target: "https://api.decorom.in",
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
   plugins: [
     react(),
     tailwindcss(),

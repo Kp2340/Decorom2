@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { AlertCircle } from "lucide-react";
 import { processCheckout } from "../api/checkout.api";
 import { getProductById } from "../api/products.api";
 import { toImageUrls } from "../utils/imageUtils";
@@ -37,7 +38,8 @@ const Checkout = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [backendPrice, setBackendPrice] = useState(null); // Price returned from backend
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState({});
+  const [apiError, setApiError] = useState("");
 
   // Promo state
   const [appliedPromoCode, setAppliedPromoCode] = useState(null);
@@ -57,7 +59,7 @@ const Checkout = () => {
         const data = await getProductById(productId);
         setProduct(data);
       } catch {
-        setError("Failed to load product details for checkout.");
+        setApiError("Failed to load product details for checkout.");
       }
     };
     loadProduct();
@@ -115,7 +117,15 @@ const Checkout = () => {
     productImages[0] || "https://via.placeholder.com/64x64?text=No+Image";
 
   const handleShippingChange = (e) => {
-    setShipping({ ...shipping, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setShipping((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors((prev) => {
+        const next = { ...prev };
+        delete next[name];
+        return next;
+      });
+    }
   };
 
   const handleCustomChange = (e) => {
@@ -123,52 +133,119 @@ const Checkout = () => {
     if (name === "namePlateDetails") {
       const lines = value.split("\n");
       if (lines.length <= 5 && value.length <= 100) {
-        setCustomDetails({ ...customDetails, [name]: value });
+        setCustomDetails((prev) => ({ ...prev, [name]: value }));
       }
     } else {
-      // For height and width
       const val = parseInt(value) || 0;
-      setCustomDetails({ ...customDetails, [name]: val });
+      setCustomDetails((prev) => ({ ...prev, [name]: val }));
+    }
+    if (errors[name]) {
+      setErrors((prev) => {
+        const next = { ...prev };
+        delete next[name];
+        return next;
+      });
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError("");
+    setApiError("");
 
     // A fixed SKU always ships at its configured size, whatever is in local state.
     const fixedDims = fixedPrice ? parseDefaultSize(product.defaultSize) : null;
     const orderHeight = fixedDims?.height || customDetails.height;
     const orderWidth = fixedDims?.width || customDetails.width;
 
-    // Basic Validation
-    if (orderHeight < 1 || orderHeight > 96 || orderWidth < 1 || orderWidth > 96) {
-      setError("Size must be between 1x1 and 96x96 inches.");
+    // Validate ALL fields together without early returning
+    const newErrors = {};
+
+    // 1. Name plate content
+    if (!customDetails.namePlateDetails.trim()) {
+      newErrors.namePlateDetails = "Please enter name plate text.";
+    }
+
+    // 2. Dimensions (for custom sizing)
+    if (!fixedPrice) {
+      if (!orderHeight || orderHeight < 1 || orderHeight > 96) {
+        newErrors.height = "Height: 1 to 96 inches.";
+      }
+      if (!orderWidth || orderWidth < 1 || orderWidth > 96) {
+        newErrors.width = "Width: 1 to 96 inches.";
+      }
+    }
+
+    // 3. Full Name
+    if (!shipping.fullName.trim()) {
+      newErrors.fullName = "Full name is required.";
+    } else if (shipping.fullName.trim().length < 2) {
+      newErrors.fullName = "Full name must be at least 2 characters.";
+    }
+
+    // 4. Email
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!shipping.email.trim()) {
+      newErrors.email = "Email address is required.";
+    } else if (!emailPattern.test(shipping.email.trim())) {
+      newErrors.email = "Please enter a valid email address.";
+    }
+
+    // 5. Mobile Number (10 digits)
+    const digits = shipping.phone.replace(/\D/g, "");
+    const isValidPhone =
+      (digits.length === 10 && /^[6-9]/.test(digits)) ||
+      (digits.length === 12 && digits.startsWith("91") && /^[6-9]/.test(digits.slice(2))) ||
+      (digits.length === 11 && digits.startsWith("0") && /^[6-9]/.test(digits.slice(1)));
+
+    if (!shipping.phone.trim()) {
+      newErrors.phone = "Mobile number is required.";
+    } else if (!isValidPhone) {
+      newErrors.phone = "Please enter a valid 10-digit mobile number.";
+    }
+
+    // 6. Address
+    if (!shipping.address.trim()) {
+      newErrors.address = "Delivery address is required.";
+    } else if (shipping.address.trim().length < 5) {
+      newErrors.address = "Address must be at least 5 characters.";
+    } else if (shipping.address.length > 200) {
+      newErrors.address = "Address must not exceed 200 characters.";
+    }
+
+    // 7. City
+    if (!shipping.city.trim()) {
+      newErrors.city = "City is required.";
+    }
+
+    // 8. Pincode
+    if (!shipping.pincode.trim()) {
+      newErrors.pincode = "Pincode is required.";
+    } else if (!/^\d{6}$/.test(shipping.pincode.trim())) {
+      newErrors.pincode = "Pincode must be exactly 6 digits.";
+    }
+
+    // If ANY validation errors exist, show ALL of them together
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       setLoading(false);
+      // Auto-scroll to first invalid element
+      const firstField = Object.keys(newErrors)[0];
+      const targetElement = document.querySelector(`[name="${firstField}"]`);
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        targetElement.focus();
+      }
       return;
     }
 
-    if (shipping.address.trim().length < 5 || shipping.address.length > 200) {
-        setError("Address must be between 5 and 200 characters.");
-        setLoading(false);
-        return;
-    }
-
-    if (!/^\d{6}$/.test(shipping.pincode)) {
-        setError("Pincode must be exactly 6 digits.");
-        setLoading(false);
-        return;
-    }
+    setErrors({});
+    setLoading(true);
 
     // Re-validate promo on submit to catch expired codes
     let finalPromoCode = appliedPromoCode || null;
     let discountedPrice = promoInfo?.discountedTotal ?? config.price ?? 0;
 
     if (fixedPrice) {
-      // The server owns this decision: it recomputes the waiver from its own IST clock and
-      // ignores any promoCode we send. We only need frontendPrice to match the total the
-      // customer was shown, so the server's ±₹1 tolerance check passes.
       finalPromoCode = null;
       discountedPrice = delivery.total;
     } else if (appliedPromoCode) {
@@ -177,14 +254,13 @@ const Checkout = () => {
         const recheck = await validatePromoCode(appliedPromoCode, config.price);
         const recheckData = recheck?.data ?? recheck;
         if (!recheckData.valid) {
-          setError(`Promo code ${appliedPromoCode} is no longer valid: ${recheckData.message}`);
+          setApiError(`Promo code ${appliedPromoCode} is no longer valid: ${recheckData.message}`);
           handlePromoRemove();
           setLoading(false);
           return;
         }
         discountedPrice = recheckData.discountedTotal ?? discountedPrice;
       } catch {
-        // If re-validation call fails, proceed without promo to avoid blocking checkout
         finalPromoCode = null;
         discountedPrice = config.price ?? 0;
       }
@@ -205,19 +281,18 @@ const Checkout = () => {
       frontendPrice: discountedPrice,
       promoCode: finalPromoCode,
       shipping: {
-          ...shipping,
-          pincode: parseInt(shipping.pincode)
+        ...shipping,
+        pincode: parseInt(shipping.pincode),
       },
     };
 
     try {
       const res = await processCheckout(payload);
-      // Handle both axios response wrapper and direct data
       const response = res?.data ?? res;
       
       // 1. Check for payment redirect
       if (response && response.paymentUrl) {
-        setLoading(true); // Keep loading state until we leave the page
+        setLoading(true);
         window.location.href = response.paymentUrl;
         return;
       }
@@ -227,15 +302,12 @@ const Checkout = () => {
         setBackendPrice(response.finalPrice || "CONFIRMED");
         setSuccess(true);
       } else {
-        // Response exists but has no actionable data — surface a visible error
         setSuccess(false);
-        setError("Unable to complete checkout. Please check your details and try again.");
+        setApiError("Unable to complete checkout. Please check your details and try again.");
       }
     } catch (err) {
-      setError(err.message || "Checkout failed. Please try again.");
+      setApiError(err.message || "Checkout failed. Please try again.");
     } finally {
-      // Only unset loading if we're NOT redirecting
-      // If we are redirecting, we want the button to stay disabled/loading
       setLoading(false);
     }
   };
@@ -272,17 +344,18 @@ const Checkout = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
-      <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">
-        Checkout
-      </h1>
+    <div className="min-h-screen bg-cyan-50/60 py-10 md:py-16">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 className="text-3xl font-bold mb-8 text-center text-[#2C3E50]">
+          Checkout
+        </h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Order Summary */}
-        <div className="bg-gray-50 p-6 rounded-lg h-fit">
-          <h2 className="text-xl font-semibold mb-4 text-gray-800">
-            Order Summary
-          </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Order Summary */}
+          <div className="bg-white border border-cyan-100 p-6 rounded-2xl shadow-sm h-fit">
+            <h2 className="text-xl font-semibold mb-4 text-[#2C3E50]">
+              Order Summary
+            </h2>
           <div className="flex items-center space-x-4 mb-4">
             <img
               src={productImageSrc}
@@ -318,7 +391,7 @@ const Checkout = () => {
           </div>
 
           {fixedPrice ? (
-            <div className="mt-4 rounded-lg bg-pink-50 p-3">
+            <div className="mt-4 rounded-lg bg-[#FFFDD0]/60 border border-amber-100 p-3">
               <div className="space-y-1.5 text-sm">
                 <div className="flex justify-between text-gray-700">
                   <span>Product</span>
@@ -350,47 +423,47 @@ const Checkout = () => {
                   </div>
                 )}
 
-                <div className="flex items-center justify-between border-t border-pink-200 pt-2">
-                  <span className="text-xs font-semibold uppercase text-pink-600">
+                <div className="flex items-center justify-between border-t border-slate-200 pt-2">
+                  <span className="text-xs font-semibold uppercase text-slate-500">
                     Total
                   </span>
-                  <span className="text-2xl font-bold text-pink-700">
-                    ₹{delivery.total.toLocaleString()}
+                  <span className="text-2xl font-bold text-[#2C3E50]">
+                    ₹{delivery.total.toLocaleString("en-IN")}
                   </span>
                 </div>
               </div>
 
               <FreeDeliveryBanner variant="inline" className="mt-3" />
 
-              <p className="mt-2 text-[10px] text-gray-500">
+              <p className="mt-2 text-[10px] text-slate-400">
                 ✓ Inclusive of all taxes & free delivery
               </p>
             </div>
           ) : (
-          <div className="mt-4 p-3 bg-pink-50 rounded text-center">
+          <div className="mt-4 p-3 bg-slate-50 rounded-xl border border-slate-200 text-center">
             {promoInfo?.deductionAmount > 0 ? (
               <>
-                <p className="text-xs text-gray-400 mb-0.5 font-semibold uppercase line-through">
-                  ₹{config.price?.toLocaleString()}
+                <p className="text-xs text-slate-400 mb-0.5 font-semibold uppercase line-through">
+                  ₹{config.price?.toLocaleString("en-IN")}
                 </p>
-                <p className="text-xs text-green-600 font-bold mb-0.5">
-                  − ₹{promoInfo.deductionAmount?.toLocaleString()} ({appliedPromoCode})
+                <p className="text-xs text-emerald-700 font-bold mb-0.5">
+                  − ₹{promoInfo.deductionAmount?.toLocaleString("en-IN")} ({appliedPromoCode})
                 </p>
-                <p className="text-2xl font-bold text-pink-700">
-                  ₹{promoInfo.discountedTotal?.toLocaleString()}
+                <p className="text-2xl font-bold text-[#2C3E50]">
+                  ₹{promoInfo.discountedTotal?.toLocaleString("en-IN")}
                 </p>
               </>
             ) : (
               <>
-                <p className="text-xs text-pink-600 mb-1 font-semibold uppercase">
+                <p className="text-xs text-slate-500 mb-1 font-semibold uppercase">
                   Estimated Price
                 </p>
-                <p className="text-2xl font-bold text-pink-700">
-                  ~ ₹{config.price?.toLocaleString()}
+                <p className="text-2xl font-bold text-[#2C3E50]">
+                  ~ ₹{config.price?.toLocaleString("en-IN")}
                 </p>
               </>
             )}
-            <p className="text-[10px] text-gray-500 mt-1">
+            <p className="text-[10px] text-slate-400 mt-1">
               ✓ Guaranteed final price upon order placement
             </p>
           </div>
@@ -412,44 +485,95 @@ const Checkout = () => {
         </div>
 
         {/* Checkout Form */}
-        <div className="bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
-          <form onSubmit={handleSubmit} className="space-y-8">
-            {error && <div className="bg-red-50 text-red-600 p-4 rounded-xl text-sm font-medium border border-red-100">{error}</div>}
+        <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-xl border border-gray-100">
+          <form onSubmit={handleSubmit} noValidate className="space-y-8">
+            {/* API Failure Notice */}
+            {apiError && (
+              <div className="bg-red-50 border-2 border-red-500 text-red-700 p-4 rounded-xl text-sm font-semibold flex items-start gap-2.5 shadow-xs">
+                <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-bold text-red-800">Checkout Notice</p>
+                  <p className="text-xs text-red-700 mt-0.5">{apiError}</p>
+                </div>
+              </div>
+            )}
 
             {/* Section 1: Name Plate Details */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
-                <span className="w-8 h-8 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center text-sm">1</span>
-                Name Plate Content
-              </h3>
+            <div
+              className={`space-y-4 p-5 rounded-2xl border-2 transition-all ${
+                errors.namePlateDetails ? "border-red-400 bg-red-50/10 shadow-xs" : "border-gray-100"
+              }`}
+            >
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <h3 className="text-lg font-bold text-[#2C3E50] flex items-center gap-2">
+                  <span
+                    className={`w-8 h-8 font-bold rounded-full flex items-center justify-center text-sm ${
+                      errors.namePlateDetails ? "bg-red-100 text-red-600" : "bg-[#FFFDD0] text-[#E59500]"
+                    }`}
+                  >
+                    1
+                  </span>
+                  Name Plate Content
+                </h3>
+                {errors.namePlateDetails && (
+                  <span className="text-xs font-bold text-red-600 bg-red-50 px-2.5 py-0.5 rounded-full border border-red-200">
+                    Required
+                  </span>
+                )}
+              </div>
               <div>
-                <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">
-                  Lines (Max 5) & Text (Max 100 chars)
-                </label>
+                <div className="flex justify-between items-center mb-1.5 flex-wrap gap-1">
+                  <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider">
+                    Lines (Max 5) & Text (Max 100 chars)
+                  </label>
+                  {errors.namePlateDetails && (
+                    <span className="text-xs font-semibold text-red-600 flex items-center gap-1">
+                      <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                      {errors.namePlateDetails}
+                    </span>
+                  )}
+                </div>
                 <textarea
-                  required
                   name="namePlateDetails"
                   rows={3}
                   value={customDetails.namePlateDetails}
                   onChange={handleCustomChange}
-                  placeholder="Enter details as they should appear on the name plate..."
-                  className="w-full border-2 border-gray-100 rounded-xl p-4 focus:border-pink-500 outline-none transition-all resize-none font-medium"
+                  className={`w-full border-2 rounded-xl p-4 outline-none transition-all resize-none font-medium ${
+                    errors.namePlateDetails
+                      ? "border-red-500 bg-red-50/20 focus:border-red-600 focus:ring-1 focus:ring-red-500 text-red-950"
+                      : "border-gray-100 focus:border-[#E59500] focus:ring-1 focus:ring-[#E59500]"
+                  }`}
                 />
                 <div className="flex justify-between mt-1 text-[10px] font-bold text-gray-400">
-                    <span>{customDetails.namePlateDetails.split('\n').filter(l => l).length} / 5 Lines</span>
-                    <span>{customDetails.namePlateDetails.length} / 100 Characters</span>
+                  <span>{customDetails.namePlateDetails.split("\n").filter((l) => l).length} / 5 Lines</span>
+                  <span>{customDetails.namePlateDetails.length} / 100 Characters</span>
                 </div>
               </div>
             </div>
 
             {/* Section 2: Dimensions */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
-                <span className="w-8 h-8 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center text-sm">2</span>
-                Size (Inches)
-              </h3>
-              {/* Read-only for a fixed SKU. These inputs never recomputed the price anyway, so
-                  editing them used to ship new dimensions with the old frontendPrice. */}
+            <div
+              className={`space-y-4 p-5 rounded-2xl border-2 transition-all ${
+                errors.height || errors.width ? "border-red-400 bg-red-50/10 shadow-xs" : "border-gray-100"
+              }`}
+            >
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <h3 className="text-lg font-bold text-[#2C3E50] flex items-center gap-2">
+                  <span
+                    className={`w-8 h-8 font-bold rounded-full flex items-center justify-center text-sm ${
+                      errors.height || errors.width ? "bg-red-100 text-red-600" : "bg-[#FFFDD0] text-[#E59500]"
+                    }`}
+                  >
+                    2
+                  </span>
+                  Size (Inches)
+                </h3>
+                {(errors.height || errors.width) && (
+                  <span className="text-xs font-bold text-red-600 bg-red-50 px-2.5 py-0.5 rounded-full border border-red-200">
+                    Invalid dimensions
+                  </span>
+                )}
+              </div>
               {fixedPrice ? (
                 <>
                   <div className="flex items-center justify-between rounded-xl border-2 border-gray-100 bg-gray-50 p-4">
@@ -468,25 +592,41 @@ const Checkout = () => {
                 <>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Height</label>
+                      <div className="flex justify-between items-center mb-1.5 flex-wrap gap-1">
+                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider">Height</label>
+                        {errors.height && (
+                          <span className="text-xs font-semibold text-red-600">{errors.height}</span>
+                        )}
+                      </div>
                       <input
-                        required
                         type="number"
                         name="height"
                         value={customDetails.height}
                         onChange={handleCustomChange}
-                        className="w-full border-2 border-gray-100 rounded-xl p-4 focus:border-pink-500 outline-none transition-all font-bold no-spinner"
+                        className={`w-full border-2 rounded-xl p-4 outline-none transition-all font-bold no-spinner ${
+                          errors.height
+                            ? "border-red-500 bg-red-50/20 focus:border-red-600 focus:ring-1 focus:ring-red-500 text-red-950"
+                            : "border-gray-100 focus:border-[#E59500] focus:ring-1 focus:ring-[#E59500]"
+                        }`}
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Width</label>
+                      <div className="flex justify-between items-center mb-1.5 flex-wrap gap-1">
+                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider">Width</label>
+                        {errors.width && (
+                          <span className="text-xs font-semibold text-red-600">{errors.width}</span>
+                        )}
+                      </div>
                       <input
-                        required
                         type="number"
                         name="width"
                         value={customDetails.width}
                         onChange={handleCustomChange}
-                        className="w-full border-2 border-gray-100 rounded-xl p-4 focus:border-pink-500 outline-none transition-all font-bold no-spinner"
+                        className={`w-full border-2 rounded-xl p-4 outline-none transition-all font-bold no-spinner ${
+                          errors.width
+                            ? "border-red-500 bg-red-50/20 focus:border-red-600 focus:ring-1 focus:ring-red-500 text-red-950"
+                            : "border-gray-100 focus:border-[#E59500] focus:ring-1 focus:ring-[#E59500]"
+                        }`}
                       />
                     </div>
                   </div>
@@ -496,56 +636,207 @@ const Checkout = () => {
             </div>
 
             {/* Section 3: Delivery Information */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
-                <span className="w-8 h-8 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center text-sm">3</span>
-                Delivery Details
-              </h3>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="col-span-full">
-                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Full Name</label>
-                  <input required type="text" name="fullName" value={shipping.fullName} onChange={handleShippingChange} className="w-full border-2 border-gray-100 rounded-xl p-3 focus:border-pink-500 outline-none transition-all font-medium" />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Email</label>
-                  <input required type="email" name="email" value={shipping.email} onChange={handleShippingChange} className="w-full border-2 border-gray-100 rounded-xl p-3 focus:border-pink-500 outline-none transition-all font-medium" />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Phone</label>
-                  <input required type="tel" name="phone" value={shipping.phone} onChange={handleShippingChange} className="w-full border-2 border-gray-100 rounded-xl p-3 focus:border-pink-500 outline-none transition-all font-medium" />
-                </div>
-              </div>
+            {(() => {
+              const hasDeliveryErrors = !!(
+                errors.fullName ||
+                errors.email ||
+                errors.phone ||
+                errors.address ||
+                errors.city ||
+                errors.pincode
+              );
+              return (
+                <div
+                  className={`space-y-4 p-5 rounded-2xl border-2 transition-all ${
+                    hasDeliveryErrors ? "border-red-400 bg-red-50/10 shadow-xs" : "border-gray-100"
+                  }`}
+                >
+                  <div className="flex items-center justify-between flex-wrap gap-2">
+                    <h3 className="text-lg font-bold text-[#2C3E50] flex items-center gap-2">
+                      <span
+                        className={`w-8 h-8 font-bold rounded-full flex items-center justify-center text-sm ${
+                          hasDeliveryErrors ? "bg-red-100 text-red-600" : "bg-[#FFFDD0] text-[#E59500]"
+                        }`}
+                      >
+                        3
+                      </span>
+                      Delivery Details
+                    </h3>
+                    {hasDeliveryErrors && (
+                      <span className="text-xs font-bold text-red-600 bg-red-50 px-2.5 py-0.5 rounded-full border border-red-200">
+                        Please check delivery info
+                      </span>
+                    )}
+                  </div>
 
-              <div>
-                <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Address</label>
-                <textarea
-                  required
-                  name="address"
-                  rows={2}
-                  value={shipping.address}
-                  onChange={handleShippingChange}
-                  placeholder="Street, Landmark, Apartment..."
-                  className="w-full border-2 border-gray-100 rounded-xl p-4 focus:border-pink-500 outline-none transition-all resize-none font-medium"
-                />
-              </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Full Name */}
+                    <div className="col-span-full">
+                      <div className="flex justify-between items-center mb-1.5 flex-wrap gap-1">
+                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider">
+                          Full Name
+                        </label>
+                        {errors.fullName && (
+                          <span className="text-xs font-semibold text-red-600 flex items-center gap-1">
+                            <AlertCircle className="w-3 h-3 shrink-0" />
+                            {errors.fullName}
+                          </span>
+                        )}
+                      </div>
+                      <input
+                        type="text"
+                        name="fullName"
+                        value={shipping.fullName}
+                        onChange={handleShippingChange}
+                        className={`w-full border-2 rounded-xl p-3 outline-none transition-all font-medium ${
+                          errors.fullName
+                            ? "border-red-500 bg-red-50/20 focus:border-red-600 focus:ring-1 focus:ring-red-500 text-red-950"
+                            : "border-gray-100 focus:border-[#E59500] focus:ring-1 focus:ring-[#E59500]"
+                        }`}
+                      />
+                    </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">City</label>
-                  <input required type="text" name="city" value={shipping.city} onChange={handleShippingChange} className="w-full border-2 border-gray-100 rounded-xl p-3 focus:border-pink-500 outline-none transition-all font-medium" />
+                    {/* Email */}
+                    <div>
+                      <div className="flex justify-between items-center mb-1.5 flex-wrap gap-1">
+                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider">
+                          Email
+                        </label>
+                        {errors.email && (
+                          <span className="text-xs font-semibold text-red-600 flex items-center gap-1">
+                            <AlertCircle className="w-3 h-3 shrink-0" />
+                            {errors.email}
+                          </span>
+                        )}
+                      </div>
+                      <input
+                        type="email"
+                        name="email"
+                        value={shipping.email}
+                        onChange={handleShippingChange}
+                        className={`w-full border-2 rounded-xl p-3 outline-none transition-all font-medium ${
+                          errors.email
+                            ? "border-red-500 bg-red-50/20 focus:border-red-600 focus:ring-1 focus:ring-red-500 text-red-950"
+                            : "border-gray-100 focus:border-[#E59500] focus:ring-1 focus:ring-[#E59500]"
+                        }`}
+                      />
+                    </div>
+
+                    {/* Phone */}
+                    <div>
+                      <div className="flex justify-between items-center mb-1.5 flex-wrap gap-1">
+                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider">
+                          Mobile Number
+                        </label>
+                        {errors.phone && (
+                          <span className="text-xs font-semibold text-red-600 flex items-center gap-1">
+                            <AlertCircle className="w-3 h-3 shrink-0" />
+                            {errors.phone}
+                          </span>
+                        )}
+                      </div>
+                      <input
+                        type="tel"
+                        name="phone"
+                        value={shipping.phone}
+                        onChange={handleShippingChange}
+                        className={`w-full border-2 rounded-xl p-3 outline-none transition-all font-medium ${
+                          errors.phone
+                            ? "border-red-500 bg-red-50/20 focus:border-red-600 focus:ring-1 focus:ring-red-500 text-red-950"
+                            : "border-gray-100 focus:border-[#E59500] focus:ring-1 focus:ring-[#E59500]"
+                        }`}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Address */}
+                  <div>
+                    <div className="flex justify-between items-center mb-1.5 flex-wrap gap-1">
+                      <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider">
+                        Address
+                      </label>
+                      {errors.address && (
+                        <span className="text-xs font-semibold text-red-600 flex items-center gap-1">
+                          <AlertCircle className="w-3 h-3 shrink-0" />
+                          {errors.address}
+                        </span>
+                      )}
+                    </div>
+                    <textarea
+                      name="address"
+                      rows={2}
+                      value={shipping.address}
+                      onChange={handleShippingChange}
+                      className={`w-full border-2 rounded-xl p-4 outline-none transition-all resize-none font-medium ${
+                        errors.address
+                          ? "border-red-500 bg-red-50/20 focus:border-red-600 focus:ring-1 focus:ring-red-500 text-red-950"
+                          : "border-gray-100 focus:border-[#E59500] focus:ring-1 focus:ring-[#E59500]"
+                      }`}
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    {/* City */}
+                    <div>
+                      <div className="flex justify-between items-center mb-1.5 flex-wrap gap-1">
+                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider">
+                          City
+                        </label>
+                        {errors.city && (
+                          <span className="text-xs font-semibold text-red-600 flex items-center gap-1">
+                            <AlertCircle className="w-3 h-3 shrink-0" />
+                            {errors.city}
+                          </span>
+                        )}
+                      </div>
+                      <input
+                        type="text"
+                        name="city"
+                        value={shipping.city}
+                        onChange={handleShippingChange}
+                        className={`w-full border-2 rounded-xl p-3 outline-none transition-all font-medium ${
+                          errors.city
+                            ? "border-red-500 bg-red-50/20 focus:border-red-600 focus:ring-1 focus:ring-red-500 text-red-950"
+                            : "border-gray-100 focus:border-[#E59500] focus:ring-1 focus:ring-[#E59500]"
+                        }`}
+                      />
+                    </div>
+
+                    {/* Pincode */}
+                    <div>
+                      <div className="flex justify-between items-center mb-1.5 flex-wrap gap-1">
+                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider">
+                          Pincode
+                        </label>
+                        {errors.pincode && (
+                          <span className="text-xs font-semibold text-red-600 flex items-center gap-1">
+                            <AlertCircle className="w-3 h-3 shrink-0" />
+                            {errors.pincode}
+                          </span>
+                        )}
+                      </div>
+                      <input
+                        type="text"
+                        name="pincode"
+                        maxLength={6}
+                        value={shipping.pincode}
+                        onChange={handleShippingChange}
+                        className={`w-full border-2 rounded-xl p-3 outline-none transition-all font-medium ${
+                          errors.pincode
+                            ? "border-red-500 bg-red-50/20 focus:border-red-600 focus:ring-1 focus:ring-red-500 text-red-950"
+                            : "border-gray-100 focus:border-[#E59500] focus:ring-1 focus:ring-[#E59500]"
+                        }`}
+                      />
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Pincode</label>
-                  <input required type="text" name="pincode" value={shipping.pincode} onChange={handleShippingChange} className="w-full border-2 border-gray-100 rounded-xl p-3 focus:border-pink-500 outline-none transition-all font-medium" />
-                </div>
-              </div>
-            </div>
+              );
+            })()}
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full mt-8 bg-gradient-to-r from-pink-600 to-rose-600 text-white font-black py-5 rounded-2xl hover:from-pink-700 hover:to-rose-700 transition-all shadow-xl shadow-pink-200 disabled:opacity-50 transform active:scale-95 text-lg uppercase tracking-widest"
+              className="w-full mt-8 bg-white text-[#E59500] border border-[#E59500] hover:bg-[#E59500] hover:text-white font-bold py-4 rounded-xl shadow-md transition-all duration-300 active:scale-95 text-base tracking-wide uppercase disabled:opacity-50 cursor-pointer"
             >
               {loading ? "Processing..." : "Checkout →"}
             </button>
@@ -553,7 +844,8 @@ const Checkout = () => {
         </div>
       </div>
     </div>
-  );
+  </div>
+);
 };
 
 export default Checkout;

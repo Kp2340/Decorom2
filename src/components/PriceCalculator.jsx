@@ -70,6 +70,7 @@ const PriceCalculator = ({
       mat.includes("steel") ||
       mat.includes("ms") ||
       mat.includes("metal");
+    const isResin = mat.includes("resin");
 
     // Determine Base Rate
     if (isAcrylicOrWood) {
@@ -85,6 +86,10 @@ const PriceCalculator = ({
       if (area <= 100) baseRate = 30;
       else if (area <= 225) baseRate = 25;
       else baseRate = 20;
+    } else if (isResin) {
+      if (area <= 100) baseRate = 20;
+      else if (area <= 225) baseRate = 18;
+      else baseRate = 16;
     } else {
       // Default fallback (treat as Acrylic)
       if (area <= 100) baseRate = 13;
@@ -136,7 +141,7 @@ const PriceCalculator = ({
 
   return (
     <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 mt-4">
-      <h4 className="text-lg font-semibold mb-3 text-gray-800">
+      <h4 className="text-lg font-semibold mb-3 text-[#2C3E50]">
         Price Calculator
       </h4>
 
@@ -151,7 +156,7 @@ const PriceCalculator = ({
               type="number"
               value={height}
               onChange={(e) => setHeight(e.target.value)}
-              className={`w-full border rounded px-2 py-1 ${error ? "border-red-500 focus:ring-red-500" : "border-gray-300"}`}
+              className={`w-full border rounded px-2 py-1 ${error ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:border-[#E59500] focus:ring-1 focus:ring-[#E59500]"}`}
             />
           </div>
           <div>
@@ -162,7 +167,7 @@ const PriceCalculator = ({
               type="number"
               value={width}
               onChange={(e) => setWidth(e.target.value)}
-              className={`w-full border rounded px-2 py-1 ${error ? "border-red-500 focus:ring-red-500" : "border-gray-300"}`}
+              className={`w-full border rounded px-2 py-1 ${error ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:border-[#E59500] focus:ring-1 focus:ring-[#E59500]"}`}
             />
           </div>
         </div>
@@ -177,7 +182,7 @@ const PriceCalculator = ({
         <select
           value={material}
           onChange={(e) => setMaterial(e.target.value)}
-          className="w-full border rounded px-2 py-1"
+          className="w-full border rounded px-2 py-1 focus:border-[#E59500] focus:ring-1 focus:ring-[#E59500] outline-none"
         >
           <option value="Acrylic">Acrylic</option>
           <option value="ACP">ACP</option>
@@ -194,7 +199,7 @@ const PriceCalculator = ({
               type="checkbox"
               checked={true}
               disabled
-              className="rounded text-pink-600 focus:ring-pink-500"
+              className="rounded text-[#E59500] focus:ring-[#E59500]"
             />
             <span className="text-sm font-medium text-gray-700">
               Light with Waterproofing (Included)
@@ -207,7 +212,7 @@ const PriceCalculator = ({
             type="checkbox"
             checked={withFitting}
             onChange={(e) => setWithFitting(e.target.checked)}
-            className="rounded text-pink-600 focus:ring-pink-500"
+            className="rounded text-[#E59500] focus:ring-[#E59500]"
           />
           <span className="text-sm text-gray-700">
             Fitting (Ahmedabad Only) - ₹500
@@ -217,7 +222,7 @@ const PriceCalculator = ({
 
       <div className="flex items-center justify-between border-t pt-3">
         <span className="text-gray-600">Total Price:</span>
-        <span className="text-2xl font-bold text-pink-600">₹{finalPrice}</span>
+        <span className="text-2xl font-bold text-[#E59500]">₹{finalPrice}</span>
       </div>
     </div>
   );

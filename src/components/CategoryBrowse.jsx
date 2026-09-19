@@ -7,19 +7,19 @@ const CategoryBrowse = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="py-14 bg-gray-50">
-      <div className="container mx-auto px-4 mb-10">
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Browse by Category</h2>
-        <p className="text-gray-500 text-sm md:text-base">
+    <section className="py-14 bg-gradient-to-b from-cyan-50/40 via-cyan-50/60 to-cyan-50/60 relative before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-cyan-200/70 before:to-transparent">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10">
+        <h2 className="text-3xl md:text-4xl font-bold text-[#2C3E50] mb-2">Browse by Category</h2>
+        <p className="text-[#334155] text-sm md:text-base">
           Choose your favourite material and explore custom designs.
         </p>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
         {CATEGORIES.map((cat) => (
           <div
             key={cat.name}
-            className="cursor-pointer focus:outline-none focus:ring-2 focus:ring-pink-400 rounded-2xl"
+            className="cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#E59500] rounded-2xl"
             role="button"
             tabIndex={0}
             onClick={() => navigate(`/category/${slugify(cat.name)}`)}

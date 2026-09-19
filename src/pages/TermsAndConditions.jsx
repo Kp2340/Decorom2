@@ -59,7 +59,7 @@ const TermsAndConditions = () => {
             <h2 className="text-lg font-bold mb-3 text-gray-900">6. Contact Information</h2>
             <p>
               For questions regarding these Terms & Conditions, please email us at{" "}
-              <a href="mailto:decorom213@gmail.com" className="text-pink-600 font-medium hover:underline">
+              <a href="mailto:decorom213@gmail.com" className="text-[#E59500] font-medium hover:underline">
                 decorom213@gmail.com
               </a>.
             </p>

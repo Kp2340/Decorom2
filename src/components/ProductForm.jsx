@@ -342,7 +342,7 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
             name="name"
             value={formData.name}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 border p-2"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#E59500] focus:ring-[#E59500] border p-2"
             required
           />
         </div>
@@ -356,7 +356,7 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
             name="price"
             value={formData.price}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 border p-2"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#E59500] focus:ring-[#E59500] border p-2"
             required
           />
         </div>
@@ -369,7 +369,7 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
             name="material"
             value={formData.material}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 border p-2"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#E59500] focus:ring-[#E59500] border p-2"
           >
             <option value="">Select Material</option>
             <option value="Acrylic">Acrylic</option>
@@ -389,7 +389,7 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
             name="shape"
             value={formData.shape}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 border p-2"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#E59500] focus:ring-[#E59500] border p-2"
           >
             <option value="">Select Shape</option>
             <option value="Square">Square</option>
@@ -412,7 +412,7 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
             name="defaultSize"
             value={formData.defaultSize}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 border p-2"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#E59500] focus:ring-[#E59500] border p-2"
             placeholder="e.g. 12x8"
           />
         </div>
@@ -425,7 +425,7 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
               name="customizable"
               checked={formData.customizable}
               onChange={handleChange}
-              className="h-4 w-4 rounded border-gray-300 text-pink-600 focus:ring-pink-500"
+              className="h-4 w-4 rounded border-gray-300 text-[#E59500] focus:ring-[#E59500]"
             />
             <div className="flex flex-col">
               <label htmlFor="customizable" className="text-sm font-medium text-gray-700">
@@ -463,7 +463,7 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
           rows={3}
           value={formData.description}
           onChange={handleChange}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 border p-2"
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#E59500] focus:ring-[#E59500] border p-2"
         />
       </div>
 
@@ -490,7 +490,7 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
                 editorConfig: JSON.stringify(samplePreset, null, 2),
               }));
             }}
-            className="text-xs text-pink-600 hover:text-pink-700 font-semibold bg-pink-50 hover:bg-pink-100 px-2 py-1 rounded transition-colors"
+            className="text-xs text-[#E59500] hover:text-[#CC8400] font-semibold bg-[#FFFDD0] hover:bg-amber-100 px-2 py-1 rounded transition-colors"
           >
             ✨ Load Sample Customizer Preset
           </button>
@@ -500,7 +500,7 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
           rows={6}
           value={formData.editorConfig}
           onChange={handleChange}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 border p-2 font-mono text-sm"
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#E59500] focus:ring-[#E59500] border p-2 font-mono text-sm"
           placeholder='{"enabled": true, "textZones": [...] }'
         />
       </div>
@@ -525,7 +525,7 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
                   onDragOver={handleDragOver}
                   onDrop={(e) => handleDrop(e, idx, "existing")}
                   className={`relative group border rounded-lg overflow-hidden bg-gray-50 shadow-sm p-1 cursor-grab active:cursor-grabbing transition-transform ${
-                    draggedItem?.type === "existing" && draggedItem?.index === idx ? "opacity-40 scale-95 border-dashed border-pink-500" : ""
+                    draggedItem?.type === "existing" && draggedItem?.index === idx ? "opacity-40 scale-95 border-dashed border-[#E59500]" : ""
                   }`}
                 >
                   <div className="relative h-24 w-full">
@@ -652,7 +652,7 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
           accept="image/*"
           onChange={handleImageChange}
           disabled={existingImages.length + images.length >= 5}
-          className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-pink-50 file:text-pink-700 hover:file:bg-pink-100 disabled:opacity-50"
+          className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-[#FFFDD0] file:text-[#E59500] hover:file:bg-amber-100 disabled:opacity-50"
         />
         <p className="text-xs text-gray-500 mt-1">
           Select up to 5 images (max 20MB total combined). Position #1 will automatically serve as the primary thumbnail.
@@ -694,7 +694,7 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
               type="file"
               accept="video/mp4,video/webm,video/quicktime"
               onChange={handleVideoChange}
-              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100"
+              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-[#FFFDD0] file:text-[#E59500] hover:file:bg-amber-100"
             />
             <p className="text-xs text-gray-500 mt-1">
               Upload 1 video file (.mp4 or .webm, max 20MB) to display in the Product Showcase on the product page.
@@ -707,7 +707,7 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
           <div className="mt-2">
             <div className="bg-gray-200 rounded-full h-2">
               <div
-                className="bg-pink-600 h-2 rounded-full transition-all duration-300"
+                className="bg-[#E59500] h-2 rounded-full transition-all duration-300"
                 style={{ width: `${uploadProgress}%` }}
               />
             </div>
@@ -721,14 +721,14 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
           type="button"
           onClick={onCancel}
           disabled={loading}
-          className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 disabled:opacity-50"
+          className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#E59500] disabled:opacity-50"
         >
           Cancel
         </button>
         <button
           type="submit"
           disabled={loading}
-          className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 disabled:opacity-50"
+          className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#E59500] hover:bg-[#CC8400] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#E59500] disabled:opacity-50"
         >
           {loading ? "Saving..." : "Save Product"}
         </button>

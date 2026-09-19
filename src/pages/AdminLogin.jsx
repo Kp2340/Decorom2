@@ -36,7 +36,7 @@ const AdminLogin = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
+        <h2 className="text-2xl font-bold mb-6 text-center text-[#2C3E50]">
           Admin Login
         </h2>
 
@@ -56,7 +56,7 @@ const AdminLogin = () => {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-pink-500"
+              className="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-[#E59500]"
             />
           </div>
 
@@ -69,14 +69,14 @@ const AdminLogin = () => {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-pink-500"
+              className="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-[#E59500]"
             />
           </div>
 
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-pink-600 text-white font-bold py-2 rounded hover:bg-pink-700 transition disabled:opacity-50"
+            className="w-full bg-[#E59500] text-white font-bold py-2.5 rounded-xl hover:bg-[#CC8400] shadow-md transition disabled:opacity-50 active:scale-95"
           >
             {isSubmitting ? "Logging In..." : "Login"}
           </button>

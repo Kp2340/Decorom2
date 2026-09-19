@@ -44,10 +44,10 @@ const Gallery = memo(
               <button
                 key={idx}
                 onClick={() => onSelectImage(img)}
-                className={`w-16 h-16 rounded-lg overflow-hidden border-2 shrink-0 transition-all ${
+                className={`w-16 h-16 rounded-lg overflow-hidden border-2 shrink-0 transition-all cursor-pointer ${
                   selectedImage === img
-                    ? "border-pink-500 scale-105"
-                    : "border-gray-200 hover:border-pink-300"
+                    ? "border-[#E59500] scale-105 shadow-xs"
+                    : "border-slate-200 hover:border-[#E59500]/50"
                 }`}
               >
                 <LazyLoadImage

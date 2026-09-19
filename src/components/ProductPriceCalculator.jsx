@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { calculateFinalPrice } from "../utils/pricingUtils";
 import { isFixedPrice, parseDefaultSize as parseSize } from "../utils/productUtils";
-import FreeDeliveryBanner from "./FreeDeliveryBanner";
 
 /**
  * ProductPriceCalculator
@@ -112,29 +111,23 @@ const ProductPriceCalculator = ({ product, onChange, externalDimensions = null }
   // Fixed SKU: one price, one size, nothing to configure.
   if (fixed) {
     return (
-      <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 mt-4">
-        <h4 className="text-lg font-semibold mb-3 text-gray-800">Best Seller — Fixed Price</h4>
+      <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 mt-4">
+        <h4 className="text-base font-bold mb-3 text-[#2C3E50]">Best Seller — Fixed Price</h4>
 
-        <div className="flex items-center justify-between rounded-lg border border-gray-200 bg-white px-3 py-2 mb-3">
-          <span className="text-sm font-medium text-gray-600">Size</span>
-          <span className="text-sm font-bold text-gray-900">
+        <div className="flex items-center justify-between rounded-lg border border-slate-200 bg-white px-3 py-2">
+          <span className="text-sm font-medium text-[#334155]">Size</span>
+          <span className="text-sm font-bold text-[#2C3E50]">
             {defaultDims.height || "?"}" × {defaultDims.width || "?"}"
           </span>
         </div>
 
-        <p className="mb-3 text-[11px] font-medium uppercase tracking-tight text-gray-500">
-          This best seller ships in one standard size at a fixed price.
-        </p>
-
-        <FreeDeliveryBanner variant="inline" className="mb-3" />
-
-        <div className="flex items-center justify-between border-t pt-3">
-          <span className="font-medium text-gray-600">Price:</span>
+        <div className="flex items-center justify-between border-t border-slate-200 pt-3">
+          <span className="font-medium text-[#334155]">Price:</span>
           <div className="text-right">
-            <span className="text-2xl font-bold text-pink-600">
-              ₹{Number(basePrice).toLocaleString()}
+            <span className="text-2xl font-bold text-[#2C3E50]">
+              ₹{Number(basePrice).toLocaleString("en-IN")}
             </span>
-            <p className="text-[10px] text-gray-400">Inclusive of all taxes</p>
+            <p className="text-[10px] text-slate-400">Inclusive of all taxes</p>
           </div>
         </div>
       </div>
@@ -142,14 +135,14 @@ const ProductPriceCalculator = ({ product, onChange, externalDimensions = null }
   }
 
   return (
-    <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 mt-4">
-      <h4 className="text-lg font-semibold mb-3 text-gray-800">
-        Price Calculator
+    <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 mt-4">
+      <h4 className="text-base font-bold mb-3 text-[#2C3E50]">
+        Interactive Price Calculator
       </h4>
 
       <div className="grid grid-cols-2 gap-4 mb-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-xs font-semibold text-[#2C3E50] mb-1">
             Height (inch)
           </label>
           <input
@@ -158,11 +151,11 @@ const ProductPriceCalculator = ({ product, onChange, externalDimensions = null }
             max="96"
             value={height}
             onChange={(e) => setHeight(e.target.value)}
-            className="w-full border rounded px-2 py-1 border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
+            className="w-full border rounded-lg px-3 py-2 border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#E59500] focus:border-[#E59500] text-sm text-[#2C3E50] bg-white transition-all"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-xs font-semibold text-[#2C3E50] mb-1">
             Width (inch)
           </label>
           <input
@@ -171,21 +164,21 @@ const ProductPriceCalculator = ({ product, onChange, externalDimensions = null }
             max="96"
             value={width}
             onChange={(e) => setWidth(e.target.value)}
-            className="w-full border rounded px-2 py-1 border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
+            className="w-full border rounded-lg px-3 py-2 border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#E59500] focus:border-[#E59500] text-sm text-[#2C3E50] bg-white transition-all"
           />
         </div>
       </div>
 
-      <div className="space-y-3 border-t pt-3 mb-4">
+      <div className="space-y-2.5 border-t border-slate-200 pt-3 mb-4">
         <label className="flex items-center space-x-3 cursor-pointer group">
           <input
             type="checkbox"
             checked={withLighting}
             onChange={(e) => setWithLighting(e.target.checked)}
-            className="w-4 h-4 rounded text-pink-600 focus:ring-pink-500"
+            className="w-4 h-4 rounded text-[#E59500] accent-[#E59500] focus:ring-[#E59500]"
           />
-          <span className="text-sm text-gray-700 font-medium group-hover:text-black">
-            Include LED Lighting (Front/Back)
+          <span className="text-xs sm:text-sm text-[#334155] font-medium group-hover:text-[#2C3E50]">
+            Include LED Lighting (Warm/White)
           </span>
         </label>
 
@@ -194,26 +187,25 @@ const ProductPriceCalculator = ({ product, onChange, externalDimensions = null }
             type="checkbox"
             checked={withFitting}
             onChange={(e) => setWithFitting(e.target.checked)}
-            className="w-4 h-4 rounded text-pink-600 focus:ring-pink-500"
+            className="w-4 h-4 rounded text-[#E59500] accent-[#E59500] focus:ring-[#E59500]"
           />
-          <span className="text-sm text-gray-700 font-medium group-hover:text-black">
+          <span className="text-xs sm:text-sm text-[#334155] font-medium group-hover:text-[#2C3E50]">
             Professional Installation (+₹500)
           </span>
         </label>
       </div>
 
-      <div className="space-y-1 text-[10px] text-gray-500 uppercase tracking-tight mb-3">
-        <p>Min: 1x1" | Max: 96x96"</p>
-        <p>Material: {material || "Standard"}</p>
+      <div className="space-y-0.5 text-[10px] text-slate-400 uppercase tracking-tight mb-3">
+        <p>Dimensions: 1x1" to 96x96" | Material: {material || "Standard"}</p>
       </div>
 
-      <div className="flex items-center justify-between border-t pt-3">
-        <span className="text-gray-600 font-medium">Total Price:</span>
+      <div className="flex items-center justify-between border-t border-slate-200 pt-3">
+        <span className="text-xs sm:text-sm font-semibold text-[#334155]">Total Calculated Price:</span>
         <div className="text-right">
-          <span className="text-2xl font-bold text-pink-600">
-            ₹{finalPrice.toLocaleString()}
+          <span className="text-2xl font-bold text-[#2C3E50]">
+            ₹{finalPrice.toLocaleString("en-IN")}
           </span>
-          <p className="text-[10px] text-gray-400">✓ Inclusive of all taxes</p>
+          <p className="text-[10px] text-emerald-700 font-medium">✓ Inclusive of all taxes & free design</p>
         </div>
       </div>
     </div>

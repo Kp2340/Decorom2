@@ -33,17 +33,17 @@ const FreeDeliveryBanner = ({ variant = "strip", className = "" }) => {
 
   return (
     <section
-      className={`border-y border-yellow-200 bg-yellow-100 py-3 ${className}`}
+      className={`border-y border-amber-200/80 bg-[#FFFDD0] py-3 ${className}`}
       aria-live="polite"
     >
       <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 text-center">
-        <Truck className="h-5 w-5 text-gray-900" aria-hidden="true" />
-        <p className="text-sm font-black uppercase tracking-wide text-gray-900">
+        <Truck className="h-5 w-5 text-[#2C3E50]" aria-hidden="true" />
+        <p className="text-sm font-bold uppercase tracking-wide text-[#2C3E50]">
           Free delivery on all best sellers
         </p>
-        <p className="text-xs font-semibold text-gray-700">
+        <p className="text-xs font-semibold text-[#334155]">
           Limited time offer ·{" "}
-          <span className="font-mono tabular-nums font-black text-rose-600">{label}</span> left
+          <span className="font-mono tabular-nums font-bold text-[#E59500]">{label}</span> left
         </p>
       </div>
     </section>

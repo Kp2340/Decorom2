@@ -2,7 +2,6 @@ import React from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import Hero from "../components/Hero";
-import TrustBadges from "../components/TrustBadges";
 import HorizontalRail from "../components/HorizontalRail";
 import RecentlyViewedRail from "../components/RecentlyViewedRail";
 import CategoryBrowse from "../components/CategoryBrowse";
@@ -55,23 +54,20 @@ const Home = () => (
       <script type="application/ld+json">{LOCAL_BUSINESS_JSON_LD}</script>
     </Helmet>
 
-    {/* 1. Hero */}
+    {/* 1. Hero (100vh fold containing Carousel image, Headline, CTAs, and All Features) */}
     <Hero />
 
-    {/* 2. Trust badges strip */}
-    <TrustBadges />
-
-    {/* 2b. Recently viewed (renders nothing if the visitor has no history yet) */}
+    {/* 2. Recently viewed (renders nothing if the visitor has no history yet) */}
     <RecentlyViewedRail />
 
     {/* 3. Best Selling Nameplates */}
     <HorizontalRail />
 
     {/* 3b. View All Best Sellers CTA */}
-    <div className="bg-white pb-6 flex justify-center">
+    <div className="bg-white pb-8 flex justify-center">
       <Link
         to="/best-sellers"
-        className="inline-flex items-center gap-2 text-sm font-black text-pink-600 hover:text-pink-700 border border-pink-200 hover:border-pink-400 px-6 py-3 rounded-2xl transition-all hover:shadow-md"
+        className="inline-flex items-center gap-2 text-sm font-bold bg-[#0F172A] hover:bg-white text-white hover:text-[#0F172A] border border-[#0F172A] px-7 py-3 rounded-xl transition-all shadow-xs hover:shadow-md cursor-pointer"
       >
         View All Best Sellers →
       </Link>

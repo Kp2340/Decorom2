@@ -81,8 +81,8 @@ const Carousel = () => {
           <button
             key={index}
             onClick={() => setCurrent(index)}
-            className={`w-3 h-3 rounded-full transition ${
-              index === current ? "bg-pink-500" : "bg-gray-300"
+            className={`w-3 h-3 rounded-full transition cursor-pointer ${
+              index === current ? "bg-[#E59500]" : "bg-slate-300 hover:bg-slate-400"
             }`}
             aria-label={`Go to slide ${index + 1}`}
           ></button>

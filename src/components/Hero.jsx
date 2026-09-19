@@ -3,20 +3,10 @@
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-
-const CLD_THUMB = (id) =>
-  `https://res.cloudinary.com/dowskut5u/video/upload/so_0,w_220,h_310,c_fill,f_jpg,q_auto/${id}.jpg`;
-
-const PRODUCT_VISUALS = [
-  { id: "nameplate-1_bgmqhe", label: "Premium" },
-  { id: "nameplate-2_zzihkw", label: "Wooden" },
-  { id: "nameplate-3_bajgll", label: "Acrylic" },
-  { id: "nameplate-4_qb69jf", label: "Steel" },
-  { id: "nameplate-5_yhlkrn", label: "Custom" },
-];
+import TrustBadges from "./TrustBadges";
 
 const Hero = () => (
-  <section className="relative w-full min-h-[75vh] md:h-[calc(100vh-64px)] flex items-center justify-center overflow-hidden bg-gray-900 py-10 md:py-0">
+  <section className="-mt-12 relative w-full h-[100dvh] min-h-[560px] flex flex-col justify-between overflow-hidden bg-gray-900 pt-12">
 
     {/* Background */}
     <img
@@ -32,94 +22,58 @@ const Hero = () => (
       className="absolute inset-0 w-full h-full object-cover opacity-40"
       fetchPriority="high"
     />
-    <div className="absolute inset-0 bg-gradient-to-r from-gray-900/90 via-gray-900/60 to-gray-900/20" />
+    <div className="absolute inset-0 bg-gradient-to-r from-gray-900/95 via-gray-900/70 to-gray-900/40" />
 
-    {/* Content row */}
-    <div className="relative z-10 w-full max-w-7xl mx-auto px-4 flex flex-col lg:flex-row items-center justify-between gap-8">
-
-      {/* Left — text */}
-      <div className="flex-1 text-center lg:text-left max-w-xl">
+    {/* Centered Content row (vertically centered in remaining space) */}
+    <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-1 flex flex-col items-center justify-center text-center my-auto py-6">
+      <div className="max-w-2xl mx-auto flex flex-col items-center">
         <motion.h1
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-3 md:mb-5 leading-tight"
+          transition={{ duration: 0.6 }}
+          className="text-3xl sm:text-5xl md:text-6xl font-bold text-white mb-3 sm:mb-4 leading-tight drop-shadow-sm"
         >
           Unique Nameplates for{" "}
-          <span className="text-pink-400">Your Dream Home</span>
+          <span className="text-[#E59500]">Your Dream Home</span>
         </motion.h1>
 
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-sm md:text-lg text-gray-200 mb-6 md:mb-8 max-w-lg mx-auto lg:mx-0"
+          transition={{ duration: 0.6, delay: 0.15 }}
+          className="text-sm sm:text-base md:text-lg text-gray-300 mb-6 sm:mb-8 max-w-xl mx-auto leading-relaxed"
         >
           Handcrafted with passion, designed with precision. Elevate your
           entrance with our premium designer nameplates.
         </motion.p>
 
+        {/* Primary & Secondary Buttons */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
+          initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="flex flex-row flex-wrap items-center justify-center lg:justify-start gap-3"
+          transition={{ duration: 0.4, delay: 0.3 }}
+          className="flex flex-row flex-wrap items-center justify-center gap-3 sm:gap-4"
         >
           <Link
             to="/products"
-            className="px-6 py-3 md:px-8 md:py-3.5 bg-pink-600 hover:bg-pink-700 text-white text-sm md:text-base font-bold rounded-full transition-all transform hover:scale-105 shadow-lg shadow-pink-600/30"
+            className="px-7 py-3.5 bg-white hover:bg-[#E59500] text-[#E59500] hover:text-white border border-[#E59500] text-xs sm:text-sm md:text-base font-bold rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg shadow-[#E59500]/30 cursor-pointer inline-flex items-center gap-2"
           >
             Explore Collection
           </Link>
           <Link
             to="/custom-design"
-            className="px-6 py-3 md:px-8 md:py-3.5 bg-white/15 hover:bg-white/25 text-white text-sm md:text-base font-bold rounded-full backdrop-blur-md transition-all border border-white/30"
+            className="px-7 py-3.5 bg-[#0F172A] hover:bg-white text-white hover:text-[#0F172A] border border-[#0F172A] text-xs sm:text-sm md:text-base font-bold rounded-full transition-all duration-300 transform hover:scale-105 shadow-md cursor-pointer inline-flex items-center gap-2"
           >
             Custom Design
           </Link>
         </motion.div>
       </div>
-
-      {/* Right — product visuals (desktop only) */}
-      <motion.div
-        initial={{ opacity: 0, x: 40 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.9, delay: 0.3 }}
-        className="hidden lg:flex gap-3 items-end shrink-0"
-      >
-        {PRODUCT_VISUALS.map((v, i) => (
-          <div
-            key={v.id}
-            className="relative rounded-2xl overflow-hidden shadow-xl shrink-0 border border-white/10"
-            style={{
-              width: 100,
-              height: i === 2 ? 280 : i % 2 === 0 ? 220 : 250,
-            }}
-          >
-            <img
-              src={CLD_THUMB(v.id)}
-              alt={`${v.label} nameplate`}
-              className="w-full h-full object-cover"
-              loading="eager"
-            />
-            <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/70 to-transparent px-2 py-2">
-              <p className="text-white text-xs font-semibold text-center">{v.label}</p>
-            </div>
-          </div>
-        ))}
-      </motion.div>
     </div>
 
-    {/* Scroll indicator */}
-    <motion.div
-      animate={{ y: [0, 10, 0] }}
-      transition={{ duration: 2, repeat: Infinity }}
-      className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/50 z-10"
-    >
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-      </svg>
-    </motion.div>
+    {/* All Features pinned at the bottom of the 100vh container */}
+    <div className="relative z-20 w-full shrink-0">
+      <TrustBadges />
+    </div>
   </section>
 );
 

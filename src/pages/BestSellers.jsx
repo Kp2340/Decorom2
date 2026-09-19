@@ -50,7 +50,7 @@ const BestSellers = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       <SEO
         title="Best Selling Nameplates — Decorom"
         description="Explore Decorom's top-selling custom nameplates, handpicked and loved by hundreds of customers."
@@ -58,9 +58,9 @@ const BestSellers = () => {
       />
 
       {/* Page Header */}
-      <div className="bg-white border-b border-gray-100 py-10 px-4 text-center">
-        <p className="text-xs font-black text-pink-500 uppercase tracking-widest mb-2">Customer Favourites</p>
-        <h1 className="text-3xl md:text-4xl font-black text-gray-900 mb-3">Our Best Sellers</h1>
+      <div className="bg-cyan-50/60 border-b border-cyan-100/80 py-10 px-4 text-center">
+        <p className="text-xs font-black text-[#E59500] uppercase tracking-widest mb-2">Customer Favourites</p>
+        <h1 className="text-3xl md:text-4xl font-black text-[#2C3E50] mb-3">Our Best Sellers</h1>
         <p className="text-gray-500 text-sm max-w-md mx-auto">
           Handpicked by our customers — these are the most loved nameplates at Decorom.
         </p>
@@ -68,7 +68,7 @@ const BestSellers = () => {
 
       <FreeDeliveryBanner />
 
-      <div className="container mx-auto px-4 py-10 max-w-6xl">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {error && (
           <div className="text-center py-12 text-red-500 font-semibold">{error}</div>
         )}
@@ -80,10 +80,10 @@ const BestSellers = () => {
                 <div
                   key={product.id}
                   onClick={() => navigate(`/products/${product.id}`)}
-                  className="group bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer"
+                  className="group bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 product-card-lift cursor-pointer flex flex-col h-full"
                 >
                   {/* Image + Rank Badge */}
-                  <div className="relative aspect-[4/5] overflow-hidden bg-gray-100">
+                  <div className="relative aspect-[4/5] overflow-hidden bg-gray-100 shrink-0">
                     {product.thumbnailUrl ? (
                       <img
                         src={product.thumbnailUrl}
@@ -97,34 +97,31 @@ const BestSellers = () => {
                       </div>
                     )}
                     {/* Rank chip */}
-                    <div className="absolute top-2 left-2 w-8 h-8 bg-black/80 text-white rounded-full flex items-center justify-center text-xs font-black shadow-md">
+                    <div className="absolute top-2 left-2 w-8 h-8 bg-[#2C3E50]/80 text-white rounded-full flex items-center justify-center text-xs font-black shadow-md">
                       #{index + 1}
                     </div>
                     {/* Best seller badge */}
-                    <div className="absolute top-2 right-2 bg-pink-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-md uppercase tracking-wide">
+                    <div className="absolute top-2 right-2 bg-[#E59500] text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-md uppercase tracking-wide">
                       Best Seller
                     </div>
                   </div>
 
                   {/* Product Info */}
-                  <div className="p-3 md:p-4">
-                    <h3 className="font-bold text-gray-900 text-sm leading-snug line-clamp-2 mb-1 group-hover:text-pink-600 transition-colors">
+                  <div className="p-3 md:p-4 flex flex-col flex-1">
+                    <h3 className="font-bold text-[#2C3E50] text-sm leading-snug line-clamp-2 min-h-[2.5rem] mb-1 group-hover:text-[#E59500] transition-colors">
                       {product.name}
                     </h3>
                     {product.material && (
                       <p className="text-[11px] text-gray-400 font-medium mb-2">{product.material}</p>
                     )}
                     {product.basePrice > 0 && (
-                      <p className="text-pink-600 font-black text-sm mb-3">
-                        {/* Fixed SKUs sell for exactly this amount, so "Starting" would be a
-                            misleading claim — it used to sit next to a product page showing a
-                            completely different, area-derived price. */}
+                      <p className="text-[#E59500] font-black text-sm mb-3">
                         {isFixedPrice(product) ? "" : "Starting "}₹
                         {product.basePrice.toLocaleString()}
                       </p>
                     )}
-                    <button className="w-full bg-gradient-to-r from-pink-600 to-rose-600 text-white text-xs font-black py-2.5 rounded-xl hover:from-pink-700 hover:to-rose-700 transition-all active:scale-95 shadow-sm shadow-pink-100">
-                      Customise & Order →
+                    <button className="w-full mt-auto bg-white hover:bg-[#E59500] text-[#E59500] hover:text-white border border-[#E59500] text-xs font-bold py-2.5 rounded-xl transition-all duration-200 active:scale-95 shadow-xs cursor-pointer">
+                      Order Now →
                     </button>
                   </div>
                 </div>

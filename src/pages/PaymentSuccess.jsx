@@ -251,8 +251,8 @@ const PaymentSuccess = () => {
 
             {/* Order Details Grid */}
             <div className="mb-10">
-              <h3 className="text-xl font-black text-gray-900 mb-6 flex items-center gap-2">
-                  <span className="w-1.5 h-6 bg-pink-500 rounded-full"></span> Order Summary
+              <h3 className="text-xl font-black text-[#2C3E50] mb-6 flex items-center gap-2">
+                <span className="w-1.5 h-6 bg-[#E59500] rounded-full"></span> Order Summary
               </h3>
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
