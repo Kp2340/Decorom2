@@ -12,7 +12,7 @@ import { toImageUrls, PLACEHOLDER_IMAGE } from "../utils/imageUtils";
  * - Expanded: smoothly morphs into an inline input field with live floating dropdown
  * - Dismisses on Escape, outside click, or X button
  */
-const SearchBar = ({ isTransparent, headerBtnClass }) => {
+const SearchBar = ({ headerBtnClass }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
   const containerRef = useRef(null);

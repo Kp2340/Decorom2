@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getProducts } from "../api/products.api";
 import ProductCard from "../components/ProductCard";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import SEO from "../components/SEO";
 
 import { CATEGORIES, slugify } from "../constants/categories";
@@ -87,12 +87,12 @@ const Products = () => {
                       The finest {cat.name.toLowerCase()} designs for your entrance.
                     </p>
                   </div>
-                  <button
-                    onClick={() => navigate(`/category/${slugify(cat.name)}`)}
-                    className="text-[#E59500] font-bold text-sm md:text-base hover:text-[#CC8400] transition-colors whitespace-nowrap ml-4 cursor-pointer"
+                  <Link
+                    to={`/category/${slugify(cat.name)}`}
+                    className="text-[#E59500] font-bold text-sm md:text-base hover:text-[#CC8400] transition-colors whitespace-nowrap ml-4 inline-flex items-center cursor-pointer"
                   >
                     View All →
-                  </button>
+                  </Link>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 lg:grid-cols-4 sm:gap-6 md:gap-8">

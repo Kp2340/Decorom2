@@ -1,8 +1,15 @@
 import React from "react";
+import SEO from "../components/SEO";
 
 const RefundPolicy = () => {
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
+      <SEO
+        title="Refund & Cancellation Policy"
+        description="Decorom's policy on bespoke custom nameplates, 24-hour damaged item reporting, transit replacements, and quality guarantees."
+        keywords="decorom refund policy, custom nameplate replacement ahmedabad, return policy decorom"
+        url="https://www.decorom.in/refund-policy"
+      />
       <h1 className="text-3xl font-bold mb-8 text-center">Refund Policy</h1>
 
       <div className="space-y-6 text-gray-700">

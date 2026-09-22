@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { ShoppingBag } from "lucide-react";
+import { ShoppingBag, ChevronDown } from "lucide-react";
 import SearchBar from "./SearchBar";
 import MiniCartDrawer from "./MiniCartDrawer";
 import { useWishlist } from "../wishlist/WishlistContext";
+import { CATEGORIES, slugify } from "../constants/categories";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [categoriesDropdownOpen, setCategoriesDropdownOpen] = useState(false);
   const { count: wishlistCount, toggleDrawer } = useWishlist();
   const location = useLocation();
   const isHomePage = location.pathname === "/";
@@ -24,7 +26,10 @@ const Header = () => {
   const isTransparent = isHomePage && !isScrolled;
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-  const closeMenu = () => setIsMenuOpen(false);
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+    setCategoriesDropdownOpen(false);
+  };
 
   // Simplified navigation items per agreed design strategy
   const menuItems = [
@@ -32,6 +37,7 @@ const Header = () => {
     { name: "Best Sellers", path: "/best-sellers" },
     { name: "Custom Design", path: "/custom-design" },
     { name: "Customers", path: "/customers" },
+    { name: "About", path: "/about" },
     { name: "Contact", path: "/contact" },
   ];
 
@@ -104,14 +110,69 @@ const Header = () => {
 
           {/* Center: Desktop Menu (Visible on xl+ 1280px+) — centered */}
           <div className="hidden xl:flex items-center justify-center flex-1">
-            <ul className="flex items-center space-x-6 xl:space-x-8 text-sm font-medium">
-              {menuItems.map((item) => (
-                <li key={item.name}>
-                  <NavLink to={item.path} className={desktopLinkClass}>
-                    {item.name}
-                  </NavLink>
-                </li>
-              ))}
+            <ul className="flex items-center space-x-5 2xl:space-x-7 text-sm font-medium">
+              <li>
+                <NavLink to="/products" className={desktopLinkClass}>
+                  Products
+                </NavLink>
+              </li>
+
+              {/* Categories Dropdown */}
+              <li
+                className="relative group py-1"
+                onMouseEnter={() => setCategoriesDropdownOpen(true)}
+                onMouseLeave={() => setCategoriesDropdownOpen(false)}
+              >
+                <button
+                  type="button"
+                  className={`${desktopLinkClass({
+                    isActive: location.pathname.startsWith("/category"),
+                  })} flex items-center gap-1 cursor-pointer`}
+                  onClick={() => setCategoriesDropdownOpen((prev) => !prev)}
+                  aria-expanded={categoriesDropdownOpen}
+                  aria-haspopup="true"
+                >
+                  Categories
+                  <ChevronDown className="w-3.5 h-3.5 transition-transform duration-200 group-hover:rotate-180" />
+                </button>
+
+                <div
+                  className={`absolute top-full left-1/2 -translate-x-1/2 pt-2 transition-all duration-200 ${
+                    categoriesDropdownOpen
+                      ? "opacity-100 visible translate-y-0"
+                      : "opacity-0 invisible -translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0"
+                  }`}
+                >
+                  <div className="bg-[#0F172A] border border-slate-700/80 rounded-xl shadow-xl py-2 px-1 min-w-[190px] backdrop-blur-md">
+                    {CATEGORIES.map((cat) => (
+                      <NavLink
+                        key={cat.name}
+                        to={`/category/${slugify(cat.name)}`}
+                        onClick={() => setCategoriesDropdownOpen(false)}
+                        className={({ isActive }) =>
+                          `block px-3 py-2 text-xs font-medium rounded-lg transition-colors ${
+                            isActive
+                              ? "text-[#E59500] bg-white/5 font-semibold"
+                              : "text-slate-300 hover:text-[#E59500] hover:bg-white/5"
+                          }`
+                        }
+                      >
+                        {cat.name}
+                      </NavLink>
+                    ))}
+                  </div>
+                </div>
+              </li>
+
+              {menuItems
+                .filter((item) => item.name !== "Products")
+                .map((item) => (
+                  <li key={item.name}>
+                    <NavLink to={item.path} className={desktopLinkClass}>
+                      {item.name}
+                    </NavLink>
+                  </li>
+                ))}
             </ul>
           </div>
 
@@ -151,7 +212,7 @@ const Header = () => {
 
       {/* Mobile/Tablet Menu Panel (Left Slide) */}
       <div
-        className={`fixed top-0 left-0 h-full w-4/5 max-w-xs bg-[#0F172A] border-r border-slate-800 z-50 transform transition-transform duration-300 ease-out shadow-2xl xl:hidden ${
+        className={`fixed top-0 left-0 h-full w-4/5 max-w-xs bg-[#0F172A] border-r border-slate-800 z-50 transform transition-transform duration-300 ease-out shadow-2xl xl:hidden overflow-y-auto ${
           isMenuOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -171,17 +232,54 @@ const Header = () => {
 
         {/* Mobile Menu Items */}
         <ul className="flex flex-col py-6 space-y-2 px-6">
-          {menuItems.map((item) => (
-            <li key={item.name}>
-              <NavLink
-                to={item.path}
-                onClick={closeMenu}
-                className={mobileLinkClass}
-              >
-                {item.name}
-              </NavLink>
-            </li>
-          ))}
+          <li>
+            <NavLink
+              to="/products"
+              onClick={closeMenu}
+              className={mobileLinkClass}
+            >
+              Products
+            </NavLink>
+          </li>
+
+          {/* Categories for Mobile */}
+          <li className="py-1">
+            <span className="block text-xs uppercase font-bold tracking-wider text-slate-400 pl-3 mb-1.5">
+              Categories
+            </span>
+            <div className="pl-3 space-y-1">
+              {CATEGORIES.map((cat) => (
+                <NavLink
+                  key={cat.name}
+                  to={`/category/${slugify(cat.name)}`}
+                  onClick={closeMenu}
+                  className={({ isActive }) =>
+                    `block text-sm py-1 pl-3 transition-colors ${
+                      isActive
+                        ? "text-[#E59500] font-semibold"
+                        : "text-slate-300 hover:text-[#E59500]"
+                    }`
+                  }
+                >
+                  {cat.name} Nameplates
+                </NavLink>
+              ))}
+            </div>
+          </li>
+
+          {menuItems
+            .filter((item) => item.name !== "Products")
+            .map((item) => (
+              <li key={item.name}>
+                <NavLink
+                  to={item.path}
+                  onClick={closeMenu}
+                  className={mobileLinkClass}
+                >
+                  {item.name}
+                </NavLink>
+              </li>
+            ))}
         </ul>
       </div>
     </>

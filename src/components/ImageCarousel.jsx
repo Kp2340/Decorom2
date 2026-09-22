@@ -9,7 +9,6 @@ const ImageCarousel = ({ images = [], videoUrl = null }) => {
 
   const [current, setCurrent] = useState(0);
   const [isMuted, setIsMuted] = useState(true);
-  const [isPlaying, setIsPlaying] = useState(true);
   const [imageLoaded, setImageLoaded] = useState({});
   const touchStartX = useRef(null);
   const videoRef = useRef(null);

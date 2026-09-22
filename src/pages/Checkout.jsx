@@ -63,7 +63,17 @@ const Checkout = () => {
       }
     };
     loadProduct();
-  }, [productId]);
+  }, [productId, passedProduct]);
+
+  const handlePromoApply = useCallback((code, data) => {
+    setAppliedPromoCode(code);
+    setPromoInfo(data);
+  }, []);
+
+  const handlePromoRemove = useCallback(() => {
+    setAppliedPromoCode(null);
+    setPromoInfo(null);
+  }, []);
 
   // Re-evaluate eligible promo when base price changes (e.g. user resizes)
   useEffect(() => {
@@ -92,17 +102,7 @@ const Checkout = () => {
       const { discountAmount: d } = calculateDiscount(appliedPromoCode, config.price);
       if (d === 0) handlePromoRemove();
     }
-  }, [config?.price, fixedPrice]);
-
-  const handlePromoApply = useCallback((code, data) => {
-    setAppliedPromoCode(code);
-    setPromoInfo(data);
-  }, []);
-
-  const handlePromoRemove = useCallback(() => {
-    setAppliedPromoCode(null);
-    setPromoInfo(null);
-  }, []);
+  }, [config?.price, fixedPrice, appliedPromoCode, handlePromoRemove]);
 
   // Redirect if user hit checkout directly without configuration
   useEffect(() => {

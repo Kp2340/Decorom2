@@ -175,7 +175,7 @@ const ProductForm = ({ initialData, onSubmit, onCancel, loading }) => {
       // Handle existing video from backend
       setExistingVideo(initialData.videoUrl || initialData.video || null);
     }
-  }, [initialData?.id]);
+  }, [initialData]);
 
   // Cleanup preview URLs on unmount
   useEffect(() => {

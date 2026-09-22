@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { submitCustomInquiry } from "../api/orders.api";
+import SEO from "../components/SEO";
 
 const CustomDesign = () => {
   const navigate = useNavigate();
@@ -34,6 +35,12 @@ const CustomDesign = () => {
 
   return (
     <div className="min-h-screen bg-white font-sans overflow-hidden">
+      <SEO
+        title="Custom Nameplate Design Inquiry"
+        description="Request a bespoke designer nameplate tailored to your home entrance. Choose custom dimensions, acrylic, wood, steel, or resin with regional font personalization in Ahmedabad."
+        keywords="custom nameplate design ahmedabad, personalized house name plate maker, bespoke entrance nameplate"
+        url="https://www.decorom.in/custom-design"
+      />
       {/* Decorative Background */}
       <div className="absolute top-0 right-0 w-1/2 h-full bg-cyan-50/50 skew-x-12 translate-x-1/2 -z-10" />
 

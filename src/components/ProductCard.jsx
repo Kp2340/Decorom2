@@ -1,4 +1,5 @@
 import React, { memo, useMemo } from "react";
+import { Link } from "react-router-dom";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { Heart } from "lucide-react";
 import {
@@ -72,15 +73,28 @@ const ProductCard = memo(({ product, onClick }) => {
     >
       {/* Image Container - Fixed aspect ratio prevents layout shift */}
       <div className="relative w-full aspect-[3/4] bg-slate-100 overflow-hidden">
-        <LazyLoadImage
-          src={src}
-          srcSet={srcSet}
-          sizes={sizes}
-          placeholderSrc={BLUR_PLACEHOLDER}
-          alt={product.name}
-          decoding="async"
-          className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-        />
+        <Link
+          to={`/products/${product.id}`}
+          onClick={(e) => {
+            if (onClick) {
+              e.preventDefault();
+              onClick(product);
+            }
+          }}
+          tabIndex={-1}
+          aria-hidden="true"
+          className="block w-full h-full"
+        >
+          <LazyLoadImage
+            src={src}
+            srcSet={srcSet}
+            sizes={sizes}
+            placeholderSrc={BLUR_PLACEHOLDER}
+            alt={product.name}
+            decoding="async"
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        </Link>
         <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
         {(isBestSeller || isLed) && (
@@ -125,7 +139,17 @@ const ProductCard = memo(({ product, onClick }) => {
 
         {/* Product Name */}
         <h3 className="text-sm sm:text-base font-semibold text-[#2C3E50] leading-snug line-clamp-2 min-h-[2.5rem] group-hover:text-[#E59500] transition-colors">
-          {product.name}
+          <Link
+            to={`/products/${product.id}`}
+            onClick={(e) => {
+              if (onClick) {
+                e.preventDefault();
+                onClick(product);
+              }
+            }}
+          >
+            {product.name}
+          </Link>
         </h3>
 
         {/* Specs/Customization Type */}

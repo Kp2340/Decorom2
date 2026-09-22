@@ -1,6 +1,6 @@
 import { ShieldCheck, Truck, PackageCheck, Palette, Layers, Gift } from "lucide-react";
 
-export const TRUST_BADGES = [
+const TRUST_BADGES = [
   {
     icon: ShieldCheck,
     title: "Secure Payment",

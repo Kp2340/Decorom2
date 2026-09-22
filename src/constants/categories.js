@@ -12,7 +12,7 @@ export const CATEGORIES = [
     images: [
       CLD("v1771703476/decorom/products/dtv6nu8f3rfanmkfzcin.png"),
       CLD("v1787125164/decorom/products/wungwv9x1fcwqhcgkx5d.png"),
-      CLD("v1773567450/decorom/products/m0ufm3tqwmijg3ja6l51.png"),
+      CLD("v1773569229/decorom/products/pct1r7ntizduqwjvfx5g.png"),
       CLD("v1771703054/decorom/products/n7fselgisyplrzpktr8z.png"),
     ],
   },
@@ -53,7 +53,7 @@ export const CATEGORIES = [
       CLD("v1780754823/decorom/products/dp9sjpswh5we5q0i2tlg.jpg"),
       CLD("v1771702737/decorom/products/yigxjh2ez1m2eouosluc.png"),
       CLD("v1771699368/decorom/products/axxz9weeyeyxwpt4eben.png"),
-      CLD("v1773567450as"),
+      CLD("v1773567450/decorom/products/m0ufm3tqwmijg3ja6l51.png"),
     ],
   },
   {

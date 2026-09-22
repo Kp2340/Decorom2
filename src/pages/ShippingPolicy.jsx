@@ -1,8 +1,15 @@
 import React from "react";
+import SEO from "../components/SEO";
 
 const ShippingPolicy = () => {
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
+      <SEO
+        title="Shipping & Delivery Policy"
+        description="Learn about Decorom's 2-3 business day order processing, 5-7 day doorstep delivery timeline across Gujarat, secure multi-layer packaging, and pan-India shipping."
+        keywords="decorom shipping policy, nameplate delivery timeline ahmedabad, order processing decorom"
+        url="https://www.decorom.in/shipping-policy"
+      />
       <h1 className="text-3xl font-bold mb-8 text-center">Shipping Policy</h1>
 
       <div className="space-y-6 text-gray-700">

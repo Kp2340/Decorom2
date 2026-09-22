@@ -28,10 +28,10 @@ const FacebookIcon = ({ className = "w-4 h-4 shrink-0 transition-colors" }) => (
 
 const Footer = () => (
   <footer className="bg-[#0F172A] text-slate-300 border-t border-slate-800 mt-10 transition-colors duration-200">
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 grid grid-cols-2 md:grid-cols-5 gap-x-6 gap-y-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-6 gap-y-8">
 
-      {/* Column 1 — Brand Column (spans 2 on mobile, 1 on desktop) */}
-      <div className="col-span-2 md:col-span-1 space-y-3">
+      {/* Column 1 — Brand Column (spans 2 on mobile, 3 on md, 1 on lg) */}
+      <div className="col-span-2 md:col-span-3 lg:col-span-1 space-y-3">
         <Link to="/" className="inline-block">
           <img
             src="/logo/logo.png"
@@ -47,7 +47,20 @@ const Footer = () => (
         </p>
       </div>
 
-      {/* Column 2 — Quick Links */}
+      {/* Column 2 — Categories */}
+      <div className="space-y-3">
+        <h3 className="text-xs sm:text-sm font-bold text-white uppercase tracking-wider">Categories</h3>
+        <ul className="space-y-2 text-xs sm:text-sm text-slate-400">
+          <li><Link to="/category/acrylic" className="hover:text-[#E59500] transition-colors duration-200">Acrylic Plates</Link></li>
+          <li><Link to="/category/wooden" className="hover:text-[#E59500] transition-colors duration-200">Wooden Plates</Link></li>
+          <li><Link to="/category/acp" className="hover:text-[#E59500] transition-colors duration-200">ACP Plates</Link></li>
+          <li><Link to="/category/mild-steel" className="hover:text-[#E59500] transition-colors duration-200">Mild Steel</Link></li>
+          <li><Link to="/category/stainless-steel" className="hover:text-[#E59500] transition-colors duration-200">Stainless Steel</Link></li>
+          <li><Link to="/category/resin" className="hover:text-[#E59500] transition-colors duration-200">Resin Art</Link></li>
+        </ul>
+      </div>
+
+      {/* Column 3 — Quick Links */}
       <div className="space-y-3">
         <h3 className="text-xs sm:text-sm font-bold text-white uppercase tracking-wider">Quick Links</h3>
         <ul className="space-y-2 text-xs sm:text-sm text-slate-400">
@@ -60,11 +73,11 @@ const Footer = () => (
         </ul>
       </div>
 
-      {/* Column 3 — Policies */}
+      {/* Column 4 — Policies */}
       <div className="space-y-3">
         <h3 className="text-xs sm:text-sm font-bold text-white uppercase tracking-wider">Policies</h3>
         <ul className="space-y-2 text-xs sm:text-sm text-slate-400">
-          <li><Link to="/privacy" className="hover:text-[#E59500] transition-colors duration-200">Privacy Policy</Link></li>
+          <li><Link to="/privacy-policy" className="hover:text-[#E59500] transition-colors duration-200">Privacy Policy</Link></li>
           <li><Link to="/terms" className="hover:text-[#E59500] transition-colors duration-200">Terms &amp; Conditions</Link></li>
           <li><Link to="/refund-policy" className="hover:text-[#E59500] transition-colors duration-200">Refund Policy</Link></li>
           <li><Link to="/shipping-policy" className="hover:text-[#E59500] transition-colors duration-200">Shipping Policy</Link></li>
