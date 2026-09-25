@@ -8,7 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview --host",
-    "dev": "vite --host"
+    "dev": "vite --host",
+    "test": "vitest run"
   },
   "dependencies": {
     "@emailjs/browser": "4.4.1",
@@ -41,6 +42,7 @@
     "svgo": "4.1.0",
     "tailwindcss": "4.3.2",
     "vite": "8.1.4",
-    "vite-plugin-image-optimizer": "2.0.3"
+    "vite-plugin-image-optimizer": "2.0.3",
+    "vitest": "4.1.11"
   }
 }
