@@ -1,0 +1,115 @@
+{
+  "name": "Decorom",
+  "legalName": "Decorom",
+  "tagline": "Handcrafted Luxury Designer Nameplates for Homes, Flats & Villas",
+  "homepage": "https://www.decorom.in",
+  "description": "Decorom is a premier designer nameplate manufacturer and e-commerce brand based in Ahmedabad, Gujarat. Specializing in handcrafted custom nameplates in Acrylic, Natural Teak Wood, Weatherproof ACP, Laser-cut Mild Steel, SS 304 Stainless Steel, and Hand-Poured Resin Art with real-time 2D/3D customizer and pan-India doorstep delivery.",
+  "rating": {
+    "platform": "Google Maps",
+    "ratingValue": 4.9,
+    "reviewCount": 41,
+    "googleMapsUrl": "https://www.google.com/maps?cid=6058749169901264755"
+  },
+  "contact": {
+    "phone": "+91 90167 07658",
+    "whatsapp": "https://wa.me/919016707658",
+    "email": "decorom213@gmail.com",
+    "website": "https://www.decorom.in/contact",
+    "operatingHours": "Monday - Saturday: 9:00 AM - 7:00 PM IST"
+  },
+  "physicalStore": {
+    "address": "Shop A/7, Second Floor, Shreekunj Shopping Centre, Near HDFC Bank, K.K. Nagar, Ghatlodiya, Nirnay Nagar",
+    "city": "Ahmedabad",
+    "district": "Ahmedabad",
+    "state": "Gujarat",
+    "pincode": "380061",
+    "country": "India",
+    "geo": {
+      "latitude": 23.0693,
+      "longitude": 72.5503
+    },
+    "hasMap": "https://www.google.com/maps?cid=6058749169901264755"
+  },
+  "fulfillment": {
+    "productionTime": "Ready within 2–3 working days from design approval",
+    "deliveryAhmedabad": "Next-day doorstep delivery across Ahmedabad & Gandhinagar",
+    "deliveryPanIndia": "4–6 working days express courier shipping with live tracking across all Indian states",
+    "packaging": "Multi-layer shockproof thermocol and corrugated protective box",
+    "freeDeliveryThreshold": "Free shipping on orders above ₹2,000"
+  },
+  "customizerFeatures": {
+    "designerUrl": "https://www.decorom.in/custom-design",
+    "interactivePreview": "Real-time 2D/3D visual customizer with live typography, dimensions, and colorway rendering",
+    "scriptSupport": ["English", "Hindi (Devanagari)", "Gujarati", "Marathi", "Regional Indian Scripts"],
+    "religiousAndDecorativeMotifs": [
+      "Lord Ganesha / Ganpati",
+      "Om & Swastik Symbols",
+      "Lord Krishna Flute & Peacock Feather",
+      "Jain Navkar Mantra & Jain Prateek",
+      "Ik Onkar & Sikh Symbols",
+      "Floral Vines & Modern Abstract Borders"
+    ],
+    "lightingOptions": ["Non-LED", "Warm White Backlit LED (3000K)", "Golden Yellow LED", "Waterproof 12V DC Adapter Included"]
+  },
+  "materialCategories": [
+    {
+      "name": "Acrylic Nameplates",
+      "slug": "acrylic",
+      "url": "https://www.decorom.in/category/acrylic",
+      "priceRange": "₹799 - ₹4,999",
+      "durability": "100% waterproof, weather-resistant, zero yellowing cast acrylic",
+      "finishes": ["High-Gloss Black & Gold", "3D Embossed Golden Mirror", "Frosted & Matte", "Illuminated Backlit"],
+      "recommendedFor": "Modern apartments, flats, corridors, and contemporary homes"
+    },
+    {
+      "name": "Wooden Nameplates",
+      "slug": "wooden",
+      "url": "https://www.decorom.in/category/wooden",
+      "priceRange": "₹999 - ₹6,499",
+      "durability": "Treated with exterior marine PU polish, moisture-sealed, termite-resistant",
+      "finishes": ["Natural Teak Wood", "Dark Walnut Stain", "Rustic Live-Edge Log Slice", "Wood with Golden 3D Acrylic Letters"],
+      "recommendedFor": "Traditional bungalows, villas, covered home entrances, and vastu-compliant entrances"
+    },
+    {
+      "name": "ACP (Aluminium Composite Panel) Nameplates",
+      "slug": "acp",
+      "url": "https://www.decorom.in/category/acp",
+      "priceRange": "₹1,299 - ₹5,760",
+      "durability": "Extreme weather-resistance, 100% rustproof, fire-retardant exterior core",
+      "finishes": ["Natural Wood Grain Texture (Teak / Walnut)", "Brushed Gold & Silver Metallic", "Matte Charcoal & Black"],
+      "recommendedFor": "Exposed outdoor walls, main bungalow entrance gates, and heavy monsoon areas"
+    },
+    {
+      "name": "Mild Steel (MS) Laser-Cut Nameplates",
+      "slug": "mild-steel",
+      "url": "https://www.decorom.in/category/mild-steel",
+      "priceRange": "₹1,440 - ₹14,400",
+      "durability": "7-tank chemical pre-treatment with industrial thermal powder coating",
+      "finishes": ["Matte Black Powder Coat", "Textured Charcoal", "Antique Bronze & Copper"],
+      "recommendedFor": "Architectural villa gates, modern exterior compound walls, and large farmhouses"
+    },
+    {
+      "name": "Stainless Steel (SS 304) Nameplates",
+      "slug": "stainless-steel",
+      "url": "https://www.decorom.in/category/stainless-steel",
+      "priceRange": "₹2,999 - ₹14,000",
+      "durability": "High-grade SS 304 architectural stainless steel, lifetime rustproof guarantee",
+      "finishes": ["Electroplated Titanium Gold PVD", "Rose Gold Gloss", "Brushed Hairline Silver", "Chemical Acid Etched"],
+      "recommendedFor": "Luxury residences, executive corporate offices, advocate & doctor chambers"
+    },
+    {
+      "name": "Resin Art Nameplates",
+      "slug": "resin",
+      "url": "https://www.decorom.in/category/resin",
+      "priceRange": "₹2,999 - ₹4,499",
+      "durability": "Shatterproof crystal-clear UV-stabilized epoxy resin",
+      "finishes": ["Real Pressed Flowers & Botanical", "Ocean Wave Resin", "Marble Swirl with Gold Leafing"],
+      "recommendedFor": "Artistic home entrances, apartment foyer decor, and personalized luxury housewarming gifts"
+    }
+  ],
+  "warrantyAndCare": {
+    "warranty": "1-year warranty covering manufacturing defects, letter adhesion, and LED power modules",
+    "cleaning": "Wipe with a soft microfibre cloth; mild soapy water for acrylic/ACP/metal; avoid abrasive scrubbers or chemical solvents",
+    "mounting": "Includes pre-drilled holes, brass mirror cap screws, floating wall stand-off spacers, or heavy-duty 3M VHB tape"
+  }
+}

@@ -80,8 +80,8 @@ const ALL_REVIEWS = [
 const REVIEWS = [...ALL_REVIEWS].sort((a, b) => b.rating - a.rating || a.name.localeCompare(b.name));
 
 // These reflect the actual Google listing — update when your review count changes
-const GOOGLE_RATING = 4.8;
-const GOOGLE_REVIEW_COUNT = 3;
+const GOOGLE_RATING = 4.9;
+const GOOGLE_REVIEW_COUNT = 41;
 
 const AVATAR_COLORS = [
   "bg-[#E59500]", "bg-blue-500", "bg-emerald-500",
@@ -130,7 +130,7 @@ const ReviewCard = ({ review, colorClass }) => {
 };
 
 const CustomerReviews = () => (
-    <section className="py-16 bg-gradient-to-b from-slate-50/50 via-white to-white relative before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-slate-200 before:to-transparent">
+    <section className="py-16 bg-white relative before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-slate-200 before:to-transparent">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-8">

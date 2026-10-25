@@ -14,10 +14,11 @@
   -moz-appearance: textfield;
 }
 
-/* Prevent horizontal page scroll without breaking CSS position: sticky */
+/* Prevent horizontal page scroll and pull-down bounce exposing white area */
 html, body {
   overflow-x: clip;
   max-width: 100vw;
+  overscroll-behavior-y: none;
 }
 
 /* Hide scrollbar but keep scroll functionality */

@@ -62,7 +62,7 @@ const App = () => (
             <ScrollToTop />
             <GTMAnalytics />
             <Header />
-            <main className="pt-12 min-h-screen">
+            <main className="pt-12 min-h-screen bg-white">
               <Suspense fallback={<PageLoader />}>
                 <Routes>
                   <Route path="/" element={<Home />} />

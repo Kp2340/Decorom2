@@ -36,7 +36,9 @@ const Footer = () => (
           <img
             src="/logo/logo.png"
             alt="Decorom"
-            className="h-8 w-auto brightness-0 invert"
+            width="60"
+            height="36"
+            className="h-9 w-auto brightness-0 invert drop-shadow-xs shrink-0"
           />
         </Link>
         <p className="text-xs text-slate-400 leading-relaxed max-w-xs">

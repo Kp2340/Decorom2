@@ -1,20 +1,51 @@
+import { useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
 
-const CLD = (name) =>
-  `https://res.cloudinary.com/dowskut5u/video/upload/f_auto,q_auto:good,w_720/${name}`;
+const CLD_VIDEO = (name) =>
+  `https://res.cloudinary.com/dowskut5u/video/upload/w_360,br_500k,q_auto:eco,vc_h264,f_auto/${name}.mp4`;
+
+const CLD_POSTER = (name) =>
+  `https://res.cloudinary.com/dowskut5u/video/upload/so_0,w_360,f_auto,q_auto/${name}.jpg`;
 
 const VIDEOS = [
-  { id: 1, title: "Premium Stainless Steel", url: CLD("nameplate-1_bgmqhe") },
-  { id: 2, title: "Golden Acrylic",           url: CLD("nameplate-2_zzihkw") },
-  { id: 3, title: "Wooden Collection",        url: CLD("nameplate-3_bajgll") },
-  { id: 4, title: "LED Dwarka Name Plate",    url: CLD("nameplate-4_qb69jf") },
-  { id: 5, title: "ACP Wooden Theme",         url: CLD("nameplate-5_yhlkrn") },
+  { id: 1, title: "Premium Stainless Steel", name: "nameplate-1_bgmqhe" },
+  { id: 2, title: "Golden Acrylic",           name: "nameplate-2_zzihkw" },
+  { id: 3, title: "Wooden Collection",        name: "nameplate-3_bajgll" },
+  { id: 4, title: "LED Dwarka Name Plate",    name: "nameplate-4_qb69jf" },
+  { id: 5, title: "ACP Wooden Theme",         name: "nameplate-5_yhlkrn" },
 ];
 
+function VideoSlideItem({ item }) {
+  const videoRef = useRef(null);
+  const posterUrl = CLD_POSTER(item.name);
+  const videoUrl = CLD_VIDEO(item.name);
+
+  return (
+    <div className="relative rounded-2xl overflow-hidden bg-gray-900 group aspect-[9/16]">
+      <video
+        ref={videoRef}
+        className="w-full h-full object-cover"
+        autoPlay
+        loop
+        muted
+        playsInline
+        poster={posterUrl}
+        preload="metadata"
+      >
+        <source src={videoUrl} type="video/mp4" />
+        <track kind="captions" src="data:text/vtt,WEBVTT" label="English" default={false} />
+      </video>
+      <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent px-4 py-3 pointer-events-none">
+        <p className="text-white text-sm font-semibold">{item.title}</p>
+      </div>
+    </div>
+  );
+}
+
 const VideoShowcase = () => (
-  <section className="py-10 md:py-16 bg-gradient-to-b from-slate-50/50 via-white to-white overflow-hidden relative before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-slate-200 before:to-transparent">
+  <section className="py-10 md:py-16 bg-white overflow-hidden relative before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-slate-200 before:to-transparent">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 md:mb-10">
       <h2 className="text-2xl md:text-3xl font-bold text-[#2C3E50] mb-2">Our Nameplates in Action</h2>
       <p className="text-[#334155] text-sm md:text-base">Watch the craftsmanship — real videos before delivery.</p>
@@ -34,25 +65,9 @@ const VideoShowcase = () => (
           1280: { slidesPerView: 5,   spaceBetween: 20 },
         }}
       >
-        {[...VIDEOS, ...VIDEOS].map((v, i) => (
-          <SwiperSlide key={`${v.id}-${i}`}>
-            <div className="relative rounded-2xl overflow-hidden bg-gray-800 group">
-              <div className="aspect-[9/16]">
-                <video
-                  className="w-full h-full object-cover"
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  preload="none"
-                >
-                  <source src={v.url} type="video/mp4" />
-                </video>
-              </div>
-              <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/70 to-transparent px-4 py-3">
-                <p className="text-white text-sm font-semibold">{v.title}</p>
-              </div>
-            </div>
+        {VIDEOS.map((v) => (
+          <SwiperSlide key={v.id}>
+            <VideoSlideItem item={v} />
           </SwiperSlide>
         ))}
       </Swiper>

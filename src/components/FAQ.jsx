@@ -101,7 +101,7 @@ const FAQ = () => {
   };
 
   return (
-    <section className="py-14 bg-gradient-to-b from-cyan-50/40 via-cyan-50/60 to-cyan-50/60 relative before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-cyan-200/70 before:to-transparent">
+    <section className="py-14 bg-slate-50/70 relative before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-slate-200 before:to-transparent">
       <Helmet>
         <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
       </Helmet>

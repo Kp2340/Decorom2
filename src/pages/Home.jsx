@@ -36,9 +36,12 @@ const LOCAL_BUSINESS_JSON_LD = JSON.stringify({
   areaServed: ["Ahmedabad", "Gandhinagar", "Vadodara", "Surat", "Gujarat", "India"],
   openingHours: "Mo-Sa 09:00-19:00",
   priceRange: "₹₹ (₹799 - ₹4999)",
-  paymentAccepted: "Cash, Credit Card, UPI, Net Banking",
-  hasMap:
-    "https://www.google.com/maps/place/Decorom/@23.067602,72.5427599,17z",
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: "4.9",
+    reviewCount: "41",
+  },
+  hasMap: "https://www.google.com/maps?cid=6058749169901264755",
 });
 
 const Home = () => (

@@ -19,7 +19,7 @@ import { getDisplayPrice, isFixedPrice, parseDefaultSize } from '../utils/produc
  * FALLBACK contains images only, to keep the rail visually populated if the request fails.
  */
 const FALLBACK = [
-  { id: "72cb2a6c-0fd7-44e8-8cfe-87477931aad1", name: "Premium House Shape Wooden Name Plate", image: "https://res.cloudinary.com/dowskut5u/image/upload/f_auto,q_auto,w_600/v1771698397/decorom/products/qmp4bdzdqyzckxukcdem.png" },
+  { id: "72cb2a6c-0fd7-44e8-8cfe-87477931aad1", name: "Premium House Shape Wooden Name Plate", image: "https://res.cloudinary.com/dowskut5u/image/upload/f_auto,q_auto,w_600/v1790188341/decorom/products/xpmy0t8s91jmzgn6ycvu.jpg" },
   { id: "55c98480-8334-485b-8f99-3d51fb5b45de", name: "Premium Floral Round Name Plate", image: "https://res.cloudinary.com/dowskut5u/image/upload/f_auto,q_auto,w_600/v1771701050/decorom/products/orqh9c8rzllcnpguijtd.png" },
   { id: "b622c8e3-845b-4ceb-a1d5-2884aa5423f6", name: "Premium Arch Acrylic Name Plate", image: "https://res.cloudinary.com/dowskut5u/image/upload/f_auto,q_auto,w_600/v1771700200/decorom/products/vcinivkdfksqpvadghgt.png" },
   { id: "dc1e94b8-c41e-45e6-91c5-8504f2bd2248", name: "Premium White Gold Rectangular Name Plate", image: "https://res.cloudinary.com/dowskut5u/image/upload/f_auto,q_auto,w_600/v1771702880/decorom/products/brhqvafv6t6lp1zbxa4g.png" },
@@ -80,7 +80,7 @@ const HorizontalRail = () => {
   if (items.length === 0) return null;
 
   return (
-    <section className="py-10 md:py-14 bg-gradient-to-b from-slate-50/50 via-white to-white overflow-hidden relative before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-slate-200 before:to-transparent">
+    <section className="py-10 md:py-14 bg-white overflow-hidden relative before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-slate-200 before:to-transparent">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
         <h2 className="text-2xl md:text-3xl font-bold text-[#2C3E50] mb-1">Our Best Selling Nameplates</h2>
         <p className="text-[#334155] text-sm md:text-base">Handpicked by our customers — swipe to explore.</p>

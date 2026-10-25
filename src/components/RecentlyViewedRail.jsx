@@ -18,7 +18,7 @@ const RecentlyViewedRail = () => {
   if (items.length === 0) return null;
 
   return (
-    <section className="py-8 md:py-10 bg-cyan-50/60 border-t border-cyan-100/80">
+    <section className="py-8 md:py-10 bg-slate-50/70 border-t border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-4">
         <h2 className="text-xl md:text-2xl font-bold text-[#2C3E50]">Recently Viewed</h2>
       </div>

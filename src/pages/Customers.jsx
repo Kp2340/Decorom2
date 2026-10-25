@@ -18,9 +18,11 @@ const Customers = () => {
           muted 
           loop 
           playsInline
+          preload="none"
           className="absolute inset-0 w-full h-full object-cover opacity-40"
         >
           <source src="https://res.cloudinary.com/demo/video/upload/o_40/v1679000000/sea.mp4" type="video/mp4" />
+          <track kind="captions" src="data:text/vtt,WEBVTT" label="English" default={false} />
         </video>
         <div className="relative z-10 text-center px-4">
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">Happy Customers</h1>

@@ -5,7 +5,7 @@ import { CATEGORIES, slugify } from "../constants/categories";
 
 const CategoryBrowse = () => {
   return (
-    <section className="py-14 bg-gradient-to-b from-cyan-50/40 via-cyan-50/60 to-cyan-50/60 relative before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-cyan-200/70 before:to-transparent">
+    <section className="py-14 bg-slate-50/70 relative before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-slate-200 before:to-transparent">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10">
         <h2 className="text-3xl md:text-4xl font-bold text-[#2C3E50] mb-2">Browse by Category</h2>
         <p className="text-[#334155] text-sm md:text-base">

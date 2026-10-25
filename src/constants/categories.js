@@ -11,7 +11,7 @@ export const CATEGORIES = [
     id: "1",
     images: [
       CLD("v1771703476/decorom/products/dtv6nu8f3rfanmkfzcin.png"),
-      CLD("v1787125164/decorom/products/wungwv9x1fcwqhcgkx5d.png"),
+      CLD("v1771700200/decorom/products/vcinivkdfksqpvadghgt.png"),
       CLD("v1773569229/decorom/products/pct1r7ntizduqwjvfx5g.png"),
       CLD("v1771703054/decorom/products/n7fselgisyplrzpktr8z.png"),
     ],
@@ -20,20 +20,20 @@ export const CATEGORIES = [
     name: "Wooden",
     id: "3",
     images: [
-      CLD("v1771698199/decorom/products/iaybtun9ujsswnendqao.png"),
-      CLD("v1771698397/decorom/products/qmp4bdzdqyzckxukcdem.png"),
-      CLD("v1771702610/decorom/products/ceuhvfnfzrdktlgm4bzz.png"),
-      CLD("v1773567684/decorom/products/odrod8ssoufyjtmx2dw1.png"),
+      CLD("v1790188341/decorom/products/xpmy0t8s91jmzgn6ycvu.jpg"),
+      CLD("v1790226136/decorom/products/e0juca08dri3pp7gabvn.jpg"),
+      CLD("v1790224717/decorom/products/y0ufsjhjbhfuy5pstdfi.jpg"),
+      CLD("v1790224245/decorom/products/aay5erzkeluz4ovs1nra.jpg"),
     ],
   },
   {
     name: "ACP",
     id: "2",
     images: [
-      CLD("v1771698680/decorom/products/sbglb4wj7j1btef67l2q.png"),
-      CLD("v1771702984/decorom/products/nfnkcwbv4qtnfrhogi8f.png"),
-      CLD("v1771700070/decorom/products/t2x7shjprvdvmj6szfwh.png"),
-      CLD("v1771698905/decorom/products/kj9wcevrdwfqctt8d9qw.png"),
+      CLD("v1790224218/decorom/products/v7fsei3wqihdoldpfact.jpg"),
+      CLD("v1790224506/decorom/products/oymc4poyaabim2ftqhnl.jpg"),
+      CLD("v1790225697/decorom/products/id4pbwobxjq3b9cvtryw.jpg"),
+      CLD("v1790227478/decorom/products/ogyvc2ppswjgrhzlh1w9.jpg"),
     ],
   },
   {
@@ -52,7 +52,7 @@ export const CATEGORIES = [
     images: [
       CLD("v1780754823/decorom/products/dp9sjpswh5we5q0i2tlg.jpg"),
       CLD("v1771702737/decorom/products/yigxjh2ez1m2eouosluc.png"),
-      CLD("v1771699368/decorom/products/axxz9weeyeyxwpt4eben.png"),
+      CLD("v1773568671/decorom/products/yz96lyz6e4uxs76lnvgz.png"),
       CLD("v1773567450/decorom/products/m0ufm3tqwmijg3ja6l51.png"),
     ],
   },

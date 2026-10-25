@@ -21,7 +21,7 @@ const InstagramIcon = () => (
 );
 
 const InstagramGrid = () => (
-  <section className="py-10 md:py-14 bg-gradient-to-b from-cyan-50/40 via-cyan-50/60 to-cyan-50/60 overflow-hidden relative before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-cyan-200/70 before:to-transparent">
+  <section className="py-10 md:py-14 bg-slate-50/70 overflow-hidden relative before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-slate-200 before:to-transparent">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 md:mb-10 flex items-center justify-between gap-4 flex-wrap">
       <div>
         <h2 className="text-2xl md:text-3xl font-bold text-[#2C3E50] mb-2">Latest from Instagram</h2>

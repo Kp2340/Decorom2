@@ -69,7 +69,7 @@ const Header = () => {
       <header
         className={`fixed w-full top-0 z-50 transition-all duration-300 ${
           isTransparent
-            ? "bg-transparent border-b border-white/10"
+            ? "bg-transparent"
             : "bg-[#0F172A]/95 backdrop-blur-md border-b border-slate-800 shadow-md"
         }`}
       >
@@ -103,7 +103,9 @@ const Header = () => {
               <img
                 src="/logo/logo.png"
                 alt="Decorom"
-                className="h-8 sm:h-9 w-auto drop-shadow-xs shrink-0 brightness-0 invert"
+                width="60"
+                height="36"
+                className="h-9 w-auto drop-shadow-xs shrink-0 brightness-0 invert"
               />
             </NavLink>
           </div>
@@ -218,7 +220,13 @@ const Header = () => {
       >
         {/* Mobile Logo + Close */}
         <div className="flex items-center justify-between p-4 border-b border-slate-800">
-          <img src="/logo/logo.png" alt="Decorom" className="h-9 w-auto brightness-0 invert" />
+          <img
+            src="/logo/logo.png"
+            alt="Decorom"
+            width="60"
+            height="36"
+            className="h-9 w-auto brightness-0 invert"
+          />
           <button
             onClick={closeMenu}
             className="p-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-md cursor-pointer transition-colors"
