@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getFeaturedProducts } from "../api/products.api";
-import { BEST_SELLER_IDS } from "../config/bestSellers";
+import { BEST_SELLER_IDS, BEST_SELLER_FALLBACKS } from "../config/bestSellers";
 import SEO from "../components/SEO";
 import FreeDeliveryBanner from "../components/FreeDeliveryBanner";
 import { isFixedPrice } from "../utils/productUtils";
@@ -30,18 +30,20 @@ const BestSellers = () => {
         const data = res?.data ?? res;
         const list = Array.isArray(data) ? data : data?.content ?? [];
 
-        // Sort by BEST_SELLER_IDS config order
-        const sorted = [...BEST_SELLER_IDS]
-          .map((id) => list.find((p) => p.id === id))
-          .filter(Boolean);
+        // 1. Resolve BEST_SELLER_IDS, prioritizing live API with infallible fallback
+        const bestSellers = BEST_SELLER_IDS.map((id) => {
+          const live = list.find((p) => p.id === id);
+          const fb = BEST_SELLER_FALLBACKS.find((f) => f.id === id);
+          return live || fb;
+        }).filter(Boolean);
 
-        // Append any featured products not in the config (fallback)
+        // 2. Append any extra featured products not in the config
         const configSet = new Set(BEST_SELLER_IDS);
         const extras = list.filter((p) => !configSet.has(p.id));
 
-        setProducts([...sorted, ...extras]);
+        setProducts([...bestSellers, ...extras]);
       } catch {
-        setError("Could not load best sellers. Please try again.");
+        setProducts(BEST_SELLER_FALLBACKS);
       } finally {
         setLoading(false);
       }
@@ -58,7 +60,7 @@ const BestSellers = () => {
       />
 
       {/* Page Header */}
-      <div className="bg-cyan-50/60 border-b border-cyan-100/80 py-10 px-4 text-center">
+      <div className="bg-slate-50/80 border-b border-slate-200/80 py-10 px-4 text-center">
         <p className="text-xs font-black text-[#E59500] uppercase tracking-widest mb-2">Customer Favourites</p>
         <h1 className="text-3xl md:text-4xl font-black text-[#2C3E50] mb-3">Our Best Sellers</h1>
         <p className="text-gray-500 text-sm max-w-md mx-auto">
@@ -84,18 +86,16 @@ const BestSellers = () => {
                 >
                   {/* Image + Rank Badge */}
                   <div className="relative aspect-[4/5] overflow-hidden bg-gray-100 shrink-0">
-                    {product.thumbnailUrl ? (
-                      <img
-                        src={product.thumbnailUrl}
-                        alt={product.name}
-                        loading="lazy"
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400 text-sm">
-                        No Image
-                      </div>
-                    )}
+                    <img
+                      src={product.thumbnailUrl || BEST_SELLER_FALLBACKS[0].thumbnailUrl}
+                      alt={product.name}
+                      loading="lazy"
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = BEST_SELLER_FALLBACKS[0].thumbnailUrl;
+                      }}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
                     {/* Rank chip */}
                     <div className="absolute top-2 left-2 w-8 h-8 bg-[#2C3E50]/80 text-white rounded-full flex items-center justify-center text-xs font-black shadow-md">
                       #{index + 1}

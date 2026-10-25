@@ -21,7 +21,7 @@ const InstagramIcon = () => (
 );
 
 const InstagramGrid = () => (
-  <section className="py-10 md:py-14 bg-slate-50/70 overflow-hidden relative before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-slate-200 before:to-transparent">
+  <section className="py-12 md:py-16 bg-slate-50/70 overflow-hidden relative before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-slate-200 before:to-transparent scroll-mt-16">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 md:mb-10 flex items-center justify-between gap-4 flex-wrap">
       <div>
         <h2 className="text-2xl md:text-3xl font-bold text-[#2C3E50] mb-2">Latest from Instagram</h2>
@@ -31,7 +31,7 @@ const InstagramGrid = () => (
         href={INSTAGRAM_URL}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400 text-white text-sm font-semibold hover:opacity-90 transition-opacity shadow-md whitespace-nowrap"
+        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400 text-white text-sm font-semibold hover:opacity-90 transition-opacity shadow-md whitespace-nowrap shrink-0"
       >
         <InstagramIcon />
         @decorom.in
@@ -42,8 +42,8 @@ const InstagramGrid = () => (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <Swiper
         modules={[Autoplay]}
-        spaceBetween={12}
-        slidesPerView={1.4}
+        spaceBetween={14}
+        slidesPerView={1.3}
         autoplay={{ delay: 6000, disableOnInteraction: false }}
         loop={false}
         breakpoints={{
@@ -55,8 +55,10 @@ const InstagramGrid = () => (
       >
         {REELS.map((reel) => (
           <SwiperSlide key={reel.id}>
-            <div className="relative rounded-2xl overflow-hidden bg-gray-900 shadow-md"
-                 style={{ aspectRatio: "9/16" }}>
+            <div
+              className="relative rounded-2xl overflow-hidden bg-gray-900 shadow-md"
+              style={{ aspectRatio: "9/20", minHeight: "490px" }}
+            >
               <iframe
                 src={`https://www.instagram.com/reel/${reel.id}/embed/`}
                 className="w-full h-full border-0 absolute inset-0"
