@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 import 'swiper/css';
@@ -16,26 +17,20 @@ const priceFor = (product) => {
 
 const HorizontalRail = () => {
   const navigate = useNavigate();
-  const [products, setProducts] = useState([]);
 
-  useEffect(() => {
-    let cancelled = false;
-
-    (async () => {
+  const { data: products = [] } = useQuery({
+    queryKey: ['featuredProducts'],
+    queryFn: async () => {
       try {
         const res = await getFeaturedProducts();
         const data = res?.data ?? res;
-        const list = Array.isArray(data) ? data : data?.content ?? [];
-        if (!cancelled) setProducts(list);
+        return Array.isArray(data) ? data : data?.content ?? [];
       } catch {
-        // Fallback handles gracefully
+        return [];
       }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+    },
+    staleTime: 1000 * 60 * 10,
+  });
 
   // Ordered by the shared BEST_SELLER_IDS config, guaranteed to never 404 or show broken images
   const items = useMemo(() => {
@@ -62,9 +57,10 @@ const HorizontalRail = () => {
       return null;
     }).filter(Boolean);
 
-    // 2. Append any extra featured products from API
+    // 2. Append any extra live featured products returned by the API that weren't in config
+    const configSet = new Set(BEST_SELLER_IDS);
     const extras = products
-      .filter((p) => !BEST_SELLER_IDS.includes(p.id))
+      .filter((p) => !configSet.has(p.id))
       .map((p) => ({
         id: p.id,
         name: p.name,
@@ -75,47 +71,58 @@ const HorizontalRail = () => {
     return [...bestSellers, ...extras];
   }, [products]);
 
-  if (items.length === 0) return null;
+  const slides = [...items, ...items];
+
+  const handleCardClick = (id) => {
+    navigate(`/products/${id}`);
+  };
 
   return (
-    <section className="py-10 md:py-14 bg-white overflow-hidden relative before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-slate-200 before:to-transparent">
+    <section className="py-12 bg-gray-50/50 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#2C3E50] mb-1">Our Best Selling Nameplates</h2>
-        <p className="text-[#334155] text-sm md:text-base">Handpicked by our customers — swipe to explore.</p>
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
+          Trending Designs
+        </h2>
+        <p className="text-gray-500 text-sm mt-1">Handpicked favourites from our master collection</p>
       </div>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <div className="w-full">
         <Swiper
           modules={[Autoplay]}
+          loop={true}
+          speed={4000}
+          autoplay={{
+            delay: 0,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true,
+          }}
+          allowTouchMove={true}
+          slidesPerView="auto"
           spaceBetween={16}
-          slidesPerView={1.3}
-          autoplay={{ delay: 2500, disableOnInteraction: false }}
-          loop
-          breakpoints={{ 480: { slidesPerView: 2.2 }, 768: { slidesPerView: 3.2 }, 1024: { slidesPerView: 4.2 } }}
+          className="horizontal-rail-swiper"
         >
-          {/* Duplicate for seamless loop */}
-          {[...items, ...items].map((item, i) => (
-            <SwiperSlide key={`${item.id}-${i}`}>
-              <div className="group relative bg-gray-50 rounded-2xl overflow-hidden shadow-xs hover:shadow-xl transition-all duration-300 cursor-pointer product-card-lift" onClick={() => navigate(`/products/${item.id}`)}>
-                <div className="aspect-[4/5] overflow-hidden">
+          {slides.map((item, index) => (
+            <SwiperSlide key={`${item.id}-${index}`} style={{ width: '220px' }}>
+              <div
+                onClick={() => handleCardClick(item.id)}
+                className="group cursor-pointer bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col h-[280px]"
+              >
+                <div className="relative h-[200px] w-full overflow-hidden bg-gray-100">
                   <img
                     src={item.image}
                     alt={item.name}
                     loading="lazy"
-                    onError={(e) => {
-                      e.currentTarget.onerror = null;
-                      e.currentTarget.src = BEST_SELLER_FALLBACKS[0].thumbnailUrl;
-                    }}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    decoding="async"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/50 to-transparent p-4 text-white">
-                  <h3 className="font-bold text-sm leading-snug line-clamp-2">{item.name}</h3>
-                  {item.price > 0 && (
-                    <p className="text-[#E59500] font-bold text-base mt-1">₹{item.price.toLocaleString("en-IN")}</p>
-                  )}
-                  <span className="inline-block mt-2 bg-white hover:bg-[#E59500] text-[#E59500] hover:text-white border border-[#E59500] px-3 py-1.5 rounded-lg text-xs font-bold transition-all shadow-xs">
-                    Order Now →
-                  </span>
+                <div className="p-3 flex flex-col justify-between flex-1">
+                  <p className="text-sm font-medium text-gray-900 line-clamp-1 group-hover:text-primary transition-colors">
+                    {item.name}
+                  </p>
+                  <p className="text-sm font-bold text-gray-900 mt-1">
+                    {item.price}
+                  </p>
                 </div>
               </div>
             </SwiperSlide>

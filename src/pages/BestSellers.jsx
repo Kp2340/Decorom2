@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import { getFeaturedProducts } from "../api/products.api";
 import { BEST_SELLER_IDS, BEST_SELLER_FALLBACKS } from "../config/bestSellers";
 import SEO from "../components/SEO";
@@ -19,42 +20,44 @@ const SkeletonCard = () => (
 
 const BestSellers = () => {
   const navigate = useNavigate();
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
-  useEffect(() => {
-    const load = async () => {
+  const { data: rawList = [], isLoading: loading, isError } = useQuery({
+    queryKey: ["featuredProducts"],
+    queryFn: async () => {
       try {
         const res = await getFeaturedProducts();
         const data = res?.data ?? res;
-        const list = Array.isArray(data) ? data : data?.content ?? [];
-
-        // 1. Resolve BEST_SELLER_IDS, prioritizing live API with infallible fallback
-        const bestSellers = BEST_SELLER_IDS.map((id) => {
-          const live = list.find((p) => p.id === id);
-          const fb = BEST_SELLER_FALLBACKS.find((f) => f.id === id);
-          return live || fb;
-        }).filter(Boolean);
-
-        // 2. Append any extra featured products not in the config
-        const configSet = new Set(BEST_SELLER_IDS);
-        const extras = list.filter((p) => !configSet.has(p.id));
-
-        setProducts([...bestSellers, ...extras]);
+        return Array.isArray(data) ? data : data?.content ?? [];
       } catch {
-        setProducts(BEST_SELLER_FALLBACKS);
-      } finally {
-        setLoading(false);
+        return [];
       }
-    };
-    load();
-  }, []);
+    },
+    staleTime: 1000 * 60 * 10,
+  });
+
+  const products = useMemo(() => {
+    if (!rawList || rawList.length === 0) {
+      return BEST_SELLER_FALLBACKS;
+    }
+
+    // 1. Resolve BEST_SELLER_IDS, prioritizing live API with infallible fallback
+    const bestSellers = BEST_SELLER_IDS.map((id) => {
+      const live = rawList.find((p) => p.id === id);
+      const fb = BEST_SELLER_FALLBACKS.find((f) => f.id === id);
+      return live || fb;
+    }).filter(Boolean);
+
+    // 2. Append any extra featured products not in the config
+    const configSet = new Set(BEST_SELLER_IDS);
+    const extras = rawList.filter((p) => !configSet.has(p.id));
+
+    return [...bestSellers, ...extras];
+  }, [rawList]);
 
   return (
     <div className="min-h-screen bg-white">
       <SEO
-        title="Best Selling Nameplates — Decorom"
+        title="Best Selling Nameplates - Decorom"
         description="Explore Decorom's top-selling custom nameplates, handpicked and loved by hundreds of customers."
         keywords="Best Seller Nameplates, Popular Nameplates Ahmedabad, Top Nameplate Designs"
       />
@@ -64,15 +67,15 @@ const BestSellers = () => {
         <p className="text-xs font-black text-[#E59500] uppercase tracking-widest mb-2">Customer Favourites</p>
         <h1 className="text-3xl md:text-4xl font-black text-[#2C3E50] mb-3">Our Best Sellers</h1>
         <p className="text-gray-500 text-sm max-w-md mx-auto">
-          Handpicked by our customers — these are the most loved nameplates at Decorom.
+          Handpicked by our customers - these are the most loved nameplates at Decorom.
         </p>
       </div>
 
       <FreeDeliveryBanner />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        {error && (
-          <div className="text-center py-12 text-red-500 font-semibold">{error}</div>
+        {isError && (
+          <div className="text-center py-12 text-red-500 font-semibold">Failed to load best sellers.</div>
         )}
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
@@ -121,14 +124,14 @@ const BestSellers = () => {
                       </p>
                     )}
                     <button className="w-full mt-auto bg-white hover:bg-[#E59500] text-[#E59500] hover:text-white border border-[#E59500] text-xs font-bold py-2.5 rounded-xl transition-all duration-200 active:scale-95 shadow-xs cursor-pointer">
-                      Order Now →
+                      Order Now -&gt;
                     </button>
                   </div>
                 </div>
               ))}
         </div>
 
-        {!loading && products.length === 0 && !error && (
+        {!loading && products.length === 0 && !isError && (
           <div className="text-center py-16 text-gray-400">
             <p className="text-4xl mb-4">🏷️</p>
             <p className="font-semibold">No featured products yet. Check back soon!</p>

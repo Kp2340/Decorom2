@@ -1,36 +1,45 @@
-import React, { useEffect, useState } from "react";
-import { getProducts } from "../api/products.api";
+import React, { useMemo, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { getAllProductsForSearch } from "../api/products.api";
 import ProductCard from "../components/ProductCard";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import SEO from "../components/SEO";
-
 import { CATEGORIES, slugify } from "../constants/categories";
 
+const matchesCategory = (productMaterial, catName) => {
+  if (!productMaterial || !catName) return false;
+  const pm = productMaterial.toLowerCase().trim();
+  const cn = catName.toLowerCase().trim();
+  if (cn.includes("resin")) return pm.includes("resin");
+  if (cn.includes("wood")) return pm.includes("wood");
+  if (cn.includes("acp")) return pm.includes("acp");
+  if (cn.includes("stainless")) return pm.includes("stainless") || pm === "ss";
+  if (cn.includes("mild")) return pm.includes("mild") || pm === "ms";
+  if (cn.includes("acrylic")) return pm.includes("acrylic");
+  return pm === cn;
+};
+
 const Products = () => {
-  const [sections, setSections] = useState({});
-  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
 
-  useEffect(() => {
-    const fetchAllCategories = async () => {
-      setLoading(true);
-      const results = {};
-      await Promise.all(
-        CATEGORIES.map(async (cat) => {
-          try {
-            const data = await getProducts(0, 4, cat.id);
-            results[cat.id] = data?.content || (Array.isArray(data) ? data.slice(0, 4) : []);
-          } catch {
-            results[cat.id] = [];
-          }
-        })
-      );
-      setSections(results);
-      setLoading(false);
-    };
-    fetchAllCategories();
-  }, []);
+  // Reuses the globally cached catalog query (shared with SearchBar in Header)
+  const { data: allProducts = [], isLoading: loading } = useQuery({
+    queryKey: ["allProductsForSearch"],
+    queryFn: getAllProductsForSearch,
+    staleTime: 1000 * 60 * 10, // 10 minutes cache
+  });
+
+  // Group products into 4-preview tiles per category client-side
+  const sections = useMemo(() => {
+    const results = {};
+    CATEGORIES.forEach((cat) => {
+      results[cat.id] = allProducts
+        .filter((p) => matchesCategory(p.material, cat.name))
+        .slice(0, 4);
+    });
+    return results;
+  }, [allProducts]);
 
   // Scroll to previous section if returning from product detail page
   useEffect(() => {
@@ -57,7 +66,7 @@ const Products = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-2 md:mb-4">Our Masterpieces</h1>
           <p className="text-gray-300 max-w-2xl mx-auto text-sm md:text-lg">
-            Premium nameplates across 5 material categories — handcrafted in Ahmedabad.
+            Premium nameplates across 5 material categories - handcrafted in Ahmedabad.
           </p>
         </div>
       </div>
@@ -91,7 +100,7 @@ const Products = () => {
                     to={`/category/${slugify(cat.name)}`}
                     className="text-[#E59500] font-bold text-sm md:text-base hover:text-[#CC8400] transition-colors whitespace-nowrap ml-4 inline-flex items-center cursor-pointer"
                   >
-                    View All →
+                    View All -&gt;
                   </Link>
                 </div>
 

@@ -52,6 +52,9 @@ const Carousel = () => {
               src={img}
               alt={`Slide ${index}`}
               className="w-full h-64 md:h-96 object-cover"
+              loading={index === 0 ? "eager" : "lazy"}
+              decoding={index === 0 ? "sync" : "async"}
+              {...(index === 0 ? { fetchPriority: "high" } : {})}
             />
           </div>
         ))}
@@ -76,16 +79,19 @@ const Carousel = () => {
       </button>
 
       {/* Dots */}
-      <div className="absolute bottom-4 w-full flex justify-center space-x-2">
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
         {images.map((_, index) => (
           <button
             key={index}
-            onClick={() => setCurrent(index)}
-            className={`w-3 h-3 rounded-full transition cursor-pointer ${
-              index === current ? "bg-[#E59500]" : "bg-slate-300 hover:bg-slate-400"
+            onClick={() => {
+              setCurrent(index);
+              if (timeoutRef.current) clearTimeout(timeoutRef.current);
+            }}
+            className={`w-3 h-3 rounded-full cursor-pointer transition ${
+              current === index ? "bg-white" : "bg-white/50"
             }`}
             aria-label={`Go to slide ${index + 1}`}
-          ></button>
+          />
         ))}
       </div>
     </div>
