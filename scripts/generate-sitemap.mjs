@@ -17,12 +17,12 @@ async function generateSitemap() {
   const categoriesModule = await import(categoriesUrl);
   const { CATEGORIES, slugify } = categoriesModule;
 
-  // Import products using file URL on Windows
-  const productsUrl = pathToFileURL(
-    path.join(rootDir, "src", "data", "nameplate.js")
+  // Import verified products from bestSellers config using file URL on Windows
+  const bestSellersUrl = pathToFileURL(
+    path.join(rootDir, "src", "config", "bestSellers.js")
   ).href;
-  const productsModule = await import(productsUrl);
-  const { types } = productsModule;
+  const bestSellersModule = await import(bestSellersUrl);
+  const { BEST_SELLER_FALLBACKS } = bestSellersModule;
 
   const urls = [];
 
@@ -113,8 +113,8 @@ async function generateSitemap() {
 
   // 3. Products
   let productCount = 0;
-  if (Array.isArray(types)) {
-    for (const prod of types) {
+  if (Array.isArray(BEST_SELLER_FALLBACKS)) {
+    for (const prod of BEST_SELLER_FALLBACKS) {
       if (prod && prod.id) {
         urls.push({
           loc: `${BASE_URL}/products/${prod.id}`,
