@@ -57,8 +57,10 @@ const Products = () => {
   return (
     <div className="min-h-screen bg-white pb-16">
       <SEO
-        title="Our Full Range of Designer Nameplates"
-        description="Browse all types of premium nameplates: Stainless Steel, Wooden, Acrylic, and more. Find the perfect design for your home."
+        title="Custom Designer Nameplates in Ahmedabad | All Materials & Styles"
+        description="Explore 60+ designer door nameplates in Ahmedabad. Handcrafted acrylic, teak wood, SS 304, MS laser cut & resin nameplates starting at ₹799 with free delivery across India."
+        keywords="designer nameplates ahmedabad, custom door nameplates, acrylic nameplates, wooden name plates, metal name plates online"
+        url="https://www.decorom.in/products"
       />
 
       {/* Hero */}

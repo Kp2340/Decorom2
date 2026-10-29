@@ -4,9 +4,11 @@ const DEFAULT_OG_IMAGE = "https://www.decorom.in/logo/logo.png";
 const BASE_DOMAIN = "https://www.decorom.in";
 
 const SEO = ({ title, description, keywords, image, url, noindex = false }) => {
-  // Title formatting: strictly optimal character length for search engines
+  // Title formatting: optimal length, avoids double "- Decorom" suffix
   const formattedTitle = title
-    ? `${title} - Decorom`
+    ? title.trim().endsWith("Decorom")
+      ? title.trim()
+      : `${title.trim()} - Decorom`
     : "Designer Nameplates in Ahmedabad | Custom Home Decor - Decorom";
 
   const defaultDescription =

@@ -57,9 +57,9 @@ const BestSellers = () => {
   return (
     <div className="min-h-screen bg-white">
       <SEO
-        title="Best Selling Nameplates - Decorom"
-        description="Explore Decorom's top-selling custom nameplates, handpicked and loved by hundreds of customers."
-        keywords="Best Seller Nameplates, Popular Nameplates Ahmedabad, Top Nameplate Designs"
+        title="Best Selling Door Nameplates in Ahmedabad | Top Custom Designs"
+        description="Explore Decorom's highest-rated custom door nameplates in Ahmedabad. Trending acrylic, wooden & LED designs with 5-star customer reviews and free doorstep delivery."
+        keywords="Best Seller Nameplates, Popular Nameplates Ahmedabad, Top Nameplate Designs, Trending Door Nameplates"
       />
 
       {/* Page Header */}

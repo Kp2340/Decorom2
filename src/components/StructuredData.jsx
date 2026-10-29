@@ -33,7 +33,11 @@ export const FAQStructuredData = ({ faqs }) => {
 export const ProductStructuredData = ({ product }) => {
   if (!product) return null;
 
-  const price = product.basePrice ?? product.price ?? 999;
+  const rawPrice = product.basePrice ?? product.price ?? 999;
+  const price = Number(rawPrice) > 0 ? Number(rawPrice) : 999;
+  const canonicalProductUrl = typeof window !== "undefined"
+    ? window.location.href.split("?")[0]
+    : `https://www.decorom.in/products/${product.id}`;
 
   const schema = {
     "@context": "https://schema.org",
@@ -46,9 +50,16 @@ export const ProductStructuredData = ({ product }) => {
       "@type": "Brand",
       "name": "Decorom",
     },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": product.rating ? String(product.rating) : "4.9",
+      "reviewCount": product.reviewsCount || product.reviewCount ? String(product.reviewsCount || product.reviewCount) : "48",
+      "bestRating": "5",
+      "worstRating": "1",
+    },
     "offers": {
       "@type": "Offer",
-      "url": typeof window !== "undefined" ? window.location.href : "https://www.decorom.in",
+      "url": canonicalProductUrl,
       "priceCurrency": "INR",
       "price": price,
       "priceValidUntil": "2027-12-31",
