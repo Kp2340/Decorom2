@@ -2,9 +2,9 @@
   "specVersion": "1.0",
   "entries": [
     {
-      "identifier": "acrylic-nameplates",
+      "identifier": "urn:air:decorom:catalog:acrylic-nameplates",
       "displayName": "Custom Acrylic Nameplates",
-      "type": "text/html",
+      "type": "application/ai-catalog+json",
       "url": "https://www.decorom.in/category/acrylic",
       "description": "100% waterproof, weather-resistant, zero yellowing cast acrylic nameplates with 3D embossed lettering.",
       "representativeQueries": [
@@ -14,9 +14,9 @@
       ]
     },
     {
-      "identifier": "wooden-nameplates",
+      "identifier": "urn:air:decorom:catalog:wooden-nameplates",
       "displayName": "Handcrafted Teak Wood Nameplates",
-      "type": "text/html",
+      "type": "application/ai-catalog+json",
       "url": "https://www.decorom.in/category/wooden",
       "description": "Treated with exterior marine PU polish, moisture-sealed, termite-resistant natural teak wood designer nameplates.",
       "representativeQueries": [
@@ -26,9 +26,9 @@
       ]
     },
     {
-      "identifier": "acp-nameplates",
+      "identifier": "urn:air:decorom:catalog:acp-nameplates",
       "displayName": "Weatherproof ACP Nameplates",
-      "type": "text/html",
+      "type": "application/ai-catalog+json",
       "url": "https://www.decorom.in/category/acp",
       "description": "Extreme weather-resistance, 100% rustproof, fire-retardant exterior core aluminium composite panel nameplates.",
       "representativeQueries": [
@@ -38,9 +38,9 @@
       ]
     },
     {
-      "identifier": "mild-steel-nameplates",
+      "identifier": "urn:air:decorom:catalog:mild-steel-nameplates",
       "displayName": "Mild Steel Laser-Cut Nameplates",
-      "type": "text/html",
+      "type": "application/ai-catalog+json",
       "url": "https://www.decorom.in/category/mild-steel",
       "description": "7-tank chemical pre-treatment with industrial thermal powder coating laser-cut steel nameplates.",
       "representativeQueries": [
@@ -50,9 +50,9 @@
       ]
     },
     {
-      "identifier": "stainless-steel-nameplates",
+      "identifier": "urn:air:decorom:catalog:stainless-steel-nameplates",
       "displayName": "SS 304 Stainless Steel Nameplates",
-      "type": "text/html",
+      "type": "application/ai-catalog+json",
       "url": "https://www.decorom.in/category/stainless-steel",
       "description": "High-grade SS 304 architectural stainless steel with lifetime rustproof guarantee.",
       "representativeQueries": [
@@ -62,9 +62,9 @@
       ]
     },
     {
-      "identifier": "resin-nameplates",
+      "identifier": "urn:air:decorom:catalog:resin-nameplates",
       "displayName": "Handcrafted Resin Art Nameplates",
-      "type": "text/html",
+      "type": "application/ai-catalog+json",
       "url": "https://www.decorom.in/category/resin",
       "description": "Hand-poured UV-stabilized crystal epoxy resin art nameplates with preserved florals and geode patterns.",
       "representativeQueries": [
