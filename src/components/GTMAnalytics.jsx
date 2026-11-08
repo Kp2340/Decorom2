@@ -54,9 +54,9 @@ const GTMAnalytics = () => {
     };
 
     if ("requestIdleCallback" in window) {
-      window.requestIdleCallback(() => setTimeout(initTracker, 2000));
+      window.requestIdleCallback(() => setTimeout(initTracker, 6000));
     } else {
-      setTimeout(initTracker, 3000);
+      setTimeout(initTracker, 6000);
     }
 
     const events = ["scroll", "touchstart", "mousemove", "keydown"];

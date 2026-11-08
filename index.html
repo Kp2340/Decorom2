@@ -57,25 +57,24 @@
     <link rel="preconnect" href="https://api.decorom.in" crossorigin />
     <link rel="dns-prefetch" href="https://api.decorom.in" />
 
-    <!-- Preload Hero LCP Background Image -->
+    <!-- Preload Hero LCP Background Image (Mobile-optimized quality & compression) -->
     <link
       rel="preload"
       as="image"
-      href="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=1600"
+      href="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=70&w=800"
       imagesrcset="
-        https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=800 800w,
-        https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=1200 1200w,
-        https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=1600 1600w
+        https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=70&w=640 640w,
+        https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=70&w=800 800w,
+        https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=75&w=1200 1200w,
+        https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=75&w=1600 1600w
       "
       imagesizes="100vw"
       fetchpriority="high"
     />
 
-    <!-- Preconnect to image & font assets -->
+    <!-- Preconnect to image assets (keep <= 2 to avoid preconnect warnings) -->
     <link rel="preconnect" href="https://images.unsplash.com" />
     <link rel="preconnect" href="https://res.cloudinary.com" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
     <!-- Baseline Organization & LocalBusiness JSON-LD for Raw Crawlers -->
     <script type="application/ld+json">
@@ -112,18 +111,7 @@
     </script>
 
     <!-- Devanagari/Gujarati fonts for custom text preview -->
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&amp;family=Tiro+Devanagari+Hindi:ital@0;1&amp;display=swap"
-      media="print"
-      onload="this.media='all'"
-    />
-    <noscript>
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&amp;family=Tiro+Devanagari+Hindi:ital@0;1&amp;display=swap"
-      />
-    </noscript>
+
 
     <!-- Meta Pixel Code (Deferred on Idle / User Interaction to unblock main thread) -->
     <script>
@@ -142,9 +130,9 @@
       fbq('track', 'PageView');
     }
     if ('requestIdleCallback' in window) {
-      window.requestIdleCallback(function() { setTimeout(loadMetaPixel, 2500); });
+      window.requestIdleCallback(function() { setTimeout(loadMetaPixel, 6000); });
     } else {
-      setTimeout(loadMetaPixel, 3500);
+      setTimeout(loadMetaPixel, 6000);
     }
     ['scroll', 'touchstart', 'mousemove', 'keydown'].forEach(function(ev) {
       window.addEventListener(ev, loadMetaPixel, { once: true, passive: true });
