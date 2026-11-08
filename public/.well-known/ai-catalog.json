@@ -1,9 +1,48 @@
 {
+  "specVersion": "1.0",
   "name": "Decorom",
   "legalName": "Decorom",
   "tagline": "Handcrafted Luxury Designer Nameplates for Homes, Flats & Villas",
   "homepage": "https://www.decorom.in",
   "description": "Decorom is a premier designer nameplate manufacturer and e-commerce brand based in Ahmedabad, Gujarat. Specializing in handcrafted custom nameplates in Acrylic, Natural Teak Wood, Weatherproof ACP, Laser-cut Mild Steel, SS 304 Stainless Steel, and Hand-Poured Resin Art with real-time 2D/3D customizer and pan-India doorstep delivery.",
+  "entries": [
+    {
+      "id": "acrylic-nameplates",
+      "description": "100% waterproof, weather-resistant, zero yellowing cast acrylic nameplates with 3D embossed lettering.",
+      "url": "https://www.decorom.in/category/acrylic",
+      "name": "Acrylic Nameplates"
+    },
+    {
+      "id": "wooden-nameplates",
+      "description": "Treated with exterior marine PU polish, moisture-sealed, termite-resistant natural teak wood nameplates.",
+      "url": "https://www.decorom.in/category/wooden",
+      "name": "Wooden Nameplates"
+    },
+    {
+      "id": "acp-nameplates",
+      "description": "Extreme weather-resistance, 100% rustproof, fire-retardant exterior core aluminium composite panel nameplates.",
+      "url": "https://www.decorom.in/category/acp",
+      "name": "ACP Nameplates"
+    },
+    {
+      "id": "mild-steel-nameplates",
+      "description": "7-tank chemical pre-treatment with industrial thermal powder coating laser-cut steel nameplates.",
+      "url": "https://www.decorom.in/category/mild-steel",
+      "name": "Mild Steel Laser-Cut Nameplates"
+    },
+    {
+      "id": "stainless-steel-nameplates",
+      "description": "High-grade SS 304 architectural stainless steel with lifetime rustproof guarantee.",
+      "url": "https://www.decorom.in/category/stainless-steel",
+      "name": "Stainless Steel (SS 304) Nameplates"
+    },
+    {
+      "id": "resin-nameplates",
+      "description": "Hand-poured UV-stabilized crystal epoxy resin art nameplates with preserved florals and geode patterns.",
+      "url": "https://www.decorom.in/category/resin",
+      "name": "Resin Art Nameplates"
+    }
+  ],
   "rating": {
     "platform": "Google Maps",
     "ratingValue": 4.9,
@@ -40,7 +79,13 @@
   "customizerFeatures": {
     "designerUrl": "https://www.decorom.in/custom-design",
     "interactivePreview": "Real-time 2D/3D visual customizer with live typography, dimensions, and colorway rendering",
-    "scriptSupport": ["English", "Hindi (Devanagari)", "Gujarati", "Marathi", "Regional Indian Scripts"],
+    "scriptSupport": [
+      "English",
+      "Hindi (Devanagari)",
+      "Gujarati",
+      "Marathi",
+      "Regional Indian Scripts"
+    ],
     "religiousAndDecorativeMotifs": [
       "Lord Ganesha / Ganpati",
       "Om & Swastik Symbols",
@@ -49,7 +94,12 @@
       "Ik Onkar & Sikh Symbols",
       "Floral Vines & Modern Abstract Borders"
     ],
-    "lightingOptions": ["Non-LED", "Warm White Backlit LED (3000K)", "Golden Yellow LED", "Waterproof 12V DC Adapter Included"]
+    "lightingOptions": [
+      "Non-LED",
+      "Warm White Backlit LED (3000K)",
+      "Golden Yellow LED",
+      "Waterproof 12V DC Adapter Included"
+    ]
   },
   "materialCategories": [
     {
@@ -58,7 +108,12 @@
       "url": "https://www.decorom.in/category/acrylic",
       "priceRange": "₹799 - ₹4,999",
       "durability": "100% waterproof, weather-resistant, zero yellowing cast acrylic",
-      "finishes": ["High-Gloss Black & Gold", "3D Embossed Golden Mirror", "Frosted & Matte", "Illuminated Backlit"],
+      "finishes": [
+        "High-Gloss Black & Gold",
+        "3D Embossed Golden Mirror",
+        "Frosted & Matte",
+        "Illuminated Backlit"
+      ],
       "recommendedFor": "Modern apartments, flats, corridors, and contemporary homes"
     },
     {
@@ -67,7 +122,12 @@
       "url": "https://www.decorom.in/category/wooden",
       "priceRange": "₹999 - ₹6,499",
       "durability": "Treated with exterior marine PU polish, moisture-sealed, termite-resistant",
-      "finishes": ["Natural Teak Wood", "Dark Walnut Stain", "Rustic Live-Edge Log Slice", "Wood with Golden 3D Acrylic Letters"],
+      "finishes": [
+        "Natural Teak Wood",
+        "Dark Walnut Stain",
+        "Rustic Live-Edge Log Slice",
+        "Wood with Golden 3D Acrylic Letters"
+      ],
       "recommendedFor": "Traditional bungalows, villas, covered home entrances, and vastu-compliant entrances"
     },
     {
@@ -76,7 +136,11 @@
       "url": "https://www.decorom.in/category/acp",
       "priceRange": "₹1,299 - ₹5,760",
       "durability": "Extreme weather-resistance, 100% rustproof, fire-retardant exterior core",
-      "finishes": ["Natural Wood Grain Texture (Teak / Walnut)", "Brushed Gold & Silver Metallic", "Matte Charcoal & Black"],
+      "finishes": [
+        "Natural Wood Grain Texture (Teak / Walnut)",
+        "Brushed Gold & Silver Metallic",
+        "Matte Charcoal & Black"
+      ],
       "recommendedFor": "Exposed outdoor walls, main bungalow entrance gates, and heavy monsoon areas"
     },
     {
@@ -85,7 +149,11 @@
       "url": "https://www.decorom.in/category/mild-steel",
       "priceRange": "₹1,440 - ₹14,400",
       "durability": "7-tank chemical pre-treatment with industrial thermal powder coating",
-      "finishes": ["Matte Black Powder Coat", "Textured Charcoal", "Antique Bronze & Copper"],
+      "finishes": [
+        "Matte Black Powder Coat",
+        "Textured Charcoal",
+        "Antique Bronze & Copper"
+      ],
       "recommendedFor": "Architectural villa gates, modern exterior compound walls, and large farmhouses"
     },
     {
@@ -94,7 +162,12 @@
       "url": "https://www.decorom.in/category/stainless-steel",
       "priceRange": "₹2,999 - ₹14,000",
       "durability": "High-grade SS 304 architectural stainless steel, lifetime rustproof guarantee",
-      "finishes": ["Electroplated Titanium Gold PVD", "Rose Gold Gloss", "Brushed Hairline Silver", "Chemical Acid Etched"],
+      "finishes": [
+        "Electroplated Titanium Gold PVD",
+        "Rose Gold Gloss",
+        "Brushed Hairline Silver",
+        "Chemical Acid Etched"
+      ],
       "recommendedFor": "Luxury residences, executive corporate offices, advocate & doctor chambers"
     },
     {
@@ -103,13 +176,14 @@
       "url": "https://www.decorom.in/category/resin",
       "priceRange": "₹2,999 - ₹4,499",
       "durability": "Shatterproof crystal-clear UV-stabilized epoxy resin",
-      "finishes": ["Real Pressed Flowers & Botanical", "Ocean Wave Resin", "Marble Swirl with Gold Leafing"],
+      "finishes": [
+        "Real Pressed Flowers & Botanical",
+        "Ocean Wave Resin",
+        "Marble Swirl with Gold Leafing"
+      ],
       "recommendedFor": "Artistic home entrances, apartment foyer decor, and personalized luxury housewarming gifts"
     }
   ],
-  "warrantyAndCare": {
-    "warranty": "1-year warranty covering manufacturing defects, letter adhesion, and LED power modules",
-    "cleaning": "Wipe with a soft microfibre cloth; mild soapy water for acrylic/ACP/metal; avoid abrasive scrubbers or chemical solvents",
-    "mounting": "Includes pre-drilled holes, brass mirror cap screws, floating wall stand-off spacers, or heavy-duty 3M VHB tape"
-  }
+  "catalogStats": null,
+  "seoHighlights": null
 }
