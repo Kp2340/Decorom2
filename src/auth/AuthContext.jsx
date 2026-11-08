@@ -1,0 +1,48 @@
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { loginAdmin } from "../api/admin.api";
+
+const AuthContext = createContext(null);
+
+export const AuthProvider = ({ children }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Check for existing token
+    const token = sessionStorage.getItem("adminToken");
+    if (token) {
+      // In a real app we might validate the token's expiry here
+      setIsAuthenticated(true);
+    }
+    setLoading(false);
+  }, []);
+
+  const login = async (email, password) => {
+    try {
+      const response = await loginAdmin(email, password);
+      if (response && response.token) {
+        sessionStorage.setItem("adminToken", response.token);
+        setIsAuthenticated(true);
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error("Login failed", error);
+      throw error;
+    }
+  };
+
+  const logout = () => {
+    sessionStorage.removeItem("adminToken");
+    setIsAuthenticated(false);
+  };
+
+  return (
+    <AuthContext.Provider value={{ isAuthenticated, login, logout, loading }}>
+      {!loading && children}
+    </AuthContext.Provider>
+  );
+};
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const useAuth = () => useContext(AuthContext);

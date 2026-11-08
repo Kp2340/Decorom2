@@ -1,124 +1,298 @@
-import { useState } from "react";
-import { Link } from "react-router-dom"; // <-- Import Link
+import { useState, useEffect } from "react";
+import { NavLink, useLocation } from "react-router-dom";
+import { ShoppingBag, ChevronDown } from "lucide-react";
+import SearchBar from "./SearchBar";
+import MiniCartDrawer from "./MiniCartDrawer";
+import { useWishlist } from "../wishlist/WishlistContext";
+import { CATEGORIES, slugify } from "../constants/categories";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [categoriesDropdownOpen, setCategoriesDropdownOpen] = useState(false);
+  const { count: wishlistCount, toggleDrawer } = useWishlist();
+  const location = useLocation();
+  const isHomePage = location.pathname === "/";
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 40);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const isTransparent = isHomePage && !isScrolled;
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-  const closeMenu = () => setIsMenuOpen(false);
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+    setCategoriesDropdownOpen(false);
+  };
 
+  // Simplified navigation items per agreed design strategy
   const menuItems = [
-    { name: "Home", path: "/" },
-    // { name: "Products", path: "/products" },
-    { name: "Contact Us", path: "/contact" },
-    { name: "About Us", path: "/about" },
+    { name: "Products", path: "/products" },
+    { name: "Best Sellers", path: "/best-sellers" },
+    { name: "Custom Design", path: "/custom-design" },
+    { name: "Customers", path: "/customers" },
+    { name: "About", path: "/about" },
+    { name: "Contact", path: "/contact" },
   ];
 
+  const desktopLinkClass = ({ isActive }) =>
+    `py-1 px-2.5 text-sm font-medium transition-colors duration-200 whitespace-nowrap ${
+      isActive
+        ? "text-[#E59500] font-semibold"
+        : isTransparent
+        ? "text-white hover:text-[#E59500]"
+        : "text-slate-200 hover:text-[#E59500]"
+    }`;
+
+  const mobileLinkClass = ({ isActive }) =>
+    `block font-semibold text-base transition-colors duration-200 py-2 ${
+      isActive
+        ? "text-[#E59500] border-l-2 border-[#E59500] pl-3"
+        : "text-slate-300 hover:text-[#E59500] pl-3"
+    }`;
+
+  const headerBtnClass = `w-8 h-8 p-[4px] rounded-[88px] transition-all duration-200 cursor-pointer shadow-xs flex items-center justify-center shrink-0 ${
+    isTransparent
+      ? "border border-white/20 bg-white/10 backdrop-blur-md text-white hover:bg-[#E59500] hover:text-white hover:border-[#E59500]"
+      : "border border-transparent bg-white text-[#E59500] hover:bg-[#E59500] hover:text-white"
+  }`;
+
   return (
-      <>
-        {/* Header */}
-        <header className="bg-yellow-100 shadow-md fixed w-full top-0 z-50">
-          <nav className="flex justify-between items-center px-4 py-3 md:px-8 lg:px-12 max-w-7xl mx-auto">
-            {/* Mobile Toggle Button (Left) */}
-            <button
-                className="md:hidden flex flex-col justify-center items-center z-50 bg-yellow-100 p-2 rounded"
-                onClick={toggleMenu}
-                aria-label="Toggle menu"
-            >
+    <>
+      {/* Header */}
+      <header
+        className={`fixed w-full top-0 z-50 transition-all duration-300 ${
+          isTransparent
+            ? "bg-transparent"
+            : "bg-[#0F172A]/95 backdrop-blur-md border-b border-slate-800 shadow-md"
+        }`}
+      >
+        <nav className="flex items-center justify-between h-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+          {/* Mobile/Tablet Toggle Button (Left on screens < xl) */}
+          <button
+            className={`xl:hidden flex flex-col justify-center items-center z-50 ${headerBtnClass}`}
+            onClick={toggleMenu}
+            aria-label="Toggle menu"
+          >
             <span
-                className={`bg-black h-0.5 w-6 rounded-sm transition-all duration-300 ease-out ${
-                    isMenuOpen ? "rotate-45 translate-y-1.5" : "-translate-y-1"
-                }`}
-            ></span>
-              <span
-                  className={`bg-black h-0.5 w-6 rounded-sm transition-all duration-300 ease-out ${
-                      isMenuOpen ? "opacity-0" : "opacity-100"
-                  }`}
-              ></span>
-              <span
-                  className={`bg-black h-0.5 w-6 rounded-sm transition-all duration-300 ease-out ${
-                      isMenuOpen ? "-rotate-45 -translate-y-1.5" : "translate-y-1"
-                  }`}
-              ></span>
-            </button>
+              className={`h-0.5 w-4 rounded-sm bg-current transition-all duration-300 ease-out ${
+                isMenuOpen ? "rotate-45 translate-y-1" : "-translate-y-0.5"
+              }`}
+            />
+            <span
+              className={`h-0.5 w-4 rounded-sm bg-current transition-all duration-300 ease-out ${
+                isMenuOpen ? "opacity-0" : "opacity-100 my-0.5"
+              }`}
+            />
+            <span
+              className={`h-0.5 w-4 rounded-sm bg-current transition-all duration-300 ease-out ${
+                isMenuOpen ? "-rotate-45 -translate-y-1" : "translate-y-0.5"
+              }`}
+            />
+          </button>
 
-            {/* Logo (Center) */}
-            <div className="flex-1 flex justify-center md:justify-start z-50">
-              <img src="logo/logo.png" alt="logo" className="h-14 w-auto" />
-            </div>
-
-            {/* Desktop Menu */}
-            <ul className="hidden md:flex items-center space-x-8">
-              {menuItems.map((item) => (
-                  <li key={item.name}>
-                    <Link
-                        to={item.path}
-                        className="text-black hover:text-yellow-600 font-medium transition-colors duration-300 relative group"
-                    >
-                      {item.name}
-                      <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-yellow-600 group-hover:w-full transition-all duration-300"></span>
-                    </Link>
-                  </li>
-              ))}
-            </ul>
-          </nav>
-        </header>
-
-        {/* Mobile Overlay */}
-        <div
-            className={`fixed inset-0 bg-black bg-opacity-40 z-40 md:hidden transition-opacity duration-300 ${
-                isMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-            }`}
-            onClick={closeMenu}
-        ></div>
-
-        {/* Mobile Menu Panel (Left Slide) */}
-        <div
-            className={`fixed top-0 left-0 h-full w-4/5 max-w-xs bg-yellow-100 z-50 transform transition-transform duration-300 ease-out ${
-                isMenuOpen ? "translate-x-0" : "-translate-x-full"
-            }`}
-        >
-          {/* Mobile Logo + Close */}
-          <div className="flex items-center justify-center p-4 border-b relative">
-            <img src="logo/logo.png" alt="logo" className="h-14 w-auto" />
-            <button
-                onClick={closeMenu}
-                className="absolute right-4 p-2 md:hidden"
-                aria-label="Close menu"
-            >
-              <svg
-                  className="w-6 h-6 text-black"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-              >
-                <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
+          {/* Left: Logo (Center on mobile/tablet < xl, left on desktop xl+) */}
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 xl:relative xl:left-auto xl:top-auto xl:translate-x-0 xl:translate-y-0 xl:flex-1 xl:flex xl:justify-start z-40">
+            <NavLink to="/" onClick={closeMenu} className="flex items-center" aria-label="Decorom Homepage">
+              <img
+                src="/logo/logo.png"
+                alt="Decorom"
+                width="60"
+                height="36"
+                className="h-9 w-auto drop-shadow-xs shrink-0 brightness-0 invert"
+              />
+            </NavLink>
           </div>
 
-          {/* Mobile Menu Items */}
-          <ul className="flex flex-col py-6 space-y-3 pl-6">
-            {menuItems.map((item) => (
-                <li key={item.name}>
-                  <Link
-                      to={item.path}
-                      onClick={closeMenu}
-                      className="block text-black hover:text-yellow-600 font-medium text-lg transition-colors duration-300"
-                  >
-                    {item.name}
-                  </Link>
-                </li>
-            ))}
-          </ul>
+          {/* Center: Desktop Menu (Visible on xl+ 1280px+) — centered */}
+          <div className="hidden xl:flex items-center justify-center flex-1">
+            <ul className="flex items-center space-x-5 2xl:space-x-7 text-sm font-medium">
+              <li>
+                <NavLink to="/products" className={desktopLinkClass}>
+                  Products
+                </NavLink>
+              </li>
+
+              {/* Categories Dropdown */}
+              <li
+                className="relative group py-1"
+                onMouseEnter={() => setCategoriesDropdownOpen(true)}
+                onMouseLeave={() => setCategoriesDropdownOpen(false)}
+              >
+                <button
+                  type="button"
+                  className={`${desktopLinkClass({
+                    isActive: location.pathname.startsWith("/category"),
+                  })} flex items-center gap-1 cursor-pointer`}
+                  onClick={() => setCategoriesDropdownOpen((prev) => !prev)}
+                  aria-expanded={categoriesDropdownOpen}
+                  aria-haspopup="true"
+                >
+                  Categories
+                  <ChevronDown className="w-3.5 h-3.5 transition-transform duration-200 group-hover:rotate-180" />
+                </button>
+
+                <div
+                  className={`absolute top-full left-1/2 -translate-x-1/2 pt-2 transition-all duration-200 ${
+                    categoriesDropdownOpen
+                      ? "opacity-100 visible translate-y-0"
+                      : "opacity-0 invisible -translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0"
+                  }`}
+                >
+                  <div className="bg-[#0F172A] border border-slate-700/80 rounded-xl shadow-xl py-2 px-1 min-w-[190px] backdrop-blur-md">
+                    {CATEGORIES.map((cat) => (
+                      <NavLink
+                        key={cat.name}
+                        to={`/category/${slugify(cat.name)}`}
+                        onClick={() => setCategoriesDropdownOpen(false)}
+                        className={({ isActive }) =>
+                          `block px-3 py-2 text-xs font-medium rounded-lg transition-colors ${
+                            isActive
+                              ? "text-[#E59500] bg-white/5 font-semibold"
+                              : "text-slate-300 hover:text-[#E59500] hover:bg-white/5"
+                          }`
+                        }
+                      >
+                        {cat.name}
+                      </NavLink>
+                    ))}
+                  </div>
+                </div>
+              </li>
+
+              {menuItems
+                .filter((item) => item.name !== "Products")
+                .map((item) => (
+                  <li key={item.name}>
+                    <NavLink to={item.path} className={desktopLinkClass}>
+                      {item.name}
+                    </NavLink>
+                  </li>
+                ))}
+            </ul>
+          </div>
+
+          {/* Right: Search + Mini-Cart Drawer Trigger — right aligned */}
+          <div className="flex items-center justify-end gap-2 xl:flex-1 z-40">
+            <SearchBar
+              isTransparent={isTransparent}
+              headerBtnClass={headerBtnClass}
+            />
+            <button
+              onClick={toggleDrawer}
+              aria-label="Saved Designs Cart"
+              className={`relative ${headerBtnClass}`}
+              title="View saved designs"
+            >
+              <ShoppingBag className="w-4 h-4" />
+              {wishlistCount > 0 && (
+                <span className="absolute -top-1 -right-1 min-w-[17px] h-4 px-1 flex items-center justify-center rounded-full bg-[#E59500] text-white text-[10px] font-bold leading-none shadow-xs border border-white">
+                  {wishlistCount}
+                </span>
+              )}
+            </button>
+          </div>
+        </nav>
+      </header>
+
+      {/* Global Mini-Cart Drawer */}
+      <MiniCartDrawer />
+
+      {/* Mobile/Tablet Overlay */}
+      <div
+        className={`fixed inset-0 bg-black/60 backdrop-blur-xs z-40 xl:hidden transition-opacity duration-300 ${
+          isMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
+        onClick={closeMenu}
+      />
+
+      {/* Mobile/Tablet Menu Panel (Left Slide) */}
+      <div
+        className={`fixed top-0 left-0 h-full w-4/5 max-w-xs bg-[#0F172A] border-r border-slate-800 z-50 transform transition-transform duration-300 ease-out shadow-2xl xl:hidden overflow-y-auto ${
+          isMenuOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        {/* Mobile Logo + Close */}
+        <div className="flex items-center justify-between p-4 border-b border-slate-800">
+          <img
+            src="/logo/logo.png"
+            alt="Decorom"
+            width="60"
+            height="36"
+            className="h-9 w-auto brightness-0 invert"
+          />
+          <button
+            onClick={closeMenu}
+            className="p-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-md cursor-pointer transition-colors"
+            aria-label="Close menu"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
-      </>
+
+        {/* Mobile Menu Items */}
+        <ul className="flex flex-col py-6 space-y-2 px-6">
+          <li>
+            <NavLink
+              to="/products"
+              onClick={closeMenu}
+              className={mobileLinkClass}
+            >
+              Products
+            </NavLink>
+          </li>
+
+          {/* Categories for Mobile */}
+          <li className="py-1">
+            <span className="block text-xs uppercase font-bold tracking-wider text-slate-400 pl-3 mb-1.5">
+              Categories
+            </span>
+            <div className="pl-3 space-y-1">
+              {CATEGORIES.map((cat) => (
+                <NavLink
+                  key={cat.name}
+                  to={`/category/${slugify(cat.name)}`}
+                  onClick={closeMenu}
+                  className={({ isActive }) =>
+                    `block text-sm py-1 pl-3 transition-colors ${
+                      isActive
+                        ? "text-[#E59500] font-semibold"
+                        : "text-slate-300 hover:text-[#E59500]"
+                    }`
+                  }
+                >
+                  {cat.name} Nameplates
+                </NavLink>
+              ))}
+            </div>
+          </li>
+
+          {menuItems
+            .filter((item) => item.name !== "Products")
+            .map((item) => (
+              <li key={item.name}>
+                <NavLink
+                  to={item.path}
+                  onClick={closeMenu}
+                  className={mobileLinkClass}
+                >
+                  {item.name}
+                </NavLink>
+              </li>
+            ))}
+        </ul>
+      </div>
+    </>
   );
 };
 
 export default Header;
+

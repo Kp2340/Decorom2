@@ -1,14 +1,162 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <title>Decorom</title>
+    
+    <!-- Primary Metadata -->
+    <title>Decorom | Premium Designer Nameplates in Ahmedabad</title>
+    <meta
+      name="description"
+      content="Shop handcrafted acrylic, wooden, metal, ACP &amp; LED designer nameplates in Ahmedabad, Gujarat. Custom door nameplates for homes, villas &amp; offices with free delivery across India."
+    />
+    <meta name="keywords" content="Designer Nameplates Ahmedabad, Custom Nameplates Gujarat, Door Name Plates Online, LED Nameplates, Wooden Nameplates, Acrylic Nameplates" />
+    <meta name="author" content="Decorom" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://www.decorom.in" />
+
+    <!-- Local SEO Geo-Tags (Ahmedabad, Gujarat) -->
+    <meta name="geo.region" content="IN-GJ" />
+    <meta name="geo.placename" content="Ahmedabad" />
+    <meta name="geo.position" content="23.0693;72.5503" />
+    <meta name="ICBM" content="23.0693, 72.5503" />
+
+    <!-- Open Graph / Facebook / WhatsApp Preview -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Decorom" />
+    <meta property="og:url" content="https://www.decorom.in" />
+    <meta property="og:title" content="Decorom | Premium Designer Nameplates in Ahmedabad" />
+    <meta
+      property="og:description"
+      content="Handcrafted custom door nameplates in Ahmedabad. Acrylic, wooden, metal &amp; LED nameplates made for modern homes and offices with free delivery across India."
+    />
+    <meta property="og:image" content="https://www.decorom.in/logo/hero-bg.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="en_IN" />
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@decorom_in" />
+    <meta name="twitter:url" content="https://www.decorom.in" />
+    <meta name="twitter:title" content="Decorom | Premium Designer Nameplates in Ahmedabad" />
+    <meta
+      name="twitter:description"
+      content="Handcrafted custom door nameplates in Ahmedabad. Acrylic, wooden, metal &amp; LED nameplates made for modern homes with free delivery across India."
+    />
+    <meta name="twitter:image" content="https://www.decorom.in/logo/hero-bg.jpg" />
+
+    <!-- Favicon Suite & Web App Manifest -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/logo/logo.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/logo/logo.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/logo/logo.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#2C3E50" />
+
+    <!-- Preconnect to Backend API to eliminate DNS/TLS latency on first fetch -->
+    <link rel="preconnect" href="https://api.decorom.in" crossorigin />
+    <link rel="dns-prefetch" href="https://api.decorom.in" />
+
+    <!-- Preload Hero LCP Background Image -->
+    <link
+      rel="preload"
+      as="image"
+      href="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=1600"
+      imagesrcset="
+        https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=800 800w,
+        https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=1200 1200w,
+        https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=1600 1600w
+      "
+      imagesizes="100vw"
+      fetchpriority="high"
+    />
+
+    <!-- Preconnect to image & font assets -->
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <link rel="preconnect" href="https://res.cloudinary.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Baseline Organization & LocalBusiness JSON-LD for Raw Crawlers -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Decorom",
+      "image": "https://www.decorom.in/logo/logo.png",
+      "telephone": "+91-9016707658",
+      "email": "decorom213@gmail.com",
+      "url": "https://www.decorom.in",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Shop A/7, Second Floor, Shreekunj Shopping Centre, Near HDFC Bank, K.K. Nagar, Ghatlodiya",
+        "addressLocality": "Ahmedabad",
+        "addressRegion": "Gujarat",
+        "postalCode": "380061",
+        "addressCountry": "IN"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "23.0693",
+        "longitude": "72.5503"
+      },
+      "areaServed": ["Ahmedabad", "Gandhinagar", "Vadodara", "Surat", "Gujarat", "India"],
+      "openingHours": "Mo-Sa 09:00-19:00",
+      "priceRange": "₹₹ (₹799 - ₹4999)",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "41"
+      }
+    }
+    </script>
+
+    <!-- Devanagari/Gujarati fonts for custom text preview -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&amp;family=Tiro+Devanagari+Hindi:ital@0;1&amp;display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&amp;family=Tiro+Devanagari+Hindi:ital@0;1&amp;display=swap"
+      />
+    </noscript>
+
+    <!-- Meta Pixel Code (Deferred on Idle / User Interaction to unblock main thread) -->
+    <script>
+    function loadMetaPixel() {
+      if (window._metaPixelLoaded) return;
+      window._metaPixelLoaded = true;
+      !function(f,b,e,v,n,t,s)
+      {
+        if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)
+      }(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', '2394872401316810');
+      fbq('track', 'PageView');
+    }
+    if ('requestIdleCallback' in window) {
+      window.requestIdleCallback(function() { setTimeout(loadMetaPixel, 2500); });
+    } else {
+      setTimeout(loadMetaPixel, 3500);
+    }
+    ['scroll', 'touchstart', 'mousemove', 'keydown'].forEach(function(ev) {
+      window.addEventListener(ev, loadMetaPixel, { once: true, passive: true });
+    });
+    </script>
+    <!-- End Meta Pixel Code -->
   </head>
+
   <body>
+    <!-- Meta Pixel noscript (inside body per HTML5 standard) -->
+    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=2394872401316810&amp;ev=PageView&amp;noscript=1"/></noscript>
     <div id="root"></div>
+    <script type="module" src="./src/main.jsx"></script>
   </body>
-  <script type="module" src="./src/main.jsx"></script>
 </html>
