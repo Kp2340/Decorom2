@@ -156,7 +156,7 @@ const FAQ = () => {
 
         <p className="text-center mt-7 text-sm text-[#334155]">
           Still have questions?{" "}
-          <a href="/contact" className="text-[#E59500] hover:text-[#CC8400] font-semibold hover:underline">
+          <a href="/contact" className="text-[#B45309] hover:text-[#92400E] font-semibold hover:underline">
             Get in touch →
           </a>
         </p>
