@@ -1,3 +1,4 @@
+import React, { useState, useEffect, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
@@ -20,72 +21,100 @@ const InstagramIcon = () => (
   </svg>
 );
 
-const InstagramGrid = () => (
-  <section className="py-12 md:py-16 bg-slate-50/70 overflow-hidden relative before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-slate-200 before:to-transparent scroll-mt-16">
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 md:mb-10 flex items-center justify-between gap-4 flex-wrap">
-      <div>
-        <h2 className="text-2xl md:text-3xl font-bold text-[#2C3E50] mb-2">Latest from Instagram</h2>
-        <p className="text-gray-500 text-sm md:text-base">Follow us for new designs every week.</p>
+const InstagramGrid = () => {
+  const [loadEmbeds, setLoadEmbeds] = useState(false);
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setLoadEmbeds(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "300px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <section ref={sectionRef} className="py-12 md:py-16 bg-slate-50/70 overflow-hidden relative before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-slate-200 before:to-transparent scroll-mt-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 md:mb-10 flex items-center justify-between gap-4 flex-wrap">
+        <div>
+          <h2 className="text-2xl md:text-3xl font-bold text-[#2C3E50] mb-2">Latest from Instagram</h2>
+          <p className="text-gray-500 text-sm md:text-base">Follow us for new designs every week.</p>
+        </div>
+        <a
+          href={INSTAGRAM_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400 text-white text-sm font-semibold hover:opacity-90 transition-opacity shadow-md whitespace-nowrap shrink-0"
+        >
+          <InstagramIcon />
+          @decorom.in
+        </a>
       </div>
-      <a
-        href={INSTAGRAM_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400 text-white text-sm font-semibold hover:opacity-90 transition-opacity shadow-md whitespace-nowrap shrink-0"
-      >
-        <InstagramIcon />
-        @decorom.in
-      </a>
-    </div>
 
-    {/* Reel embeds in a Swiper carousel */}
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <Swiper
-        modules={[Autoplay]}
-        spaceBetween={14}
-        slidesPerView={1.3}
-        autoplay={{ delay: 6000, disableOnInteraction: false }}
-        loop={false}
-        breakpoints={{
-          480:  { slidesPerView: 2.2, spaceBetween: 14 },
-          768:  { slidesPerView: 3.2, spaceBetween: 16 },
-          1024: { slidesPerView: 4,   spaceBetween: 20 },
-          1280: { slidesPerView: 5,   spaceBetween: 20 },
-        }}
-      >
-        {REELS.map((reel) => (
-          <SwiperSlide key={reel.id}>
-            <div
-              className="relative rounded-2xl overflow-hidden bg-gray-900 shadow-md"
-              style={{ aspectRatio: "9/20", minHeight: "490px" }}
-            >
-              <iframe
-                src={`https://www.instagram.com/reel/${reel.id}/embed/`}
-                className="w-full h-full border-0 absolute inset-0"
-                loading="lazy"
-                allowFullScreen
-                scrolling="no"
-                allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                title={`Decorom Reel — ${reel.label}`}
-              />
-            </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    </div>
+      {/* Reel embeds in a Swiper carousel */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <Swiper
+          modules={[Autoplay]}
+          spaceBetween={14}
+          slidesPerView={1.3}
+          autoplay={{ delay: 6000, disableOnInteraction: false }}
+          loop={false}
+          breakpoints={{
+            480:  { slidesPerView: 2.2, spaceBetween: 14 },
+            768:  { slidesPerView: 3.2, spaceBetween: 16 },
+            1024: { slidesPerView: 4,   spaceBetween: 20 },
+            1280: { slidesPerView: 5,   spaceBetween: 20 },
+          }}
+        >
+          {REELS.map((reel) => (
+            <SwiperSlide key={reel.id}>
+              <div
+                className="relative rounded-2xl overflow-hidden bg-gray-900 shadow-md flex items-center justify-center text-slate-400"
+                style={{ aspectRatio: "9/20", minHeight: "490px" }}
+              >
+                {loadEmbeds ? (
+                  <iframe
+                    src={`https://www.instagram.com/reel/${reel.id}/embed/`}
+                    className="w-full h-full border-0 absolute inset-0"
+                    loading="lazy"
+                    allowFullScreen
+                    scrolling="no"
+                    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                    title={`Decorom Reel — ${reel.label}`}
+                  />
+                ) : (
+                  <div className="flex flex-col items-center justify-center p-4 text-center">
+                    <InstagramIcon />
+                    <span className="text-xs text-slate-400 mt-2 font-medium">Reel: {reel.label}</span>
+                  </div>
+                )}
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
 
-    <div className="text-center mt-8">
-      <a
-        href={INSTAGRAM_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400 text-white text-sm font-semibold hover:opacity-90 transition-opacity shadow-md"
-      >
-        <InstagramIcon />
-        See all reels on Instagram
-      </a>
-    </div>
-  </section>
-);
+      <div className="text-center mt-8">
+        <a
+          href={INSTAGRAM_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400 text-white text-sm font-semibold hover:opacity-90 transition-opacity shadow-md"
+        >
+          <InstagramIcon />
+          See all reels on Instagram
+        </a>
+      </div>
+    </section>
+  );
+};
 
 export default InstagramGrid;

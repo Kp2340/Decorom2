@@ -56,7 +56,7 @@ const Hero = () => (
         >
           <Link
             to="/products"
-            className="px-7 py-3.5 bg-white hover:bg-[#E59500] text-[#E59500] hover:text-white border border-[#E59500] text-xs sm:text-sm md:text-base font-bold rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg shadow-[#E59500]/30 cursor-pointer inline-flex items-center gap-2"
+            className="px-7 py-3.5 bg-white hover:bg-[#E59500] text-[#B45309] hover:text-white border border-[#B45309] text-xs sm:text-sm md:text-base font-bold rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg shadow-[#E59500]/30 cursor-pointer inline-flex items-center gap-2"
           >
             Explore Collection
           </Link>

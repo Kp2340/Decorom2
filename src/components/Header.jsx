@@ -99,7 +99,7 @@ const Header = () => {
 
           {/* Left: Logo (Center on mobile/tablet < xl, left on desktop xl+) */}
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 xl:relative xl:left-auto xl:top-auto xl:translate-x-0 xl:translate-y-0 xl:flex-1 xl:flex xl:justify-start z-40">
-            <NavLink to="/" onClick={closeMenu} className="flex items-center">
+            <NavLink to="/" onClick={closeMenu} className="flex items-center" aria-label="Decorom Homepage">
               <img
                 src="/logo/logo.png"
                 alt="Decorom"

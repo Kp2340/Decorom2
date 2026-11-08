@@ -32,7 +32,7 @@ const Footer = () => (
 
       {/* Column 1 — Brand Column (spans 2 on mobile, 3 on md, 1 on lg) */}
       <div className="col-span-2 md:col-span-3 lg:col-span-1 space-y-3">
-        <Link to="/" className="inline-block">
+        <Link to="/" className="inline-block" aria-label="Decorom Home footer">
           <img
             src="/logo/logo.png"
             alt="Decorom"
@@ -145,7 +145,7 @@ const Footer = () => (
             className="group flex items-center gap-2 text-slate-400 hover:text-[#E59500] transition-colors duration-200"
           >
             <FacebookIcon className="w-4 h-4 text-[#1877F2] group-hover:text-[#E59500] transition-colors shrink-0" />
-            <span>Decorom</span>
+            <span>Decorom on Facebook</span>
           </a>
         </div>
       </div>

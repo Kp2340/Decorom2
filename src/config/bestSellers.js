@@ -24,7 +24,7 @@ export const BEST_SELLER_FALLBACKS = [
     material: "Wooden",
     defaultSize: "18*12",
     customizable: false,
-    thumbnailUrl: "https://res.cloudinary.com/dowskut5u/image/upload/w_600,f_auto,q_auto/v1790188341/decorom/products/xpmy0t8s91jmzgn6ycvu.jpg",
+    thumbnailUrl: "https://res.cloudinary.com/dowskut5u/image/upload/w_380,f_auto,q_auto/v1790188341/decorom/products/xpmy0t8s91jmzgn6ycvu.jpg",
   },
   {
     id: "55c98480-8334-485b-8f99-3d51fb5b45de",
@@ -34,7 +34,7 @@ export const BEST_SELLER_FALLBACKS = [
     material: "Acrylic with Wooden",
     defaultSize: "18*18",
     customizable: false,
-    thumbnailUrl: "https://res.cloudinary.com/dowskut5u/image/upload/w_600,f_auto,q_auto/v1790225633/decorom/products/ertjwlxn4vuqddvmeqd8.jpg",
+    thumbnailUrl: "https://res.cloudinary.com/dowskut5u/image/upload/w_380,f_auto,q_auto/v1790225633/decorom/products/ertjwlxn4vuqddvmeqd8.jpg",
   },
   {
     id: "b622c8e3-845b-4ceb-a1d5-2884aa5423f6",
@@ -44,7 +44,7 @@ export const BEST_SELLER_FALLBACKS = [
     material: "Acrylic",
     defaultSize: "48*24",
     customizable: false,
-    thumbnailUrl: "https://res.cloudinary.com/dowskut5u/image/upload/w_600,f_auto,q_auto/v1790224189/decorom/products/d2avehsvpo17iiyzkllo.jpg",
+    thumbnailUrl: "https://res.cloudinary.com/dowskut5u/image/upload/w_380,f_auto,q_auto/v1790224189/decorom/products/d2avehsvpo17iiyzkllo.jpg",
   },
   {
     id: "dc1e94b8-c41e-45e6-91c5-8504f2bd2248",
@@ -54,7 +54,7 @@ export const BEST_SELLER_FALLBACKS = [
     material: "Acrylic",
     defaultSize: "12*18",
     customizable: false,
-    thumbnailUrl: "https://res.cloudinary.com/dowskut5u/image/upload/w_600,f_auto,q_auto/v1790224483/decorom/products/rrqfdxyudrdxz4pbjxfl.jpg",
+    thumbnailUrl: "https://res.cloudinary.com/dowskut5u/image/upload/w_380,f_auto,q_auto/v1790224483/decorom/products/rrqfdxyudrdxz4pbjxfl.jpg",
   },
   {
     id: "9f4dae97-283d-492c-a2cf-6d98370c4ed0",
@@ -64,7 +64,7 @@ export const BEST_SELLER_FALLBACKS = [
     material: "ACP",
     defaultSize: "24*12",
     customizable: false,
-    thumbnailUrl: "https://res.cloudinary.com/dowskut5u/image/upload/w_600,f_auto,q_auto/v1790224506/decorom/products/oymc4poyaabim2ftqhnl.jpg",
+    thumbnailUrl: "https://res.cloudinary.com/dowskut5u/image/upload/w_380,f_auto,q_auto/v1790224506/decorom/products/oymc4poyaabim2ftqhnl.jpg",
   },
   {
     id: "b5e09509-df97-40a7-94fd-9ece93c2f4f0",
@@ -74,7 +74,7 @@ export const BEST_SELLER_FALLBACKS = [
     material: "Mild Steel with Stainless Steel",
     defaultSize: "12*24",
     customizable: false,
-    thumbnailUrl: "https://res.cloudinary.com/dowskut5u/image/upload/w_600,f_auto,q_auto/v1790225586/decorom/products/tai1vk7tqcjqy49pcjcw.jpg",
+    thumbnailUrl: "https://res.cloudinary.com/dowskut5u/image/upload/w_380,f_auto,q_auto/v1790225586/decorom/products/tai1vk7tqcjqy49pcjcw.jpg",
   },
   {
     id: "ef724b07-130c-452e-b648-3b9a43e504ec",
@@ -84,7 +84,7 @@ export const BEST_SELLER_FALLBACKS = [
     material: "Stainless Steel with Vinyl",
     defaultSize: "24*18",
     customizable: false,
-    thumbnailUrl: "https://res.cloudinary.com/dowskut5u/image/upload/w_600,f_auto,q_auto/v1790225719/decorom/products/ngs5xg1l59siyccuxhyh.jpg",
+    thumbnailUrl: "https://res.cloudinary.com/dowskut5u/image/upload/w_380,f_auto,q_auto/v1790225719/decorom/products/ngs5xg1l59siyccuxhyh.jpg",
   },
   {
     id: "8d50019e-7329-451d-a498-eb78a9353a3d",
@@ -94,7 +94,7 @@ export const BEST_SELLER_FALLBACKS = [
     material: "Acrylic",
     defaultSize: "18*12",
     customizable: false,
-    thumbnailUrl: "https://res.cloudinary.com/dowskut5u/image/upload/w_600,f_auto,q_auto/v1790224554/decorom/products/xl4x0zsoektuxbw07fvy.jpg",
+    thumbnailUrl: "https://res.cloudinary.com/dowskut5u/image/upload/w_380,f_auto,q_auto/v1790224554/decorom/products/xl4x0zsoektuxbw07fvy.jpg",
   },
 ];
 

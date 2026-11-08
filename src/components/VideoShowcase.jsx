@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
@@ -19,24 +19,51 @@ const VIDEOS = [
 
 function VideoSlideItem({ item }) {
   const videoRef = useRef(null);
+  const containerRef = useRef(null);
+  const [inView, setInView] = useState(false);
   const posterUrl = CLD_POSTER(item.name);
   const videoUrl = CLD_VIDEO(item.name);
 
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setInView(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "200px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div className="relative rounded-2xl overflow-hidden bg-gray-900 group aspect-[9/16]">
-      <video
-        ref={videoRef}
-        className="w-full h-full object-cover"
-        autoPlay
-        loop
-        muted
-        playsInline
-        poster={posterUrl}
-        preload="metadata"
-      >
-        <source src={videoUrl} type="video/mp4" />
-        <track kind="captions" src="data:text/vtt,WEBVTT" label="English" default={false} />
-      </video>
+    <div ref={containerRef} className="relative rounded-2xl overflow-hidden bg-gray-900 group aspect-[9/16]">
+      {inView ? (
+        <video
+          ref={videoRef}
+          className="w-full h-full object-cover"
+          autoPlay
+          loop
+          muted
+          playsInline
+          poster={posterUrl}
+          preload="none"
+        >
+          <source src={videoUrl} type="video/mp4" />
+          <track kind="captions" src="data:text/vtt,WEBVTT" label="English" default={false} />
+        </video>
+      ) : (
+        <img
+          src={posterUrl}
+          alt={item.title}
+          loading="lazy"
+          className="w-full h-full object-cover"
+        />
+      )}
       <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent px-4 py-3 pointer-events-none">
         <p className="text-white text-sm font-semibold">{item.title}</p>
       </div>

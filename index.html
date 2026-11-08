@@ -125,17 +125,30 @@
       />
     </noscript>
 
-    <!-- Meta Pixel Code -->
+    <!-- Meta Pixel Code (Deferred on Idle / User Interaction to unblock main thread) -->
     <script>
-    !function(f,b,e,v,n,t,s)
-    {
-      if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-      n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t,s)}(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    function loadMetaPixel() {
+      if (window._metaPixelLoaded) return;
+      window._metaPixelLoaded = true;
+      !function(f,b,e,v,n,t,s)
+      {
+        if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)
+      }(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
       fbq('init', '2394872401316810');
       fbq('track', 'PageView');
+    }
+    if ('requestIdleCallback' in window) {
+      window.requestIdleCallback(function() { setTimeout(loadMetaPixel, 2500); });
+    } else {
+      setTimeout(loadMetaPixel, 3500);
+    }
+    ['scroll', 'touchstart', 'mousemove', 'keydown'].forEach(function(ev) {
+      window.addEventListener(ev, loadMetaPixel, { once: true, passive: true });
+    });
     </script>
     <!-- End Meta Pixel Code -->
   </head>

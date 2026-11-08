@@ -1,5 +1,5 @@
 const CLD = (path) =>
-  `https://res.cloudinary.com/dowskut5u/image/upload/w_400,f_auto,q_auto/${path}`;
+  `https://res.cloudinary.com/dowskut5u/image/upload/w_240,f_auto,q_auto/${path}`;
 
 export const slugify = (text) =>
   text ? text.toLowerCase().replace(/\s+/g, "-") : "";
