@@ -57,6 +57,20 @@
     <link rel="preconnect" href="https://api.decorom.in" crossorigin />
     <link rel="dns-prefetch" href="https://api.decorom.in" />
 
+    <!-- Preload Hero LCP Background Image -->
+    <link
+      rel="preload"
+      as="image"
+      href="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=1600"
+      imagesrcset="
+        https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=800 800w,
+        https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=1200 1200w,
+        https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=1600 1600w
+      "
+      imagesizes="100vw"
+      fetchpriority="high"
+    />
+
     <!-- Preconnect to image & font assets -->
     <link rel="preconnect" href="https://images.unsplash.com" />
     <link rel="preconnect" href="https://res.cloudinary.com" />

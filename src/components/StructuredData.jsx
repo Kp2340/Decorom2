@@ -172,7 +172,7 @@ export const CollectionPageStructuredData = ({ name, description, url, products 
         "@type": "ListItem",
         "position": index + 1,
         "name": prod.name,
-        "url": `https://www.decorom.in/product/${prod.id}`,
+        "url": `https://www.decorom.in/products/${prod.id}`,
       })),
     },
   };

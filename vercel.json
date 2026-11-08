@@ -1,4 +1,17 @@
 {
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "decorom.in"
+        }
+      ],
+      "destination": "https://www.decorom.in/$1",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/api",

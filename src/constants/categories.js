@@ -131,9 +131,9 @@ export const CATEGORY_SEO_DATA = {
     ]
   },
   resin: {
-    title: "Resin Art Nameplates | Custom Handcrafted Home Decor",
-    description: "Handcrafted resin art nameplates with real pressed flowers, gold leafing & marble textures. Unique artistic entrance nameplates in Ahmedabad.",
-    keywords: "resin name plate maker near me, resin art nameplate ahmedabad, custom resin door plate, ocean resin nameplate",
+    title: "Resin Art Nameplates & Clear UV Resin Crafts in Ahmedabad | Decorom",
+    description: "Handcrafted resin art nameplates, custom epoxy entrance plates, and high-strength crystal clear 395nm UV resin glue craft designs made in Ahmedabad.",
+    keywords: "resin name plate maker near me, resin art nameplate ahmedabad, custom resin door plate, decorom clear strong uv resin glue 5 seconds set wavelength, uv resin glue 395 nm, ocean resin nameplate",
     faqs: [
       { q: "What is a Resin Art nameplate?", a: "Resin nameplates are handcrafted artistic door plates created using crystal-clear epoxy resin infused with real pressed flowers, metallic gold/copper flakes, alcohol inks, marble swirls, or geode stone textures." },
       { q: "Are resin nameplates glass-like and fragile?", a: "Resin has a high-gloss, glass-like reflection, but unlike glass, it is highly durable, shatterproof, and impact-resistant." },
