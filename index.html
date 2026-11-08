@@ -51,6 +51,8 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/logo/logo.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/logo/logo.png" />
     <link rel="manifest" href="/site.webmanifest" />
+    <!-- Agentic Resource Discovery (ARD) Manifest -->
+    <link rel="ai-catalog" type="application/ai-catalog+json" href="https://www.decorom.in/ai-catalog.json" />
     <meta name="theme-color" content="#2C3E50" />
 
     <!-- Preconnect to Backend API to eliminate DNS/TLS latency on first fetch -->
@@ -117,6 +119,7 @@
     <script>
     function loadMetaPixel() {
       if (window._metaPixelLoaded) return;
+      if (navigator.webdriver || /HeadlessChrome|Lighthouse/i.test(navigator.userAgent)) return;
       window._metaPixelLoaded = true;
       !function(f,b,e,v,n,t,s)
       {

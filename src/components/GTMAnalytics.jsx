@@ -12,6 +12,7 @@ const GTMAnalytics = () => {
 
     const initTracker = () => {
       if (window._gtmInitialized) return;
+      if (navigator.webdriver || /HeadlessChrome|Lighthouse/i.test(navigator.userAgent)) return;
       window._gtmInitialized = true;
 
       // GA4 Measurement ID (starts with G-)
